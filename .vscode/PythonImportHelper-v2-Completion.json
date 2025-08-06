@@ -1,0 +1,352 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "LinearRegression",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "LinearRegression",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "stats",
+        "importPath": "scipy",
+        "description": "scipy",
+        "isExtraImport": true,
+        "detail": "scipy",
+        "documentation": {}
+    },
+    {
+        "label": "statsmodels.api",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "statsmodels.api",
+        "description": "statsmodels.api",
+        "detail": "statsmodels.api",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "CORSMiddleware",
+        "importPath": "fastapi.middleware.cors",
+        "description": "fastapi.middleware.cors",
+        "isExtraImport": true,
+        "detail": "fastapi.middleware.cors",
+        "documentation": {}
+    },
+    {
+        "label": "JSONResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "HTMLResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "Jinja2Templates",
+        "importPath": "fastapi.templating",
+        "description": "fastapi.templating",
+        "isExtraImport": true,
+        "detail": "fastapi.templating",
+        "documentation": {}
+    },
+    {
+        "label": "io",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "io",
+        "description": "io",
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideDataProcessor",
+        "kind": 6,
+        "importPath": "backend.services.data_processor",
+        "description": "backend.services.data_processor",
+        "peekOfCode": "class GangliosideDataProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n    def process_data(self, df: pd.DataFrame, data_type: str = \"Porcine\") -> Dict[str, Any]:\n        \"\"\"\n        메인 데이터 처리 함수\n        5가지 규칙을 순차적으로 적용하여 데이터 분류\n        \"\"\"",
+        "detail": "backend.services.data_processor",
+        "documentation": {}
+    },
+    {
+        "label": "RegressionAnalyzer",
+        "kind": 6,
+        "importPath": "backend.services.regression_analyzer",
+        "description": "backend.services.regression_analyzer",
+        "peekOfCode": "class RegressionAnalyzer:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n    def perform_ols_regression(self, x_data: np.ndarray, y_data: np.ndarray, \n                              add_constant: bool = True) -> Dict[str, Any]:\n        \"\"\"\n        OLS (Ordinary Least Squares) 회귀분석 수행\n        Args:\n            x_data: 독립변수 (Log P)",
+        "detail": "backend.services.regression_analyzer",
+        "documentation": {}
+    },
+    {
+        "label": "VisualizationService",
+        "kind": 6,
+        "importPath": "backend.services.visualization_service",
+        "description": "backend.services.visualization_service",
+        "peekOfCode": "class VisualizationService:\n    def __init__(self):\n        pass\n    def create_all_plots(self, analysis_results: Dict[str, Any]) -> Dict[str, Any]:\n        \"\"\"시각화 생성 - 임시 구현\"\"\"\n        plots = {\n            \"scatter_plot\": {\"type\": \"scatter\", \"data\": [], \"layout\": {}},\n            \"histogram\": {\"type\": \"histogram\", \"data\": [], \"layout\": {}},\n            \"status\": \"임시 구현 - 시각화 로직 구현 필요\"\n        }",
+        "detail": "backend.services.visualization_service",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "kind": 6,
+        "importPath": "backend.config",
+        "description": "backend.config",
+        "peekOfCode": "class Settings(BaseModel):\n    \"\"\"애플리케이션 설정\"\"\"\n    # Database\n    database_url: str = \"postgresql://postgres:password@localhost:5432/ganglioside_db\"\n    # Redis\n    redis_url: str = \"redis://localhost:6379\"\n    # Application\n    secret_key: str = \"your-secret-key-here\"\n    debug: bool = True\n    # File Upload",
+        "detail": "backend.config",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": "backend.config",
+        "description": "backend.config",
+        "peekOfCode": "settings = Settings()\n# 디렉토리 생성\nos.makedirs(settings.upload_dir, exist_ok=True)\nos.makedirs(settings.output_dir, exist_ok=True)",
+        "detail": "backend.config",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "backend.main",
+        "description": "backend.main",
+        "peekOfCode": "app = FastAPI(\n    title=\"Ganglioside Analyzer\",\n    description=\"산성 당지질 LC-MS/MS 데이터 자동 분석 시스템\",\n    version=\"1.0.0\"\n)\n# CORS 설정\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],  # 모든 오리진 허용 (개발용)\n    allow_credentials=True,",
+        "detail": "backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "data_processor",
+        "kind": 5,
+        "importPath": "backend.main",
+        "description": "backend.main",
+        "peekOfCode": "data_processor = GangliosideDataProcessor()\nvisualization_service = VisualizationService()\n# 루트 엔드포인트 (API 상태 확인용)\n@app.get(\"/\")\nasync def root():\n    \"\"\"API 루트 엔드포인트\"\"\"\n    return {\n        \"message\": \"🧬 Ganglioside Analyzer API v1.0\",\n        \"version\": \"1.0.0\", \n        \"status\": \"running\"",
+        "detail": "backend.main",
+        "documentation": {}
+    },
+    {
+        "label": "visualization_service",
+        "kind": 5,
+        "importPath": "backend.main",
+        "description": "backend.main",
+        "peekOfCode": "visualization_service = VisualizationService()\n# 루트 엔드포인트 (API 상태 확인용)\n@app.get(\"/\")\nasync def root():\n    \"\"\"API 루트 엔드포인트\"\"\"\n    return {\n        \"message\": \"🧬 Ganglioside Analyzer API v1.0\",\n        \"version\": \"1.0.0\", \n        \"status\": \"running\"\n    }",
+        "detail": "backend.main",
+        "documentation": {}
+    }
+]
