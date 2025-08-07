@@ -1461,6 +1461,11 @@ API 상태: 정상
                 return;
             }
             
-            if (!file && isAutoReanalysis) {
-                // 자동 재분석인데 파일이 없으면 샘플 데이터 사용
-                return
+                        if (!file && isAutoReanalysis) {
+                            // 자동 재분석인데 파일이 없으면 샘플 데이터 사용
+                            return await testSampleData(true);
+                        }
+                    }
+                </script>
+            </body>
+            </html>
