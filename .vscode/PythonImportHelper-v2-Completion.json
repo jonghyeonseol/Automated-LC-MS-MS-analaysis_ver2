@@ -1,5 +1,101 @@
 [
     {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "JSONResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "JSONResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "HTMLResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -9,12 +105,60 @@
         "documentation": {}
     },
     {
-        "label": "numpy",
+        "label": "io",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "numpy",
-        "description": "numpy",
-        "detail": "numpy",
+        "importPath": "io",
+        "description": "io",
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -106,19 +250,45 @@
         "documentation": {}
     },
     {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
+        "label": "DummyGangliosideDataProcessor",
+        "importPath": "backend.services.dummy.processors",
+        "description": "backend.services.dummy.processors",
         "isExtraImport": true,
-        "detail": "typing",
+        "detail": "backend.services.dummy.processors",
         "documentation": {}
     },
     {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
+        "label": "DummyVisualizationService",
+        "importPath": "backend.services.dummy.processors",
+        "description": "backend.services.dummy.processors",
         "isExtraImport": true,
-        "detail": "typing",
+        "detail": "backend.services.dummy.processors",
+        "documentation": {}
+    },
+    {
+        "label": "Jinja2Templates",
+        "importPath": "fastapi.templating",
+        "description": "fastapi.templating",
+        "isExtraImport": true,
+        "detail": "fastapi.templating",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
         "documentation": {}
     },
     {
@@ -188,55 +358,6 @@
         "documentation": {}
     },
     {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "File",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "UploadFile",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "Request",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "CORSMiddleware",
         "importPath": "fastapi.middleware.cors",
         "description": "fastapi.middleware.cors",
@@ -245,36 +366,101 @@
         "documentation": {}
     },
     {
-        "label": "JSONResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
+        "label": "StaticFiles",
+        "importPath": "fastapi.staticfiles",
+        "description": "fastapi.staticfiles",
         "isExtraImport": true,
-        "detail": "fastapi.responses",
+        "detail": "fastapi.staticfiles",
         "documentation": {}
     },
     {
-        "label": "HTMLResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
-        "isExtraImport": true,
-        "detail": "fastapi.responses",
+        "label": "get_data_processor",
+        "kind": 2,
+        "importPath": "backend.api.routes.data",
+        "description": "backend.api.routes.data",
+        "peekOfCode": "def get_data_processor():\n    return data_processor\ndef get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith('.csv'):\n            raise HTTPException(status_code=400, detail=\"CSV 파일만 업로드 가능합니다.\")",
+        "detail": "backend.api.routes.data",
         "documentation": {}
     },
     {
-        "label": "Jinja2Templates",
-        "importPath": "fastapi.templating",
-        "description": "fastapi.templating",
-        "isExtraImport": true,
-        "detail": "fastapi.templating",
+        "label": "get_visualization_service",
+        "kind": 2,
+        "importPath": "backend.api.routes.data",
+        "description": "backend.api.routes.data",
+        "peekOfCode": "def get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith('.csv'):\n            raise HTTPException(status_code=400, detail=\"CSV 파일만 업로드 가능합니다.\")\n        contents = await file.read()\n        df = pd.read_csv(io.StringIO(contents.decode('utf-8')))",
+        "detail": "backend.api.routes.data",
         "documentation": {}
     },
     {
-        "label": "io",
+        "label": "get_data_processor",
+        "kind": 2,
+        "importPath": "backend.api.routes.data",
+        "description": "backend.api.routes.data",
+        "peekOfCode": "def get_data_processor():\n    \"\"\"데이터 프로세서 인스턴스 반환\"\"\"\n    return data_processor",
+        "detail": "backend.api.routes.data",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "backend.api.routes.data",
+        "description": "backend.api.routes.data",
+        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"data\"])\n# 서비스 인스턴스 초기화\ntry:\n    from backend.services.data_processor import GangliosideDataProcessor\n    from backend.services.visualization_service import VisualizationService\n    data_processor = GangliosideDataProcessor()\n    visualization_service = VisualizationService()\n    print(\"✅ 실제 분석 모듈 로드 성공\")\nexcept ImportError as e:\n    print(f\"⚠️ 분석 모듈 로드 실패: {e}\")",
+        "detail": "backend.api.routes.data",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"settings\"])\n@router.get(\"/settings\")\nasync def get_current_settings():\n    \"\"\"현재 분석 설정 조회\"\"\"\n    data_processor = get_data_processor()\n    return {\n        \"current_settings\": {\n            \"outlier_threshold\": data_processor.outlier_threshold,\n            \"r2_threshold\": data_processor.r2_threshold,\n            \"rt_tolerance\": data_processor.rt_tolerance",
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "router = APIRouter(tags=[\"web\"])\n# 템플릿 설정\ntemplate_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "template_dir",
+        "kind": 5,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "template_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):\n    \"\"\"Ganglioside 분석기 메인 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "templates",
+        "kind": 5,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "templates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):\n    \"\"\"Ganglioside 분석기 메인 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/interactive\", response_class=HTMLResponse)",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "DummyGangliosideDataProcessor",
         "kind": 6,
-        "isExtraImport": true,
-        "importPath": "io",
-        "description": "io",
-        "detail": "io",
+        "importPath": "backend.services.dummy.processors",
+        "description": "backend.services.dummy.processors",
+        "peekOfCode": "class DummyGangliosideDataProcessor:\n    \"\"\"더미 데이터 프로세서 - 실제 분석 로직 시뮬레이션\"\"\"\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧪 Dummy Ganglioside Data Processor 초기화\")\n    def process_data(self, df: pd.DataFrame, data_type: str = \"Porcine\") -> Dict[str, Any]:\n        \"\"\"실제 5가지 규칙을 시뮬레이션하는 향상된 분석 (설정 반영)\"\"\"\n        print(f\"🔬 더미 분석 실행: threshold={self.outlier_threshold}, r2={self.r2_threshold}, rt={self.rt_tolerance}\")",
+        "detail": "backend.services.dummy.processors",
+        "documentation": {}
+    },
+    {
+        "label": "DummyVisualizationService",
+        "kind": 6,
+        "importPath": "backend.services.dummy.processors",
+        "description": "backend.services.dummy.processors",
+        "peekOfCode": "class DummyVisualizationService:\n    \"\"\"더미 시각화 서비스\"\"\"\n    def __init__(self):\n        print(\"📊 Dummy Visualization Service 초기화\")\n    def create_all_plots(self, results: Dict[str, Any]) -> Dict[str, Any]:\n        \"\"\"더미 시각화 생성\"\"\"\n        return {\n            \"message\": \"더미 시각화 기능 준비 중\",\n            \"available_plots\": [\n                \"regression_plots\",",
+        "detail": "backend.services.dummy.processors",
         "documentation": {}
     },
     {
@@ -323,47 +509,20 @@
         "documentation": {}
     },
     {
-        "label": "get_default_html",
-        "kind": 2,
-        "importPath": "backend.main",
-        "description": "backend.main",
-        "peekOfCode": "def get_default_html():\n    \"\"\"기본 HTML 반환 (백업용)\"\"\"\ndef get_default_html():\n    \"\"\"기본 HTML 반환 (백업용)\"\"\"\n    return \"\"\"\n<!DOCTYPE html>\n<html lang=\"ko\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
-        "detail": "backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "get_default_html",
-        "kind": 2,
-        "importPath": "backend.main",
-        "description": "backend.main",
-        "peekOfCode": "def get_default_html():\n    \"\"\"기본 HTML 반환 (백업용)\"\"\"\n    return \"\"\"\n<!DOCTYPE html>\n<html lang=\"ko\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>🧬 Ganglioside Analyzer</title>\n    <style>",
-        "detail": "backend.main",
-        "documentation": {}
-    },
-    {
         "label": "app",
         "kind": 5,
         "importPath": "backend.main",
         "description": "backend.main",
-        "peekOfCode": "app = FastAPI(\n    title=\"Ganglioside Analyzer\",\n    description=\"산성 당지질 LC-MS/MS 데이터 자동 분석 시스템\",\n    version=\"1.0.0\"\n)\n# CORS 설정\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_credentials=True,",
+        "peekOfCode": "app = FastAPI(\n    title=\"🧬 Ganglioside Analyzer\",\n    description=\"산성 당지질 LC-MS/MS 데이터 자동 분석 시스템\",\n    version=\"2.0.0\"\n)\n# CORS 설정\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],  # 모든 오리진 허용 (개발용)\n    allow_credentials=True,",
         "detail": "backend.main",
         "documentation": {}
     },
     {
-        "label": "data_processor",
+        "label": "static_dir",
         "kind": 5,
         "importPath": "backend.main",
         "description": "backend.main",
-        "peekOfCode": "data_processor = GangliosideDataProcessor()\nvisualization_service = VisualizationService()\n# 루트 엔드포인트\n@app.get(\"/\")\nasync def root():\n    \"\"\"API 루트 엔드포인트\"\"\"\n    return {\n        \"message\": \"🧬 Ganglioside Analyzer API v1.0\",\n        \"version\": \"1.0.0\", \n        \"status\": \"running\"",
-        "detail": "backend.main",
-        "documentation": {}
-    },
-    {
-        "label": "visualization_service",
-        "kind": 5,
-        "importPath": "backend.main",
-        "description": "backend.main",
-        "peekOfCode": "visualization_service = VisualizationService()\n# 루트 엔드포인트\n@app.get(\"/\")\nasync def root():\n    \"\"\"API 루트 엔드포인트\"\"\"\n    return {\n        \"message\": \"🧬 Ganglioside Analyzer API v1.0\",\n        \"version\": \"1.0.0\", \n        \"status\": \"running\"\n    }",
+        "peekOfCode": "static_dir = os.path.join(os.path.dirname(__file__), \"static\")\nif os.path.exists(static_dir):\n    app.mount(\"/static\", StaticFiles(directory=static_dir), name=\"static\")\n# 라우터 등록\napp.include_router(data_router)\napp.include_router(settings_router)\napp.include_router(web_router)\n# 루트 엔드포인트\n@app.get(\"/\")\nasync def root():",
         "detail": "backend.main",
         "documentation": {}
     }
