@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Interactive Ganglioside Analyzer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 업로드 영역 */
+        .upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .file-upload {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        /* 설정 패널 */
+        .control-panel {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .control-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .control-item label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider {
+            flex: 1;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.3);
+            outline: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .value-display {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .parameter-info {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .mode-option {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .mode-option.active {
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        /* 결과 영역 */
+        .results-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: none;
+        }
+
+        .status-display {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #3498db;
+        }
+
+        /* 시각화 영역 */
+        .visualization-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: none;
+        }
+
+        /* 필터 패널 */
+        .filter-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .filter-section {
+            margin-bottom: 15px;
+        }
+
+        .filter-section h4 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .filter-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-checkbox:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .filter-checkbox.active {
+            background: #2196f3;
+            color: white;
+            border-color: #2196f3;
+        }
+
+        /* 차트 컨테이너 */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        /* 통계 대시보드 */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>🧬 Interactive Ganglioside Analyzer</h1>
+            <p>산성 당지질 LC-MS/MS 데이터 자동 분석 및 시각화 플랫폼</p>
+        </div>
+
+        <!-- 파일 업로드 섹션 -->
+        <div class="upload-section">
+            <h2 style="text-align: center; margin-bottom: 20px;">📁 데이터 업로드</h2>
+            <div class="file-upload" id="fileUpload" onclick="document.getElementById('csvFile').click();">
+                <div style="font-size: 3em; margin-bottom: 15px;">📄</div>
+                <h3>CSV 파일을 업로드하세요</h3>
+                <p>클릭하거나 파일을 드래그해서 업로드</p>
+                <input type="file" id="csvFile" accept=".csv" style="display: none;">
+            </div>
+        </div>
+
+        <!-- 설정 패널 -->
+        <div class="control-panel">
+            <h3 style="margin-top: 0; text-align: center; font-size: 1.8em;">⚙️ 실시간 분석 설정</h3>
+            <p style="text-align: center; opacity: 0.9; margin-bottom: 20px;">설정을 변경하면 즉시 재분석이 수행됩니다</p>
+            
+            <div class="control-grid">
+                <div class="control-item">
+                    <label for="outlierThreshold">📊 표준화 잔차 임계값</label>
+                    <div class="slider-container">
+                        <input type="range" id="outlierThreshold" class="slider" min="1.0" max="5.0" step="0.1" value="3.0">
+                        <div class="value-display" id="outlierValue">3.0</div>
+                    </div>
+                    <div class="parameter-info">이상치 판별 기준 (높을수록 엄격)</div>
+                </div>
+                
+                <div class="control-item">
+                    <label for="r2Threshold">📈 결정계수 (R²) 임계값</label>
+                    <div class="slider-container">
+                        <input type="range" id="r2Threshold" class="slider" min="0.90" max="0.999" step="0.001" value="0.99">
+                        <div class="value-display" id="r2Value">0.990</div>
+                    </div>
+                    <div class="parameter-info">회귀분석 품질 기준 (높을수록 엄격)</div>
+                </div>
+                
+                <div class="control-item">
+                    <label for="rtTolerance">⏱️ RT 허용 범위 (분)</label>
+                    <div class="slider-container">
+                        <input type="range" id="rtTolerance" class="slider" min="0.05" max="0.5" step="0.01" value="0.1">
+                        <div class="value-display" id="rtValue">±0.10</div>
+                    </div>
+                    <div class="parameter-info">동일 접미사 그룹 내 RT 허용 오차</div>
+                </div>
+                
+                <div class="control-item">
+                    <label>🔬 분석 모드</label>
+                    <div class="mode-selector">
+                        <div class="mode-option active" data-mode="Porcine" onclick="selectMode('Porcine')">
+                            🐷 Porcine
+                        </div>
+                        <div class="mode-option" data-mode="Mouse" onclick="selectMode('Mouse')">
+                            🐭 Mouse
+                        </div>
+                    </div>
+                    <div class="parameter-info">데이터 종류에 따른 분석 규칙 적용</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn btn-primary" onclick="resetSettings()">🔄 기본값 복원</button>
+                <button class="btn btn-success" onclick="runAnalysis()">🚀 분석 실행</button>
+            </div>
+        </div>
+
+        <!-- 결과 표시 영역 -->
+        <div class="results-container" id="resultsContainer">
+            <h3>📊 분석 결과</h3>
+            <div class="status-display" id="statusDisplay">대기 중...</div>
+            <div id="analysisResults"></div>
+            
+            <!-- 통계 대시보드 -->
+            <div class="stats-dashboard" id="statsDashboard" style="display: none;">
+                <!-- 동적으로 생성 -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-success" onclick="generateVisualization()" id="visualizeBtn" style="display: none;">
+                    📈 고급 시각화 생성
+                </button>
+                <button class="btn btn-primary" onclick="downloadResults()" id="downloadBtn" style="display: none;">
+                    💾 결과 다운로드
+                </button>
+            </div>
+        </div>
+
+        <!-- 시각화 컨테이너 -->
+        <div class="visualization-container" id="visualizationContainer">
+            <h3>📈 인터랙티브 시각화</h3>
+            
+            <!-- 필터 패널 -->
+            <div class="filter-panel">
+                <h4>🔍 시각화 필터</h4>
+                
+                <div class="filter-section">
+                    <h5>접두사별 필터 (Prefix Groups)</h5>
+                    <div class="filter-checkboxes" id="prefixFilters">
+                        <!-- 동적으로 생성 -->
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h5>분석 규칙별 필터</h5>
+                    <div class="filter-checkboxes" id="ruleFilters">
+                        <div class="filter-checkbox active" data-rule="all">
+                            <input type="checkbox" checked> 전체
+                        </div>
+                        <div class="filter-checkbox" data-rule="rule1">
+                            <input type="checkbox"> 규칙1 (회귀분석)
+                        </div>
+                        <div class="filter-checkbox" data-rule="rule4">
+                            <input type="checkbox"> 규칙4 (O-acetylation)
+                        </div>
+                        <div class="filter-checkbox" data-rule="rule5">
+                            <input type="checkbox"> 규칙5 (RT 필터링)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h5>데이터 타입별 필터</h5>
+                    <div class="filter-checkboxes" id="typeFilters">
+                        <div class="filter-checkbox active" data-type="all">
+                            <input type="checkbox" checked> 전체
+                        </div>
+                        <div class="filter-checkbox" data-type="valid">
+                            <input type="checkbox"> 유효 화합물
+                        </div>
+                        <div class="filter-checkbox" data-type="outlier">
+                            <input type="checkbox"> 이상치
+                        </div>
+                        <div class="filter-checkbox" data-type="anchor">
+                            <input type="checkbox"> Anchor (T)
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="applyFilters()">필터 적용</button>
+                    <button class="btn btn-success" onclick="resetFilters()">필터 초기화</button>
+                </div>
+            </div>
+            
+            <!-- 차트 그리드 -->
+            <div class="chart-grid" id="chartGrid">
+                <!-- 동적으로 생성되는 차트들 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let currentAnalysisResults = null;
+        let currentSettings = {
+            outlierThreshold: 3.0,
+            r2Threshold: 0.99,
+            rtTolerance: 0.1,
+            analysisMode: 'Porcine'
+        };
+        let uploadedFile = null;
+        let allPrefixes = [];
+        let filteredData = {
+            prefixes: [],
+            rules: ['all'],
+            types: ['all']
+        };
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            setupDragAndDrop();
+        });
+
+        // 이벤트 리스너 초기화
+        function initializeEventListeners() {
+            // 슬라이더 이벤트
+            document.getElementById('outlierThreshold').addEventListener('input', updateOutlierValue);
+            document.getElementById('r2Threshold').addEventListener('input', updateR2Value);
+            document.getElementById('rtTolerance').addEventListener('input', updateRtValue);
+            
+            // 파일 업로드 이벤트
+            document.getElementById('csvFile').addEventListener('change', handleFileUpload);
+            
+            // 필터 이벤트 리스너 설정
+            setupFilterEventListeners();
+        }
+
+        // 드래그 앤 드롭 설정
+        function setupDragAndDrop() {
+            const fileUpload = document.getElementById('fileUpload');
+            
+            fileUpload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileUpload.classList.add('dragover');
+            });
+            
+            fileUpload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                fileUpload.classList.remove('dragover');
+            });
+            
+            fileUpload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileUpload.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].name.endsWith('.csv')) {
+                    document.getElementById('csvFile').files = files;
+                    handleFileUpload({target: {files: files}});
+                }
+            });
+        }
+
+        // 슬라이더 값 업데이트 함수들
+        function updateOutlierValue(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('outlierValue').textContent = value.toFixed(1);
+            currentSettings.outlierThreshold = value;
+            
+            if (uploadedFile) {
+                debounceAnalysis();
+            }
+        }
+
+        function updateR2Value(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('r2Value').textContent = value.toFixed(3);
+            currentSettings.r2Threshold = value;
+            
+            if (uploadedFile) {
+                debounceAnalysis();
+            }
+        }
+
+        function updateRtValue(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('rtValue').textContent = `±${value.toFixed(2)}`;
+            currentSettings.rtTolerance = value;
+            
+            if (uploadedFile) {
+                debounceAnalysis();
+            }
+        }
+
+        // 분석 모드 선택
+        function selectMode(mode) {
+            document.querySelectorAll('.mode-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+            currentSettings.analysisMode = mode;
+            
+            if (uploadedFile) {
+                debounceAnalysis();
+            }
+        }
+
+        // 설정 초기화
+        function resetSettings() {
+            currentSettings = {
+                outlierThreshold: 3.0,
+                r2Threshold: 0.99,
+                rtTolerance: 0.1,
+                analysisMode: 'Porcine'
+            };
+            
+            document.getElementById('outlierThreshold').value = 3.0;
+            document.getElementById('r2Threshold').value = 0.99;
+            document.getElementById('rtTolerance').value = 0.1;
+            document.getElementById('outlierValue').textContent = '3.0';
+            document.getElementById('r2Value').textContent = '0.990';
+            document.getElementById('rtValue').textContent = '±0.10';
+            
+            selectMode('Porcine');
+            
+            if (uploadedFile) {
+                runAnalysis();
+            }
+        }
+
+        // 파일 업로드 처리
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.name.endsWith('.csv')) {
+                showStatus('❌ CSV 파일만 업로드 가능합니다.', 'error');
+                return;
+            }
+            
+            uploadedFile = file;
+            showStatus(`✅ 파일 업로드 완료: ${file.name}`, 'success');
+            document.getElementById('resultsContainer').style.display = 'block';
+        }
+
+        // 디바운스 분석 실행
+        let analysisTimeout;
+        function debounceAnalysis() {
+            clearTimeout(analysisTimeout);
+            analysisTimeout = setTimeout(() => {
+                runAnalysis(true);
+            }, 1000);
+        }
+
+        // 분석 실행
+        async function runAnalysis(isAutoReanalysis = false) {
+            if (!uploadedFile) {
+                showStatus('❌ 먼저 CSV 파일을 업로드해주세요.', 'error');
+                return;
+            }
+
+            try {
+                const prefix = isAutoReanalysis ? '🔄 실시간 재분석' : '🔬 분석';
+                showStatus(`${prefix} 진행 중...`, 'loading');
+
+                const formData = new FormData();
+                formData.append('file', uploadedFile);
+                formData.append('data_type', currentSettings.analysisMode);
+                formData.append('outlier_threshold', currentSettings.outlierThreshold);
+                formData.append('r2_threshold', currentSettings.r2Threshold);
+                formData.append('rt_tolerance', currentSettings.rtTolerance);
+
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.results) {
+                    currentAnalysisResults = data;
+                    displayAnalysisResults(data.results, isAutoReanalysis);
+                    updateStatsDashboard(data.results);
+                    extractPrefixes(data.results);
+                    
+                    document.getElementById('visualizeBtn').style.display = 'inline-block';
+                    document.getElementById('downloadBtn').style.display = 'inline-block';
+                } else {
+                    showStatus(`❌ 분석 오류: ${data.error}`, 'error');
+                }
+
+            } catch (error) {
+                showStatus(`❌ 분석 중 오류가 발생했습니다: ${error.message}`, 'error');
+            }
+        }
+
+        // 상태 표시
+        function showStatus(message, type = 'info') {
+            const statusDisplay = document.getElementById('statusDisplay');
+            statusDisplay.textContent = message;
+            
+            statusDisplay.className = 'status-display';
+            if (type === 'error') {
+                statusDisplay.style.borderLeftColor = '#e74c3c';
+                statusDisplay.style.background = '#fdf2f2';
+            } else if (type === 'success') {
+                statusDisplay.style.borderLeftColor = '#27ae60';
+                statusDisplay.style.background = '#f2f9f4';
+            } else if (type === 'loading') {
+                statusDisplay.style.borderLeftColor = '#f39c12';
+                statusDisplay.style.background = '#fef9e7';
+            } else {
+                statusDisplay.style.borderLeftColor = '#3498db';
+                statusDisplay.style.background = '#ecf0f1';
+            }
+        }
+
+        // 분석 결과 표시
+        function displayAnalysisResults(results, isAutoReanalysis = false) {
+            const stats = results.statistics;
+            const prefix = isAutoReanalysis ? '🔄 실시간 재분석 완료!' : '🔬 분석 완료!';
+            
+            const summary = `${prefix}
+
+=== 분석 요약 ===
+총 화합물 수: ${stats.total_compounds || 'N/A'}
+유효 화합물: ${stats.valid_compounds || 'N/A'}
+이상치: ${stats.outliers || 'N/A'}
+성공률: ${(stats.success_rate || 0).toFixed(1)}%
+
+=== 현재 설정 ===
+표준화 잔차 임계값: ${currentSettings.outlierThreshold}
+R² 임계값: ${currentSettings.r2Threshold}
+RT 허용 범위: ±${currentSettings.rtTolerance}분
+분석 모드: ${currentSettings.analysisMode}
+
+=== 규칙별 분석 ===
+규칙1 (회귀분석): ${stats.rule_breakdown?.rule1_regression || 0}개 유효
+규칙4 (O-아세틸화): ${stats.rule_breakdown?.rule4_oacetylation || 0}개 유효
+규칙5 (RT 필터링): ${stats.rule_breakdown?.rule5_rt_filtering || 0}개 유효
+
+분석 상태: ${results.status || 'Unknown'}
+목표 달성도: ${results.target_achievement || 'N/A'}
+
+${isAutoReanalysis ? '⚡ 실시간 모드: 설정 변경이 자동 반영되었습니다.' : ''}`;
+
+            showStatus(summary, 'success');
+        }
+
+        // 통계 대시보드 업데이트
+        function updateStatsDashboard(results) {
+            const stats = results.statistics;
+            const dashboard = document.getElementById('statsDashboard');
+            
+            dashboard.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.total_compounds || 0}</div>
+                    <div class="stat-label">총 화합물</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                    <div class="stat-number">${stats.valid_compounds || 0}</div>
+                    <div class="stat-label">유효 화합물</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <div class="stat-number">${stats.outliers || 0}</div>
+                    <div class="stat-label">이상치</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    <div class="stat-number">${(stats.success_rate || 0).toFixed(1)}%</div>
+                    <div class="stat-label">성공률</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                    <div class="stat-number">${stats.anchor_compounds || 0}</div>
+                    <div class="stat-label">Anchor 화합물</div>
+                </div>
+            `;
+            
+            dashboard.style.display = 'grid';
+        }
+
+        // 접두사 추출
+        function extractPrefixes(results) {
+            const prefixes = new Set();
+            
+            // 유효 화합물에서 접두사 추출
+            if (results.valid_compounds) {
+                results.valid_compounds.forEach(compound => {
+                    const prefix = extractPrefixFromName(compound.Name);
+                    if (prefix) prefixes.add(prefix);
+                });
+            }
+            
+            // 이상치에서 접두사 추출
+            if (results.outliers) {
+                results.outliers.forEach(compound => {
+                    const prefix = extractPrefixFromName(compound.Name);
+                    if (prefix) prefixes.add(prefix);
+                });
+            }
+            
+            allPrefixes = Array.from(prefixes).sort();
+            updatePrefixFilters();
+        }
+
+        // 이름에서 접두사 추출 (GD1a, GD1b, GM3 등)
+        function extractPrefixFromName(name) {
+            const match = name.match(/^([A-Z]+\d+[a-z]*)/);
+            return match ? match[1] : null;
+        }
+
+        // 접두사 필터 업데이트
+        function updatePrefixFilters() {
+            const container = document.getElementById('prefixFilters');
+            container.innerHTML = `
+                <div class="filter-checkbox active" data-prefix="all">
+                    <input type="checkbox" checked> 전체
+                </div>
+            `;
+            
+            allPrefixes.forEach(prefix => {
+                const checkbox = document.createElement('div');
+                checkbox.className = 'filter-checkbox';
+                checkbox.setAttribute('data-prefix', prefix);
+                checkbox.innerHTML = `<input type="checkbox"> ${prefix}`;
+                container.appendChild(checkbox);
+            });
+        }
+
+        // 필터 이벤트 리스너 설정
+        function setupFilterEventListeners() {
+            // 접두사 필터
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.filter-checkbox')) {
+                    const checkbox = e.target.closest('.filter-checkbox');
+                    const input = checkbox.querySelector('input');
+                    
+                    // 체크박스 토글
+                    input.checked = !input.checked;
+                    checkbox.classList.toggle('active', input.checked);
+                    
+                    // 전체 선택 로직
+                    if (checkbox.dataset.prefix === 'all' || checkbox.dataset.rule === 'all' || checkbox.dataset.type === 'all') {
+                        const container = checkbox.parentElement;
+                        const otherCheckboxes = container.querySelectorAll('.filter-checkbox:not([data-prefix="all"]):not([data-rule="all"]):not([data-type="all"])');
+                        
+                        if (input.checked) {
+                            otherCheckboxes.forEach(cb => {
+                                cb.querySelector('input').checked = false;
+                                cb.classList.remove('active');
+                            });
+                        }
+                    } else {
+                        // 개별 항목 선택 시 전체 해제
+                        const container = checkbox.parentElement;
+                        const allCheckbox = container.querySelector('[data-prefix="all"], [data-rule="all"], [data-type="all"]');
+                        if (allCheckbox && input.checked) {
+                            allCheckbox.querySelector('input').checked = false;
+                            allCheckbox.classList.remove('active');
+                        }
+                    }
+                }
+            });
+        }
+
+        // 필터 적용
+        function applyFilters() {
+            // 선택된 접두사 수집
+            const selectedPrefixes = Array.from(document.querySelectorAll('#prefixFilters .filter-checkbox.active')).map(cb => cb.dataset.prefix);
+            const selectedRules = Array.from(document.querySelectorAll('#ruleFilters .filter-checkbox.active')).map(cb => cb.dataset.rule);
+            const selectedTypes = Array.from(document.querySelectorAll('#typeFilters .filter-checkbox.active')).map(cb => cb.dataset.type);
+            
+            filteredData = {
+                prefixes: selectedPrefixes,
+                rules: selectedRules,
+                types: selectedTypes
+            };
+            
+            generateVisualization();
+        }
+
+        // 필터 초기화
+        function resetFilters() {
+            document.querySelectorAll('.filter-checkbox').forEach(cb => {
+                const isAll = cb.dataset.prefix === 'all' || cb.dataset.rule === 'all' || cb.dataset.type === 'all';
+                cb.querySelector('input').checked = isAll;
+                cb.classList.toggle('active', isAll);
+            });
+            
+            applyFilters();
+        }
+
+        // 고급 시각화 생성
+        function generateVisualization() {
+            if (!currentAnalysisResults) {
+                showStatus('❌ 분석 결과가 없습니다. 먼저 분석을 실행해주세요.', 'error');
+                return;
+            }
+
+            try {
+                showStatus('📊 고급 시각화 생성 중...', 'loading');
+                
+                // 시각화 컨테이너 표시
+                document.getElementById('visualizationContainer').style.display = 'block';
+                
+                // 필터링된 데이터 준비
+                const filteredResults = filterAnalysisResults(currentAnalysisResults.results);
+                
+                // 차트 생성
+                createAllCharts(filteredResults);
+                
+                showStatus('✅ 시각화 생성 완료!', 'success');
+                
+            } catch (error) {
+                showStatus(`❌ 시각화 생성 중 오류: ${error.message}`, 'error');
+            }
+        }
+
+        // 분석 결과 필터링
+        function filterAnalysisResults(results) {
+            const filtered = {
+                valid_compounds: [],
+                outliers: [],
+                statistics: results.statistics
+            };
+            
+            // 유효 화합물 필터링
+            if (results.valid_compounds) {
+                filtered.valid_compounds = results.valid_compounds.filter(compound => {
+                    return shouldIncludeCompound(compound, 'valid');
+                });
+            }
+            
+            // 이상치 필터링
+            if (results.outliers) {
+                filtered.outliers = results.outliers.filter(compound => {
+                    return shouldIncludeCompound(compound, 'outlier');
+                });
+            }
+            
+            return filtered;
+        }
+
+        // 화합물 포함 여부 결정
+        function shouldIncludeCompound(compound, type) {
+            // 타입 필터 확인
+            if (!filteredData.types.includes('all')) {
+                const isAnchor = compound.Anchor === 'T';
+                if (type === 'valid' && !filteredData.types.includes('valid')) return false;
+                if (type === 'outlier' && !filteredData.types.includes('outlier')) return false;
+                if (isAnchor && !filteredData.types.includes('anchor')) return false;
+            }
+            
+            // 접두사 필터 확인
+            if (!filteredData.prefixes.includes('all')) {
+                const prefix = extractPrefixFromName(compound.Name);
+                if (!filteredData.prefixes.includes(prefix)) return false;
+            }
+            
+            // 규칙 필터 확인 (추후 구현 가능)
+            
+            return true;
+        }
+
+        // 모든 차트 생성
+        function createAllCharts(results) {
+            const chartGrid = document.getElementById('chartGrid');
+            chartGrid.innerHTML = '';
+            
+            // 1. 전체 산점도 (RT vs Log P)
+            createScatterPlot(results, 'scatter-main', '전체 데이터 산점도', chartGrid);
+            
+            // 2. 접두사별 개별 산점도
+            allPrefixes.forEach(prefix => {
+                if (filteredData.prefixes.includes('all') || filteredData.prefixes.includes(prefix)) {
+                    createPrefixSpecificScatter(results, prefix, chartGrid);
+                }
+            });
+            
+            // 3. 히스토그램 (RT 분포)
+            createHistogram(results, 'histogram-rt', 'RT 분포', 'RT', chartGrid);
+            
+            // 4. 히스토그램 (Log P 분포)
+            createHistogram(results, 'histogram-logp', 'Log P 분포', 'Log P', chartGrid);
+            
+            // 5. 접두사별 성공률 막대그래프
+            createSuccessRateChart(results, chartGrid);
+            
+            // 6. 규칙별 분류 파이차트
+            createRuleBreakdownPie(results, chartGrid);
+            
+            // 7. 잔차 분석 차트
+            createResidualAnalysisChart(results, chartGrid);
+            
+            // 8. 상관관계 히트맵
+            createCorrelationHeatmap(results, chartGrid);
+        }
+
+        // 메인 산점도 생성
+        function createScatterPlot(results, id, title, container) {
+            const chartContainer = createChartContainer(id, title, container);
+            
+            const traces = [];
+            
+            // 유효 화합물
+            if (results.valid_compounds && results.valid_compounds.length > 0) {
+                const validData = results.valid_compounds;
+                const anchors = validData.filter(d => d.Anchor === 'T');
+                const nonAnchors = validData.filter(d => d.Anchor !== 'T');
+                
+                // Anchor 화합물
+                if (anchors.length > 0) {
+                    traces.push({
+                        x: anchors.map(d => d['Log P']),
+                        y: anchors.map(d => d.RT),
+                        mode: 'markers',
+                        type: 'scatter',
+                        name: 'Anchor (T)',
+                        marker: {
+                            color: '#3498db',
+                            size: 12,
+                            symbol: 'diamond',
+                            line: { color: 'white', width: 2 }
+                        },
+                        text: anchors.map(d => d.Name),
+                        hovertemplate: '<b>%{text}</b><br>Log P: %{x}<br>RT: %{y}<extra></extra>'
+                    });
+                }
+                
+                // 일반 유효 화합물 (접두사별 색상)
+                if (nonAnchors.length > 0) {
+                    const prefixGroups = groupByPrefix(nonAnchors);
+                    const colors = ['#27ae60', '#9b59b6', '#f39c12', '#e74c3c', '#16a085', '#34495e', '#2ecc71', '#8e44ad'];
+                    
+                    Object.keys(prefixGroups).forEach((prefix, index) => {
+                        const data = prefixGroups[prefix];
+                        traces.push({
+                            x: data.map(d => d['Log P']),
+                            y: data.map(d => d.RT),
+                            mode: 'markers',
+                            type: 'scatter',
+                            name: prefix,
+                            marker: {
+                                color: colors[index % colors.length],
+                                size: 8,
+                                line: { color: 'white', width: 1 }
+                            },
+                            text: data.map(d => d.Name),
+                            hovertemplate: '<b>%{text}</b><br>Log P: %{x}<br>RT: %{y}<extra></extra>'
+                        });
+                    });
+                }
+            }
+            
+            // 이상치
+            if (results.outliers && results.outliers.length > 0) {
+                traces.push({
+                    x: results.outliers.map(d => d['Log P']),
+                    y: results.outliers.map(d => d.RT),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: '이상치',
+                    marker: {
+                        color: 'transparent',
+                        size: 10,
+                        line: { color: '#e74c3c', width: 2 }
+                    },
+                    text: results.outliers.map(d => d.Name),
+                    hovertemplate: '<b>%{text}</b><br>Log P: %{x}<br>RT: %{y}<br><b>이상치</b><extra></extra>'
+                });
+            }
+            
+            const layout = {
+                title: title,
+                xaxis: { title: 'Log P' },
+                yaxis: { title: 'RT (min)' },
+                hovermode: 'closest',
+                showlegend: true,
+                legend: { x: 0.02, y: 0.98 }
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 접두사별 개별 산점도 생성
+        function createPrefixSpecificScatter(results, prefix, container) {
+            const prefixData = {
+                valid_compounds: results.valid_compounds ? results.valid_compounds.filter(d => extractPrefixFromName(d.Name) === prefix) : [],
+                outliers: results.outliers ? results.outliers.filter(d => extractPrefixFromName(d.Name) === prefix) : []
+            };
+            
+            if (prefixData.valid_compounds.length === 0 && prefixData.outliers.length === 0) return;
+            
+            const chartContainer = createChartContainer(`scatter-${prefix}`, `${prefix} 시리즈 산점도`, container);
+            
+            const traces = [];
+            
+            // 유효 화합물
+            if (prefixData.valid_compounds.length > 0) {
+                const anchors = prefixData.valid_compounds.filter(d => d.Anchor === 'T');
+                const nonAnchors = prefixData.valid_compounds.filter(d => d.Anchor !== 'T');
+                
+                if (anchors.length > 0) {
+                    traces.push({
+                        x: anchors.map(d => d['Log P']),
+                        y: anchors.map(d => d.RT),
+                        mode: 'markers',
+                        type: 'scatter',
+                        name: 'Anchor (T)',
+                        marker: {
+                            color: '#3498db',
+                            size: 12,
+                            symbol: 'diamond',
+                            line: { color: 'white', width: 2 }
+                        },
+                        text: anchors.map(d => d.Name),
+                        hovertemplate: '<b>%{text}</b><br>Log P: %{x}<br>RT: %{y}<extra></extra>'
+                    });
+                }
+                
+                if (nonAnchors.length > 0) {
+                    traces.push({
+                        x: nonAnchors.map(d => d['Log P']),
+                        y: nonAnchors.map(d => d.RT),
+                        mode: 'markers',
+                        type: 'scatter',
+                        name: '유효 화합물',
+                        marker: {
+                            color: '#27ae60',
+                            size: 8,
+                            line: { color: 'white', width: 1 }
+                        },
+                        text: nonAnchors.map(d => d.Name),
+                        hovertemplate: '<b>%{text}</b><br>Log P: %{x}<br>RT: %{y}<extra></extra>'
+                    });
+                }
+            }
+            
+            // 이상치
+            if (prefixData.outliers.length > 0) {
+                traces.push({
+                    x: prefixData.outliers.map(d => d['Log P']),
+                    y: prefixData.outliers.map(d => d.RT),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: '이상치',
+                    marker: {
+                        color: 'transparent',
+                        size: 10,
+                        line: { color: '#e74c3c', width: 2 }
+                    },
+                    text: prefixData.outliers.map(d => d.Name),
+                    hovertemplate: '<b>%{text}</b><br>Log P: %{x}<br>RT: %{y}<br><b>이상치</b><extra></extra>'
+                });
+            }
+            
+            // 회귀선 추가 (유효 화합물이 3개 이상인 경우)
+            if (prefixData.valid_compounds.length >= 3) {
+                const xData = prefixData.valid_compounds.map(d => d['Log P']);
+                const yData = prefixData.valid_compounds.map(d => d.RT);
+                const regression = calculateLinearRegression(xData, yData);
+                
+                const xMin = Math.min(...xData);
+                const xMax = Math.max(...xData);
+                const yMin = regression.slope * xMin + regression.intercept;
+                const yMax = regression.slope * xMax + regression.intercept;
+                
+                traces.push({
+                    x: [xMin, xMax],
+                    y: [yMin, yMax],
+                    mode: 'lines',
+                    type: 'scatter',
+                    name: `회귀선 (R²=${regression.r2.toFixed(3)})`,
+                    line: {
+                        color: '#9b59b6',
+                        width: 2,
+                        dash: 'dash'
+                    },
+                    hovertemplate: `회귀식: y = ${regression.slope.toFixed(3)}x + ${regression.intercept.toFixed(3)}<br>R² = ${regression.r2.toFixed(3)}<extra></extra>`
+                });
+            }
+            
+            const layout = {
+                title: `${prefix} 시리즈`,
+                xaxis: { title: 'Log P' },
+                yaxis: { title: 'RT (min)' },
+                hovermode: 'closest',
+                showlegend: true,
+                legend: { x: 0.02, y: 0.98 }
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 히스토그램 생성
+        function createHistogram(results, id, title, property, container) {
+            const chartContainer = createChartContainer(id, title, container);
+            
+            const traces = [];
+            
+            // 유효 화합물
+            if (results.valid_compounds && results.valid_compounds.length > 0) {
+                traces.push({
+                    x: results.valid_compounds.map(d => d[property]),
+                    type: 'histogram',
+                    name: '유효 화합물',
+                    marker: { color: '#27ae60', opacity: 0.7 },
+                    nbinsx: 20
+                });
+            }
+            
+            // 이상치
+            if (results.outliers && results.outliers.length > 0) {
+                traces.push({
+                    x: results.outliers.map(d => d[property]),
+                    type: 'histogram',
+                    name: '이상치',
+                    marker: { color: '#e74c3c', opacity: 0.7 },
+                    nbinsx: 20
+                });
+            }
+            
+            const layout = {
+                title: title,
+                xaxis: { title: property },
+                yaxis: { title: '빈도' },
+                barmode: 'overlay',
+                showlegend: true
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 성공률 차트 생성
+        function createSuccessRateChart(results, container) {
+            const chartContainer = createChartContainer('success-rate', '접두사별 성공률', container);
+            
+            const prefixStats = calculatePrefixStats(results);
+            const prefixes = Object.keys(prefixStats);
+            const successRates = prefixes.map(prefix => 
+                prefixStats[prefix].total > 0 ? 
+                (prefixStats[prefix].valid / prefixStats[prefix].total) * 100 : 0
+            );
+            
+            const traces = [{
+                x: prefixes,
+                y: successRates,
+                type: 'bar',
+                marker: {
+                    color: successRates.map(rate => 
+                        rate >= 90 ? '#27ae60' : 
+                        rate >= 70 ? '#f39c12' : '#e74c3c'
+                    )
+                },
+                text: successRates.map(rate => `${rate.toFixed(1)}%`),
+                textposition: 'auto',
+                hovertemplate: '<b>%{x}</b><br>성공률: %{y:.1f}%<extra></extra>'
+            }];
+            
+            const layout = {
+                title: '접두사별 성공률',
+                xaxis: { title: '접두사' },
+                yaxis: { title: '성공률 (%)' },
+                showlegend: false
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 규칙별 분류 파이차트 생성
+        function createRuleBreakdownPie(results, container) {
+            const chartContainer = createChartContainer('rule-pie', '규칙별 분류 결과', container);
+            
+            const stats = results.statistics;
+            const ruleData = stats.rule_breakdown || {};
+            
+            const labels = ['규칙1 (회귀분석)', '규칙4 (O-아세틸화)', '규칙5 (RT 필터링)', '이상치'];
+            const values = [
+                ruleData.rule1_regression || 0,
+                ruleData.rule4_oacetylation || 0,
+                ruleData.rule5_rt_filtering || 0,
+                stats.outliers || 0
+            ];
+            const colors = ['#3498db', '#9b59b6', '#f39c12', '#e74c3c'];
+            
+            const traces = [{
+                labels: labels,
+                values: values,
+                type: 'pie',
+                marker: { colors: colors },
+                textinfo: 'label+percent+value',
+                hovertemplate: '<b>%{label}</b><br>개수: %{value}<br>비율: %{percent}<extra></extra>'
+            }];
+            
+            const layout = {
+                title: '규칙별 분류 결과',
+                showlegend: true,
+                legend: { x: 1.1, y: 0.5 }
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 잔차 분석 차트 생성
+        function createResidualAnalysisChart(results, container) {
+            const chartContainer = createChartContainer('residual', '잔차 분석', container);
+            
+            // 잔차 데이터 수집 (유효 화합물에서)
+            const residualData = [];
+            if (results.valid_compounds) {
+                results.valid_compounds.forEach(compound => {
+                    if (compound.std_residual !== undefined) {
+                        residualData.push({
+                            name: compound.Name,
+                            residual: compound.std_residual,
+                            predicted: compound.predicted_rt || compound.RT,
+                            actual: compound.RT
+                        });
+                    }
+                });
+            }
+            
+            if (residualData.length === 0) {
+                chartContainer.querySelector('.chart-content').innerHTML = '<p style="text-align: center; padding: 50px;">잔차 데이터가 없습니다.</p>';
+                return;
+            }
+            
+            const traces = [{
+                x: residualData.map(d => d.predicted),
+                y: residualData.map(d => d.residual),
+                mode: 'markers',
+                type: 'scatter',
+                name: '표준화 잔차',
+                marker: {
+                    color: residualData.map(d => Math.abs(d.residual) > currentSettings.outlierThreshold ? '#e74c3c' : '#3498db'),
+                    size: 8
+                },
+                text: residualData.map(d => d.name),
+                hovertemplate: '<b>%{text}</b><br>예측 RT: %{x}<br>표준화 잔차: %{y}<extra></extra>'
+            }];
+            
+            // 임계값 라인 추가
+            const xRange = [Math.min(...residualData.map(d => d.predicted)), Math.max(...residualData.map(d => d.predicted))];
+            
+            traces.push({
+                x: xRange,
+                y: [currentSettings.outlierThreshold, currentSettings.outlierThreshold],
+                mode: 'lines',
+                type: 'scatter',
+                name: `임계값 (+${currentSettings.outlierThreshold})`,
+                line: { color: '#e74c3c', dash: 'dash' },
+                showlegend: false
+            });
+            
+            traces.push({
+                x: xRange,
+                y: [-currentSettings.outlierThreshold, -currentSettings.outlierThreshold],
+                mode: 'lines',
+                type: 'scatter',
+                name: `임계값 (-${currentSettings.outlierThreshold})`,
+                line: { color: '#e74c3c', dash: 'dash' },
+                showlegend: false
+            });
+            
+            const layout = {
+                title: '잔차 분석',
+                xaxis: { title: '예측 RT (min)' },
+                yaxis: { title: '표준화 잔차' },
+                hovermode: 'closest',
+                showlegend: true
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 상관관계 히트맵 생성
+        function createCorrelationHeatmap(results, container) {
+            const chartContainer = createChartContainer('correlation', 'RT-Log P 상관관계', container);
+            
+            // 접두사별 상관관계 계산
+            const correlationData = [];
+            const prefixGroups = groupByPrefix([...(results.valid_compounds || []), ...(results.outliers || [])]);
+            
+            Object.keys(prefixGroups).forEach(prefix => {
+                const data = prefixGroups[prefix];
+                if (data.length >= 3) {
+                    const correlation = calculateCorrelation(
+                        data.map(d => d['Log P']),
+                        data.map(d => d.RT)
+                    );
+                    correlationData.push({
+                        prefix: prefix,
+                        correlation: correlation,
+                        count: data.length
+                    });
+                }
+            });
+            
+            if (correlationData.length === 0) {
+                chartContainer.querySelector('.chart-content').innerHTML = '<p style="text-align: center; padding: 50px;">상관관계 데이터가 없습니다.</p>';
+                return;
+            }
+            
+            const traces = [{
+                x: correlationData.map(d => d.prefix),
+                y: ['RT-Log P 상관관계'],
+                z: [correlationData.map(d => d.correlation)],
+                type: 'heatmap',
+                colorscale: [
+                    [0, '#e74c3c'],
+                    [0.5, '#f39c12'],
+                    [0.7, '#27ae60'],
+                    [1, '#2ecc71']
+                ],
+                text: correlationData.map(d => `r=${d.correlation.toFixed(3)}\nn=${d.count}`),
+                texttemplate: '%{text}',
+                showscale: true,
+                colorbar: {
+                    title: '상관계수 (r)',
+                    titleside: 'right'
+                }
+            }];
+            
+            const layout = {
+                title: '접두사별 RT-Log P 상관관계',
+                xaxis: { title: '접두사' },
+                yaxis: { title: '' },
+                showlegend: false
+            };
+            
+            Plotly.newPlot(chartContainer.querySelector('.chart-content'), traces, layout, {responsive: true});
+        }
+
+        // 결과 다운로드
+        function downloadResults() {
+            if (!currentAnalysisResults) {
+                showStatus('❌ 분석 결과가 없습니다. 먼저 분석을 실행해주세요.', 'error');
+                return;
+            }
+            
+            try {
+                const csvContent = generateEnhancedCSVFromResults(currentAnalysisResults);
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ganglioside_analysis_results_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                showStatus('💾 향상된 분석 결과가 성공적으로 다운로드되었습니다!', 'success');
+                
+            } catch (error) {
+                showStatus(`❌ 다운로드 오류: ${error.message}`, 'error');
+            }
+        }
+
+        // 향상된 CSV 생성
+        function generateEnhancedCSVFromResults(results) {
+            let csv = 'Name,RT,Volume,Log P,Anchor,Status,Classification,Predicted_RT,Residual,Std_Residual,Analysis_Settings\n';
+            
+            const settingsString = `"Outlier:${currentSettings.outlierThreshold}|R2:${currentSettings.r2Threshold}|RT:${currentSettings.rtTolerance}|Mode:${currentSettings.analysisMode}"`;
+            
+            // 유효 화합물 추가
+            if (results.results.valid_compounds) {
+                results.results.valid_compounds.forEach(compound => {
+                    const predictedRT = compound.predicted_rt ? compound.predicted_rt.toFixed(3) : 'N/A';
+                    const residual = compound.residual ? compound.residual.toFixed(3) : 'N/A';
+                    const stdResidual = compound.std_residual ? compound.std_residual.toFixed(3) : 'N/A';
+                    
+                    csv += `"${compound.Name}",${compound.RT},${compound.Volume || 'N/A'},"${compound['Log P']}","${compound.Anchor}","Valid","참값",${predictedRT},${residual},${stdResidual},${settingsString}\n`;
+                });
+            }
+            
+            // 이상치 추가
+            if (results.results.outliers) {
+                results.results.outliers.forEach(compound => {
+                    const reason = compound.outlier_reason || 'Unknown';
+                    const predictedRT = compound.predicted_rt ? compound.predicted_rt.toFixed(3) : 'N/A';
+                    const residual = compound.residual ? compound.residual.toFixed(3) : 'N/A';
+                    const stdResidual = compound.std_residual ? compound.std_residual.toFixed(3) : 'N/A';
+                    
+                    csv += `"${compound.Name}",${compound.RT},${compound.Volume || 'N/A'},"${compound['Log P']}","${compound.Anchor}","Outlier","이상치: ${reason}",${predictedRT},${residual},${stdResidual},${settingsString}\n`;
+                });
+            }
+            
+            return csv;
+        }
+
+        // 유틸리티 함수들
+        
+        // 차트 컨테이너 생성
+        function createChartContainer(id, title, parent) {
+            const container = document.createElement('div');
+            container.className = 'chart-container';
+            container.innerHTML = `
+                <div class="chart-title">${title}</div>
+                <div class="chart-content" id="${id}" style="height: 400px;"></div>
+            `;
+            parent.appendChild(container);
+            return container;
+        }
+
+        // 접두사별 그룹화
+        function groupByPrefix(compounds) {
+            const groups = {};
+            compounds.forEach(compound => {
+                const prefix = extractPrefixFromName(compound.Name);
+                if (prefix) {
+                    if (!groups[prefix]) groups[prefix] = [];
+                    groups[prefix].push(compound);
+                }
+            });
+            return groups;
+        }
+
+        // 선형 회귀 계산
+        function calculateLinearRegression(xData, yData) {
+            const n = xData.length;
+            const sumX = xData.reduce((a, b) => a + b, 0);
+            const sumY = yData.reduce((a, b) => a + b, 0);
+            const sumXY = xData.reduce((sum, x, i) => sum + x * yData[i], 0);
+            const sumXX = xData.reduce((sum, x) => sum + x * x, 0);
+            const sumYY = yData.reduce((sum, y) => sum + y * y, 0);
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            // R² 계산
+            const meanY = sumY / n;
+            const ssRes = yData.reduce((sum, y, i) => {
+                const predicted = slope * xData[i] + intercept;
+                return sum + Math.pow(y - predicted, 2);
+            }, 0);
+            const ssTot = yData.reduce((sum, y) => sum + Math.pow(y - meanY, 2), 0);
+            const r2 = 1 - (ssRes / ssTot);
+            
+            return { slope, intercept, r2 };
+        }
+
+        // 상관계수 계산
+        function calculateCorrelation(xData, yData) {
+            const n = xData.length;
+            const sumX = xData.reduce((a, b) => a + b, 0);
+            const sumY = yData.reduce((a, b) => a + b, 0);
+            const sumXY = xData.reduce((sum, x, i) => sum + x * yData[i], 0);
+            const sumXX = xData.reduce((sum, x) => sum + x * x, 0);
+            const sumYY = yData.reduce((sum, y) => sum + y * y, 0);
+            
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumXX - sumX * sumX) * (n * sumYY - sumY * sumY));
+            
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+
+        // 접두사별 통계 계산
+        function calculatePrefixStats(results) {
+            const stats = {};
+            
+            // 유효 화합물 통계
+            if (results.valid_compounds) {
+                results.valid_compounds.forEach(compound => {
+                    const prefix = extractPrefixFromName(compound.Name);
+                    if (prefix) {
+                        if (!stats[prefix]) stats[prefix] = { valid: 0, outlier: 0, total: 0 };
+                        stats[prefix].valid++;
+                        stats[prefix].total++;
+                    }
+                });
+            }
+            
+            // 이상치 통계
+            if (results.outliers) {
+                results.outliers.forEach(compound => {
+                    const prefix = extractPrefixFromName(compound.Name);
+                    if (prefix) {
+                        if (!stats[prefix]) stats[prefix] = { valid: 0, outlier: 0, total: 0 };
+                        stats[prefix].outlier++;
+                        stats[prefix].total++;
+                    }
+                });
+            }
+            
+            return stats;
+        }
+
+        // 에러 핸들링
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript Error:', e.error);
+            showStatus(`❌ 시스템 오류: ${e.message}`, 'error');
+        });
+
+        // 성능 최적화를 위한 디바운스 함수
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // 반응형 차트 리사이즈
+        window.addEventListener('resize', debounce(function() {
+            const chartContents = document.querySelectorAll('[id^="scatter-"], [id^="histogram-"], [id^="success-rate"], [id^="rule-pie"], [id^="residual"], [id^="correlation"]');
+            chartContents.forEach(chart => {
+                if (chart.data) {
+                    Plotly.Plots.resize(chart);
+                }
+            });
+        }, 250));
+
+        // 차트 상호작용 설정
+        function setupChartInteractions() {
+            // 차트 클릭 이벤트 처리
+            document.addEventListener('plotly_click', function(data) {
+                const pointIndex = data.points[0].pointIndex;
+                const trace = data.points[0].data;
+                const compoundName = trace.text[pointIndex];
+                
+                // 상세 정보 표시
+                showCompoundDetails(compoundName);
+            });
+            
+            // 차트 호버 이벤트 처리
+            document.addEventListener('plotly_hover', function(data) {
+                // 호버 시 추가 정보 표시 (선택사항)
+            });
+        }
+
+        // 화합물 상세 정보 표시
+        function showCompoundDetails(compoundName) {
+            let compound = null;
+            
+            // 분석 결과에서 화합물 찾기
+            if (currentAnalysisResults.results.valid_compounds) {
+                compound = currentAnalysisResults.results.valid_compounds.find(c => c.Name === compoundName);
+            }
+            
+            if (!compound && currentAnalysisResults.results.outliers) {
+                compound = currentAnalysisResults.results.outliers.find(c => c.Name === compoundName);
+            }
+            
+            if (compound) {
+                const details = `
+📍 화합물 상세 정보
+
+이름: ${compound.Name}
+RT: ${compound.RT} min
+Log P: ${compound['Log P']}
+Volume: ${compound.Volume || 'N/A'}
+Anchor: ${compound.Anchor}
+상태: ${compound.outlier_reason ? '이상치' : '유효 화합물'}
+${compound.outlier_reason ? `사유: ${compound.outlier_reason}` : ''}
+${compound.predicted_rt ? `예측 RT: ${compound.predicted_rt.toFixed(3)} min` : ''}
+${compound.std_residual ? `표준화 잔차: ${compound.std_residual.toFixed(3)}` : ''}
+                `;
+                
+                showStatus(details, 'info');
+            }
+        }
+
+        // 키보드 단축키 설정
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Enter: 분석 실행
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                runAnalysis();
+            }
+            
+            // Ctrl+S: 결과 다운로드
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                if (currentAnalysisResults) {
+                    downloadResults();
+                }
+            }
+            
+            // Ctrl+R: 설정 리셋
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                resetSettings();
+            }
+            
+            // V: 시각화 생성
+            if (e.key === 'v' || e.key === 'V') {
+                if (currentAnalysisResults && !e.ctrlKey && !e.altKey) {
+                    generateVisualization();
+                }
+            }
+        });
+
+        // 초기화 완료 메시지
+        console.log('🧬 Interactive Ganglioside Analyzer 초기화 완료!');
+        console.log('📋 사용 가능한 단축키:');
+        console.log('  Ctrl+Enter: 분석 실행');
+        console.log('  Ctrl+S: 결과 다운로드');
+        console.log('  Ctrl+R: 설정 리셋');
+        console.log('  V: 시각화 생성');
+
+        // 브라우저 호환성 체크
+        function checkBrowserCompatibility() {
+            const isCompatible = 
+                window.File && 
+                window.FileReader && 
+                window.FileList && 
+                window.Blob &&
+                window.fetch &&
+                window.Promise;
+                
+            if (!isCompatible) {
+                showStatus('⚠️ 브라우저가 모든 기능을 지원하지 않을 수 있습니다. 최신 브라우저를 사용해주세요.', 'warning');
+            }
+        }
+
+        // 페이지 로드 완료 후 호환성 체크
+        window.addEventListener('load', function() {
+            checkBrowserCompatibility();
+            setupChartInteractions();
+        });
+
+        // 데이터 검증 함수
+        function validateCSVData(data) {
+            const requiredColumns = ['Name', 'RT', 'Volume', 'Log P', 'Anchor'];
+            const missingColumns = [];
+            
+            requiredColumns.forEach(col => {
+                if (!data.includes(col)) {
+                    missingColumns.push(col);
+                }
+            });
+            
+            return {
+                isValid: missingColumns.length === 0,
+                missingColumns: missingColumns
+            };
+        }
+
+        // 분석 진행률 표시
+        function updateAnalysisProgress(step, total, message) {
+            const percentage = Math.round((step / total) * 100);
+            showStatus(`🔄 ${message} (${percentage}%)`, 'loading');
+        }
+
+        // 메모리 사용량 모니터링 (개발용)
+        function monitorMemoryUsage() {
+            if (performance.memory) {
+                const used = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                const total = Math.round(performance.memory.totalJSHeapSize / 1048576);
+                console.log(`메모리 사용량: ${used}MB / ${total}MB`);
+            }
+        }
+
+        // 주기적 메모리 체크 (개발 모드에서만)
+        if (window.location.hostname === 'localhost') {
+            setInterval(monitorMemoryUsage, 30000);
+        }
+
+        // 사용자 경험 개선을 위한 팁 표시
+        function showUsageTips() {
+            const tips = [
+                '💡 팁: 슬라이더를 조정하면 실시간으로 재분석이 수행됩니다.',
+                '🎯 팁: 차트의 점을 클릭하면 화합물 상세 정보를 볼 수 있습니다.',
+                '⌨️ 팁: Ctrl+Enter로 빠르게 분석을 실행할 수 있습니다.',
+                '📊 팁: 필터를 사용해서 특정 접두사만 시각화할 수 있습니다.',
+                '💾 팁: Ctrl+S로 분석 결과를 다운로드할 수 있습니다.'
+            ];
+            
+            let tipIndex = 0;
+            setInterval(() => {
+                if (!currentAnalysisResults) return;
+                
+                const tip = tips[tipIndex % tips.length];
+                const statusElement = document.getElementById('statusDisplay');
+                
+                // 현재 상태가 오류나 로딩이 아닌 경우에만 팁 표시
+                if (!statusElement.textContent.includes('❌') && !statusElement.textContent.includes('🔄')) {
+                    setTimeout(() => {
+                        if (!statusElement.textContent.includes('❌') && !statusElement.textContent.includes('🔄')) {
+                            showStatus(tip, 'info');
+                        }
+                    }, 2000);
+                }
+                
+                tipIndex++;
+            }, 15000);
+        }
+
+        // 팁 표시 시작 (분석 결과가 있을 때)
+        setTimeout(showUsageTips, 5000);
+
+    </script>
+</body>
+</html>
