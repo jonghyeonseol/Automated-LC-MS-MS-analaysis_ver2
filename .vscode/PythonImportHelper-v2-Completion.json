@@ -1,5 +1,23 @@
 [
     {
+        "label": "io",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "io",
+        "description": "io",
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
         "label": "APIRouter",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -16,7 +34,7 @@
         "documentation": {}
     },
     {
-        "label": "UploadFile",
+        "label": "HTTPException",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
@@ -24,7 +42,7 @@
         "documentation": {}
     },
     {
-        "label": "HTTPException",
+        "label": "UploadFile",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
@@ -80,245 +98,11 @@
         "documentation": {}
     },
     {
-        "label": "JSONResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
-        "isExtraImport": true,
-        "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
         "label": "HTMLResponse",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
         "isExtraImport": true,
         "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
-        "label": "pandas",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
-        "documentation": {}
-    },
-    {
-        "label": "io",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "io",
-        "description": "io",
-        "detail": "io",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Tuple",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Tuple",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Tuple",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Optional",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Optional",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
         "documentation": {}
     },
     {
@@ -338,6 +122,15 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "Jinja2Templates",
         "importPath": "fastapi.templating",
         "description": "fastapi.templating",
@@ -346,12 +139,123 @@
         "documentation": {}
     },
     {
-        "label": "os",
-        "kind": 6,
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -380,14 +284,6 @@
         "documentation": {}
     },
     {
-        "label": "LinearRegression",
-        "importPath": "sklearn.linear_model",
-        "description": "sklearn.linear_model",
-        "isExtraImport": true,
-        "detail": "sklearn.linear_model",
-        "documentation": {}
-    },
-    {
         "label": "r2_score",
         "importPath": "sklearn.metrics",
         "description": "sklearn.metrics",
@@ -401,47 +297,6 @@
         "description": "sklearn.metrics",
         "isExtraImport": true,
         "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "r2_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "mean_squared_error",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "re",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "re",
-        "description": "re",
-        "detail": "re",
-        "documentation": {}
-    },
-    {
-        "label": "stats",
-        "importPath": "scipy",
-        "description": "scipy",
-        "isExtraImport": true,
-        "detail": "scipy",
-        "documentation": {}
-    },
-    {
-        "label": "stats",
-        "importPath": "scipy",
-        "description": "scipy",
-        "isExtraImport": true,
-        "detail": "scipy",
         "documentation": {}
     },
     {
@@ -454,6 +309,14 @@
         "documentation": {}
     },
     {
+        "label": "stats",
+        "importPath": "scipy",
+        "description": "scipy",
+        "isExtraImport": true,
+        "detail": "scipy",
+        "documentation": {}
+    },
+    {
         "label": "plotly.graph_objects",
         "kind": 6,
         "isExtraImport": true,
@@ -463,29 +326,11 @@
         "documentation": {}
     },
     {
-        "label": "plotly.express",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "plotly.express",
-        "description": "plotly.express",
-        "detail": "plotly.express",
-        "documentation": {}
-    },
-    {
         "label": "make_subplots",
         "importPath": "plotly.subplots",
         "description": "plotly.subplots",
         "isExtraImport": true,
         "detail": "plotly.subplots",
-        "documentation": {}
-    },
-    {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
         "documentation": {}
     },
     {
@@ -513,124 +358,124 @@
         "documentation": {}
     },
     {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "jsonify",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "render_template",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "send_file",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "jsonify",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "render_template",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "send_file",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "CORS",
-        "importPath": "flask_cors",
-        "description": "flask_cors",
-        "isExtraImport": true,
-        "detail": "flask_cors",
-        "documentation": {}
-    },
-    {
-        "label": "CORS",
-        "importPath": "flask_cors",
-        "description": "flask_cors",
-        "isExtraImport": true,
-        "detail": "flask_cors",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "traceback",
         "description": "traceback",
         "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
         "documentation": {}
     },
     {
@@ -642,14 +487,6 @@
         "documentation": {}
     },
     {
-        "label": "VisualizationService",
-        "importPath": "services.visualization_service",
-        "description": "services.visualization_service",
-        "isExtraImport": true,
-        "detail": "services.visualization_service",
-        "documentation": {}
-    },
-    {
         "label": "RegressionAnalyzer",
         "importPath": "services.regression_analyzer",
         "description": "services.regression_analyzer",
@@ -658,11 +495,19 @@
         "documentation": {}
     },
     {
+        "label": "VisualizationService",
+        "importPath": "services.visualization_service",
+        "description": "services.visualization_service",
+        "isExtraImport": true,
+        "detail": "services.visualization_service",
+        "documentation": {}
+    },
+    {
         "label": "get_data_processor",
         "kind": 2,
         "importPath": "backend.api.routes.data",
         "description": "backend.api.routes.data",
-        "peekOfCode": "def get_data_processor():\n    return data_processor\ndef get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith('.csv'):\n            raise HTTPException(status_code=400, detail=\"CSV 파일만 업로드 가능합니다.\")",
+        "peekOfCode": "def get_data_processor():\n    return data_processor\ndef get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith(\".csv\"):\n            raise HTTPException(",
         "detail": "backend.api.routes.data",
         "documentation": {}
     },
@@ -671,16 +516,7 @@
         "kind": 2,
         "importPath": "backend.api.routes.data",
         "description": "backend.api.routes.data",
-        "peekOfCode": "def get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith('.csv'):\n            raise HTTPException(status_code=400, detail=\"CSV 파일만 업로드 가능합니다.\")\n        contents = await file.read()\n        df = pd.read_csv(io.StringIO(contents.decode('utf-8')))",
-        "detail": "backend.api.routes.data",
-        "documentation": {}
-    },
-    {
-        "label": "get_data_processor",
-        "kind": 2,
-        "importPath": "backend.api.routes.data",
-        "description": "backend.api.routes.data",
-        "peekOfCode": "def get_data_processor():\n    \"\"\"데이터 프로세서 인스턴스 반환\"\"\"\n    return data_processor",
+        "peekOfCode": "def get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith(\".csv\"):\n            raise HTTPException(\n                status_code=400, detail=\"CSV 파일만 업로드 가능합니다.\"\n            )",
         "detail": "backend.api.routes.data",
         "documentation": {}
     },
@@ -698,7 +534,7 @@
         "kind": 5,
         "importPath": "backend.api.routes.settings",
         "description": "backend.api.routes.settings",
-        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"settings\"])\n@router.get(\"/settings\")\nasync def get_current_settings():\n    \"\"\"현재 분석 설정 조회\"\"\"\n    data_processor = get_data_processor()\n    return {\n        \"current_settings\": {\n            \"outlier_threshold\": data_processor.outlier_threshold,\n            \"r2_threshold\": data_processor.r2_threshold,\n            \"rt_tolerance\": data_processor.rt_tolerance",
+        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"settings\"])\n@router.get(\"/settings\")\nasync def get_current_settings():\n    \"\"\"현재 분석 설정 조회\"\"\"\n    data_processor = get_data_processor()\n    return {\n        \"current_settings\": {\n            \"outlier_threshold\": data_processor.outlier_threshold,\n            \"r2_threshold\": data_processor.r2_threshold,\n            \"rt_tolerance\": data_processor.rt_tolerance,",
         "detail": "backend.api.routes.settings",
         "documentation": {}
     },
@@ -707,7 +543,7 @@
         "kind": 5,
         "importPath": "backend.api.routes.web",
         "description": "backend.api.routes.web",
-        "peekOfCode": "router = APIRouter(tags=[\"web\"])\n# 템플릿 설정\ntemplate_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):",
+        "peekOfCode": "router = APIRouter(tags=[\"web\"])\n# 템플릿 설정\ntemplate_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\n        \"simple_test_page.html\", {\"request\": request}\n    )",
         "detail": "backend.api.routes.web",
         "documentation": {}
     },
@@ -716,7 +552,7 @@
         "kind": 5,
         "importPath": "backend.api.routes.web",
         "description": "backend.api.routes.web",
-        "peekOfCode": "template_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):\n    \"\"\"Ganglioside 분석기 메인 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})",
+        "peekOfCode": "template_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\n        \"simple_test_page.html\", {\"request\": request}\n    )\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):",
         "detail": "backend.api.routes.web",
         "documentation": {}
     },
@@ -725,7 +561,7 @@
         "kind": 5,
         "importPath": "backend.api.routes.web",
         "description": "backend.api.routes.web",
-        "peekOfCode": "templates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):\n    \"\"\"Ganglioside 분석기 메인 페이지\"\"\"\n    return templates.TemplateResponse(\"simple_test_page.html\", {\"request\": request})\n@router.get(\"/interactive\", response_class=HTMLResponse)",
+        "peekOfCode": "templates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\n        \"simple_test_page.html\", {\"request\": request}\n    )\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):\n    \"\"\"Ganglioside 분석기 메인 페이지\"\"\"",
         "detail": "backend.api.routes.web",
         "documentation": {}
     },
@@ -734,7 +570,7 @@
         "kind": 6,
         "importPath": "backend.services.dummy.processors_backup",
         "description": "backend.services.dummy.processors_backup",
-        "peekOfCode": "class DummyGangliosideDataProcessor:\n    \"\"\"더미 데이터 프로세서 - 실제 분석 로직 시뮬레이션\"\"\"\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧪 Dummy Ganglioside Data Processor 초기화\")\n    def update_settings(self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None):\n        \"\"\"분석 설정 업데이트\"\"\"\n        if outlier_threshold is not None:",
+        "peekOfCode": "class DummyGangliosideDataProcessor:\n    \"\"\"더미 데이터 프로세서 - 실제 분석 로직 시뮬레이션\"\"\"\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧪 Dummy Ganglioside Data Processor 초기화\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):",
         "detail": "backend.services.dummy.processors_backup",
         "documentation": {}
     },
@@ -752,7 +588,7 @@
         "kind": 6,
         "importPath": "backend.services.dummy.processors_new",
         "description": "backend.services.dummy.processors_new",
-        "peekOfCode": "class DummyGangliosideDataProcessor:\n    \"\"\"개선된 Ganglioside 분석 더미 클래스 (위음성 감소)\"\"\"\n    def __init__(self):\n        # 기본 설정값 (더 관대한 기준으로 설정)\n        self.outlier_threshold = 2.0  # 표준화 잔차 임계값 (기본값 더 관대하게)\n        self.r2_threshold = 0.90      # R² 임계값 (기본값 더 낮게)\n        self.rt_tolerance = 0.3       # RT 허용 오차 (기본값 더 크게)\n        print(\"🧪 Dummy Ganglioside Data Processor 초기화 (개선된 버전)\")\n    def update_settings(self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None):\n        \"\"\"분석 설정 업데이트\"\"\"",
+        "peekOfCode": "class DummyGangliosideDataProcessor:\n    \"\"\"개선된 Ganglioside 분석 더미 클래스 (위음성 감소)\"\"\"\n    def __init__(self):\n        # 기본 설정값 (더 관대한 기준으로 설정)\n        self.outlier_threshold = 2.0  # 표준화 잔차 임계값 (기본값 더 관대하게)\n        self.r2_threshold = 0.90  # R² 임계값 (기본값 더 낮게)\n        self.rt_tolerance = 0.3  # RT 허용 오차 (기본값 더 크게)\n        print(\"🧪 Dummy Ganglioside Data Processor 초기화 (개선된 버전)\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None",
         "detail": "backend.services.dummy.processors_new",
         "documentation": {}
     },
@@ -779,7 +615,7 @@
         "kind": 6,
         "importPath": "backend.services.data_processor",
         "description": "backend.services.data_processor",
-        "peekOfCode": "class EnhancedGangliosideDataProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n    def process_data(self, df: pd.DataFrame, data_type: str = \"Porcine\") -> Dict[str, Any]:\n        \"\"\"\n        메인 데이터 처리 함수\n        5가지 규칙을 순차적으로 적용하여 데이터 분류\n        \"\"\"",
+        "peekOfCode": "class EnhancedGangliosideDataProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n    def process_data(\n        self, df: pd.DataFrame, data_type: str = \"Porcine\"\n    ) -> Dict[str, Any]:\n        \"\"\"\n        메인 데이터 처리 함수",
         "detail": "backend.services.data_processor",
         "documentation": {}
     },
@@ -788,7 +624,7 @@
         "kind": 6,
         "importPath": "backend.services.ganglioside_processor",
         "description": "backend.services.ganglioside_processor",
-        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧬 Ganglioside Processor 초기화 완료\")\n    def update_settings(self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None):\n        \"\"\"분석 설정 업데이트\"\"\"\n        if outlier_threshold is not None:\n            self.outlier_threshold = outlier_threshold",
+        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧬 Ganglioside Processor 초기화 완료\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):\n        \"\"\"분석 설정 업데이트\"\"\"",
         "detail": "backend.services.ganglioside_processor",
         "documentation": {}
     },
@@ -797,7 +633,7 @@
         "kind": 6,
         "importPath": "backend.services.regression_analyzer",
         "description": "backend.services.regression_analyzer",
-        "peekOfCode": "class RegressionAnalyzer:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.confidence_level = 0.95\n        print(\"📈 Regression Analyzer 초기화 완료\")\n    def perform_comprehensive_regression(self, x_data: np.ndarray, y_data: np.ndarray, \n                                       compound_names: List[str] = None) -> Dict[str, Any]:\n        \"\"\"\n        종합적인 회귀분석 수행",
+        "peekOfCode": "class RegressionAnalyzer:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.confidence_level = 0.95\n        print(\"📈 Regression Analyzer 초기화 완료\")\n    def perform_comprehensive_regression(\n        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None\n    ) -> Dict[str, Any]:\n        \"\"\"",
         "detail": "backend.services.regression_analyzer",
         "documentation": {}
     },
@@ -806,7 +642,7 @@
         "kind": 6,
         "importPath": "backend.services.visualization_service",
         "description": "backend.services.visualization_service",
-        "peekOfCode": "class VisualizationService:\n    def __init__(self):\n        self.color_palette = {\n            'valid': '#2ecc71',      # Green\n            'outlier': '#e74c3c',    # Red\n            'anchor': '#3498db',     # Blue\n            'regression': '#9b59b6', # Purple\n            'background': '#ecf0f1', # Light gray\n            'grid': '#bdc3c7'        # Gray\n        }",
+        "peekOfCode": "class VisualizationService:\n    def __init__(self):\n        self.color_palette = {\n            \"valid\": \"#2ecc71\",  # Green\n            \"outlier\": \"#e74c3c\",  # Red\n            \"anchor\": \"#3498db\",  # Blue\n            \"regression\": \"#9b59b6\",  # Purple\n            \"background\": \"#ecf0f1\",  # Light gray\n            \"grid\": \"#bdc3c7\",  # Gray\n        }",
         "detail": "backend.services.visualization_service",
         "documentation": {}
     },
@@ -833,7 +669,7 @@
         "kind": 5,
         "importPath": "backend.main",
         "description": "backend.main",
-        "peekOfCode": "app = FastAPI(\n    title=\"🧬 Ganglioside Analyzer\",\n    description=\"산성 당지질 LC-MS/MS 데이터 자동 분석 시스템\",\n    version=\"2.0.0\"\n)\n# CORS 설정\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],  # 모든 오리진 허용 (개발용)\n    allow_credentials=True,",
+        "peekOfCode": "app = FastAPI(\n    title=\"🧬 Ganglioside Analyzer\",\n    description=\"산성 당지질 LC-MS/MS 데이터 자동 분석 시스템\",\n    version=\"2.0.0\",\n)\n# CORS 설정\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],  # 모든 오리진 허용 (개발용)\n    allow_credentials=True,",
         "detail": "backend.main",
         "documentation": {}
     },
@@ -851,7 +687,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/simple')\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"",
+        "peekOfCode": "def index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/simple\")\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -860,7 +696,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/simple')\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template('analyzer.html')\n@app.route('/api/health')\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
+        "peekOfCode": "def interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/simple\")\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -869,7 +705,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template('analyzer.html')\n@app.route('/api/health')\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify({\n        \"status\": \"healthy\",\n        \"service\": \"ganglioside-analyzer-flask\",\n        \"version\": \"2.0.0\",",
+        "peekOfCode": "def simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify(\n        {\n            \"status\": \"healthy\",\n            \"service\": \"ganglioside-analyzer-flask\",",
         "detail": "app",
         "documentation": {}
     },
@@ -878,7 +714,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify({\n        \"status\": \"healthy\",\n        \"service\": \"ganglioside-analyzer-flask\",\n        \"version\": \"2.0.0\",\n        \"timestamp\": datetime.now().isoformat()\n    })\n@app.route('/api/upload', methods=['POST'])\ndef upload_csv():",
+        "peekOfCode": "def health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify(\n        {\n            \"status\": \"healthy\",\n            \"service\": \"ganglioside-analyzer-flask\",\n            \"version\": \"2.0.0\",\n            \"timestamp\": datetime.now().isoformat(),\n        }\n    )",
         "detail": "app",
         "documentation": {}
     },
@@ -887,7 +723,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def upload_csv():\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if 'file' not in request.files:\n            return jsonify({\"error\": \"파일이 없습니다.\"}), 400\n        file = request.files['file']\n        if file.filename == '':\n            return jsonify({\"error\": \"파일명이 없습니다.\"}), 400\n        if not file.filename.endswith('.csv'):\n            return jsonify({\"error\": \"CSV 파일만 업로드 가능합니다.\"}), 400",
+        "peekOfCode": "def upload_csv():\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if \"file\" not in request.files:\n            return jsonify({\"error\": \"파일이 없습니다.\"}), 400\n        file = request.files[\"file\"]\n        if file.filename == \"\":\n            return jsonify({\"error\": \"파일명이 없습니다.\"}), 400\n        if not file.filename.endswith(\".csv\"):\n            return jsonify(",
         "detail": "app",
         "documentation": {}
     },
@@ -896,7 +732,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def analyze_data():\n    \"\"\"데이터 분석 실행\"\"\"\n    try:\n        # 파일 및 설정 가져오기\n        if 'file' not in request.files:\n            return jsonify({\"error\": \"분석할 파일이 없습니다.\"}), 400\n        file = request.files['file']\n        data_type = request.form.get('data_type', 'Porcine')\n        outlier_threshold = float(request.form.get('outlier_threshold', 3.0))\n        r2_threshold = float(request.form.get('r2_threshold', 0.99))",
+        "peekOfCode": "def analyze_data():\n    \"\"\"데이터 분석 실행\"\"\"\n    try:\n        # 파일 및 설정 가져오기\n        if \"file\" not in request.files:\n            return jsonify({\"error\": \"분석할 파일이 없습니다.\"}), 400\n        file = request.files[\"file\"]\n        data_type = request.form.get(\"data_type\", \"Porcine\")\n        outlier_threshold = float(request.form.get(\"outlier_threshold\", 3.0))\n        r2_threshold = float(request.form.get(\"r2_threshold\", 0.99))",
         "detail": "app",
         "documentation": {}
     },
@@ -905,7 +741,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def create_visualizations():\n    \"\"\"시각화 생성\"\"\"\n    try:\n        data = request.get_json()\n        if not data or 'results' not in data:\n            return jsonify({\"error\": \"분석 결과 데이터가 필요합니다.\"}), 400\n        results = data['results']\n        # 시각화 생성\n        plots = visualization_service.create_all_plots(results)\n        return jsonify({",
+        "peekOfCode": "def create_visualizations():\n    \"\"\"시각화 생성\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify(\n                {\"error\": \"분석 결과 데이터가 필요합니다.\"}\n            ), 400\n        results = data[\"results\"]\n        # 시각화 생성",
         "detail": "app",
         "documentation": {}
     },
@@ -914,7 +750,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def manage_settings():\n    \"\"\"설정 관리\"\"\"\n    try:\n        if request.method == 'GET':\n            # 현재 설정 반환\n            return jsonify({\n                \"current_settings\": ganglioside_processor.get_settings(),\n                \"default_settings\": {\n                    \"outlier_threshold\": 3.0,\n                    \"r2_threshold\": 0.99,",
+        "peekOfCode": "def manage_settings():\n    \"\"\"설정 관리\"\"\"\n    try:\n        if request.method == \"GET\":\n            # 현재 설정 반환\n            return jsonify(\n                {\n                    \"current_settings\": ganglioside_processor.get_settings(),\n                    \"default_settings\": {\n                        \"outlier_threshold\": 3.0,",
         "detail": "app",
         "documentation": {}
     },
@@ -923,7 +759,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def download_results():\n    \"\"\"분석 결과 다운로드\"\"\"\n    try:\n        data = request.get_json()\n        if not data or 'results' not in data:\n            return jsonify({\"error\": \"분석 결과 데이터가 필요합니다.\"}), 400\n        results = data['results']\n        # CSV 생성\n        csv_content = _generate_results_csv(results)\n        # 파일 저장",
+        "peekOfCode": "def download_results():\n    \"\"\"분석 결과 다운로드\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify(\n                {\"error\": \"분석 결과 데이터가 필요합니다.\"}\n            ), 400\n        results = data[\"results\"]\n        # CSV 생성",
         "detail": "app",
         "documentation": {}
     },
@@ -932,7 +768,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def sample_test():\n    \"\"\"샘플 데이터 테스트\"\"\"\n    try:\n        test_type = request.form.get('test_type', 'basic')\n        data_type = request.form.get('data_type', 'Porcine')\n        outlier_threshold = float(request.form.get('outlier_threshold', 3.0))\n        r2_threshold = float(request.form.get('r2_threshold', 0.99))\n        rt_tolerance = float(request.form.get('rt_tolerance', 0.1))\n        # 샘플 데이터 생성\n        if test_type == 'basic':",
+        "peekOfCode": "def sample_test():\n    \"\"\"샘플 데이터 테스트\"\"\"\n    try:\n        test_type = request.form.get(\"test_type\", \"basic\")\n        data_type = request.form.get(\"data_type\", \"Porcine\")\n        outlier_threshold = float(request.form.get(\"outlier_threshold\", 3.0))\n        r2_threshold = float(request.form.get(\"r2_threshold\", 0.99))\n        rt_tolerance = float(request.form.get(\"rt_tolerance\", 0.1))\n        # 샘플 데이터 생성\n        if test_type == \"basic\":",
         "detail": "app",
         "documentation": {}
     },
@@ -941,7 +777,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "app = Flask(__name__, \n            template_folder='backend/templates',\n            static_folder='backend/static')\nCORS(app)  # CORS 설정\n# 설정\napp.config.update(\n    MAX_CONTENT_LENGTH=50 * 1024 * 1024,  # 50MB 최대 파일 크기\n    UPLOAD_FOLDER='uploads',\n    OUTPUT_FOLDER='outputs'\n)",
+        "peekOfCode": "app = Flask(\n    __name__,\n    template_folder=\"backend/templates\",\n    static_folder=\"backend/static\"\n)\nCORS(app)  # CORS 설정\n# 설정\napp.config.update(\n    MAX_CONTENT_LENGTH=50 * 1024 * 1024,  # 50MB 최대 파일 크기\n    UPLOAD_FOLDER=\"uploads\",",
         "detail": "app",
         "documentation": {}
     },
@@ -950,7 +786,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "ganglioside_processor = GangliosideProcessor()\nvisualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route('/')\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():",
+        "peekOfCode": "ganglioside_processor = GangliosideProcessor()\nvisualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():",
         "detail": "app",
         "documentation": {}
     },
@@ -959,7 +795,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "visualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route('/')\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"",
+        "peekOfCode": "visualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -968,7 +804,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route('/')\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template('interactive_analyzer.html')",
+        "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")",
         "detail": "app",
         "documentation": {}
     },
@@ -977,7 +813,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/simple')\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"",
+        "peekOfCode": "def index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/simple\")\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -986,7 +822,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/simple')\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template('analyzer.html')\n@app.route('/api/health')\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
+        "peekOfCode": "def interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/simple\")\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -995,7 +831,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template('analyzer.html')\n@app.route('/api/health')\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify({\n        \"status\": \"healthy\",\n        \"service\": \"ganglioside-analyzer-flask\",\n        \"version\": \"2.0.0\",",
+        "peekOfCode": "def simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify(\n        {\n            \"status\": \"healthy\",\n            \"service\": \"ganglioside-analyzer-flask\",",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1004,7 +840,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify({\n        \"status\": \"healthy\",\n        \"service\": \"ganglioside-analyzer-flask\",\n        \"version\": \"2.0.0\",\n        \"timestamp\": datetime.now().isoformat()\n    })\n@app.route('/api/upload', methods=['POST'])\ndef upload_csv():",
+        "peekOfCode": "def health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify(\n        {\n            \"status\": \"healthy\",\n            \"service\": \"ganglioside-analyzer-flask\",\n            \"version\": \"2.0.0\",\n            \"timestamp\": datetime.now().isoformat(),\n        }\n    )",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1013,7 +849,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def upload_csv():\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if 'file' not in request.files:\n            return jsonify({\"error\": \"파일이 없습니다.\"}), 400\n        file = request.files['file']\n        if file.filename == '':\n            return jsonify({\"error\": \"파일명이 없습니다.\"}), 400\n        if not file.filename.endswith('.csv'):\n            return jsonify({\"error\": \"CSV 파일만 업로드 가능합니다.\"}), 400",
+        "peekOfCode": "def upload_csv():\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if \"file\" not in request.files:\n            return jsonify({\"error\": \"파일이 없습니다.\"}), 400\n        file = request.files[\"file\"]\n        if file.filename == \"\":\n            return jsonify({\"error\": \"파일명이 없습니다.\"}), 400\n        if not file.filename.endswith(\".csv\"):\n            return jsonify(",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1022,7 +858,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def analyze_data():\n    \"\"\"데이터 분석 실행\"\"\"\n    try:\n        # 파일 및 설정 가져오기\n        if 'file' not in request.files:\n            return jsonify({\"error\": \"분석할 파일이 없습니다.\"}), 400\n        file = request.files['file']\n        data_type = request.form.get('data_type', 'Porcine')\n        outlier_threshold = float(request.form.get('outlier_threshold', 3.0))\n        r2_threshold = float(request.form.get('r2_threshold', 0.99))",
+        "peekOfCode": "def analyze_data():\n    \"\"\"데이터 분석 실행\"\"\"\n    try:\n        # 파일 및 설정 가져오기\n        if \"file\" not in request.files:\n            return jsonify({\"error\": \"분석할 파일이 없습니다.\"}), 400\n        file = request.files[\"file\"]\n        data_type = request.form.get(\"data_type\", \"Porcine\")\n        outlier_threshold = float(request.form.get(\"outlier_threshold\", 3.0))\n        r2_threshold = float(request.form.get(\"r2_threshold\", 0.99))",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1031,7 +867,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def create_visualizations():\n    \"\"\"시각화 생성\"\"\"\n    try:\n        data = request.get_json()\n        if not data or 'results' not in data:\n            return jsonify({\"error\": \"분석 결과 데이터가 필요합니다.\"}), 400\n        results = data['results']\n        # 시각화 생성\n        plots = visualization_service.create_all_plots(results)\n        return jsonify({",
+        "peekOfCode": "def create_visualizations():\n    \"\"\"시각화 생성\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify(\n                {\"error\": \"분석 결과 데이터가 필요합니다.\"}\n            ), 400\n        results = data[\"results\"]\n        # 시각화 생성",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1040,7 +876,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def manage_settings():\n    \"\"\"설정 관리\"\"\"\n    try:\n        if request.method == 'GET':\n            # 현재 설정 반환\n            return jsonify({\n                \"current_settings\": ganglioside_processor.get_settings(),\n                \"default_settings\": {\n                    \"outlier_threshold\": 3.0,\n                    \"r2_threshold\": 0.99,",
+        "peekOfCode": "def manage_settings():\n    \"\"\"설정 관리\"\"\"\n    try:\n        if request.method == \"GET\":\n            # 현재 설정 반환\n            return jsonify(\n                {\n                    \"current_settings\": ganglioside_processor.get_settings(),\n                    \"default_settings\": {\n                        \"outlier_threshold\": 3.0,",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1049,7 +885,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def download_results():\n    \"\"\"분석 결과 다운로드\"\"\"\n    try:\n        data = request.get_json()\n        if not data or 'results' not in data:\n            return jsonify({\"error\": \"분석 결과 데이터가 필요합니다.\"}), 400\n        results = data['results']\n        # CSV 생성\n        csv_content = _generate_results_csv(results)\n        # 파일 저장",
+        "peekOfCode": "def download_results():\n    \"\"\"분석 결과 다운로드\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify(\n                {\"error\": \"분석 결과 데이터가 필요합니다.\"}\n            ), 400\n        results = data[\"results\"]\n        # CSV 생성",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1058,7 +894,7 @@
         "kind": 2,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "def sample_test():\n    \"\"\"샘플 데이터 테스트\"\"\"\n    try:\n        test_type = request.form.get('test_type', 'basic')\n        data_type = request.form.get('data_type', 'Porcine')\n        outlier_threshold = float(request.form.get('outlier_threshold', 3.0))\n        r2_threshold = float(request.form.get('r2_threshold', 0.99))\n        rt_tolerance = float(request.form.get('rt_tolerance', 0.1))\n        # 샘플 데이터 생성\n        if test_type == 'basic':",
+        "peekOfCode": "def sample_test():\n    \"\"\"샘플 데이터 테스트\"\"\"\n    try:\n        test_type = request.form.get(\"test_type\", \"basic\")\n        data_type = request.form.get(\"data_type\", \"Porcine\")\n        outlier_threshold = float(request.form.get(\"outlier_threshold\", 3.0))\n        r2_threshold = float(request.form.get(\"r2_threshold\", 0.99))\n        rt_tolerance = float(request.form.get(\"rt_tolerance\", 0.1))\n        # 샘플 데이터 생성\n        if test_type == \"basic\":",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1067,7 +903,7 @@
         "kind": 5,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "app = Flask(__name__)\nCORS(app)  # CORS 설정\n# 설정\napp.config.update(\n    MAX_CONTENT_LENGTH=50 * 1024 * 1024,  # 50MB 최대 파일 크기\n    UPLOAD_FOLDER='uploads',\n    OUTPUT_FOLDER='outputs'\n)\n# 디렉토리 생성\nos.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)",
+        "peekOfCode": "app = Flask(__name__)\nCORS(app)  # CORS 설정\n# 설정\napp.config.update(\n    MAX_CONTENT_LENGTH=50 * 1024 * 1024,  # 50MB 최대 파일 크기\n    UPLOAD_FOLDER=\"uploads\",\n    OUTPUT_FOLDER=\"outputs\",\n)\n# 디렉토리 생성\nos.makedirs(app.config[\"UPLOAD_FOLDER\"], exist_ok=True)",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1076,7 +912,7 @@
         "kind": 5,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "ganglioside_processor = GangliosideProcessor()\nvisualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route('/')\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():",
+        "peekOfCode": "ganglioside_processor = GangliosideProcessor()\nvisualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1085,7 +921,7 @@
         "kind": 5,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "visualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route('/')\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"",
+        "peekOfCode": "visualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"",
         "detail": "app_backup",
         "documentation": {}
     },
@@ -1094,7 +930,7 @@
         "kind": 5,
         "importPath": "app_backup",
         "description": "app_backup",
-        "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route('/')\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template('interactive_analyzer.html')\n@app.route('/interactive')\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template('interactive_analyzer.html')",
+        "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")",
         "detail": "app_backup",
         "documentation": {}
     }
