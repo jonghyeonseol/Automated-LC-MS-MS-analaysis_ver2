@@ -17,6 +17,29 @@ class EnhancedGangliosideDataProcessor:
         self.outlier_threshold = 3.0
         self.rt_tolerance = 0.1
 
+    def update_settings(
+        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None
+    ):
+        """분석 설정 업데이트"""
+        if outlier_threshold is not None:
+            self.outlier_threshold = outlier_threshold
+        if r2_threshold is not None:
+            self.r2_threshold = r2_threshold
+        if rt_tolerance is not None:
+            self.rt_tolerance = rt_tolerance
+        print(
+            f"⚙️ 설정 업데이트: outlier={self.outlier_threshold}, "
+            f"r2={self.r2_threshold}, rt={self.rt_tolerance}"
+        )
+
+    def get_settings(self):
+        """현재 설정 반환"""
+        return {
+            "outlier_threshold": self.outlier_threshold,
+            "r2_threshold": self.r2_threshold,
+            "rt_tolerance": self.rt_tolerance,
+        }
+
     def process_data(
         self, df: pd.DataFrame, data_type: str = "Porcine"
     ) -> Dict[str, Any]:
