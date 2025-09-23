@@ -27,42 +27,50 @@ class VisualizationService:
         print("📊 Visualization Service 초기화 완료")
 
     def create_all_plots(self, results: Dict[str, Any]) -> Dict[str, Any]:
-        """모든 시각화 생성"""
+        """모든 시각화 생성 - 2D와 3D 통합"""
         try:
             plots = {}
 
             # 1. 메인 대시보드
             plots["dashboard"] = self._create_dashboard(results)
 
-            # 2. 회귀분석 산점도
+            # 2. 통합 시각화 세트 (2D + 3D)
+            plots["integrated_visualization"] = self._create_integrated_visualization(results)
+
+            # 3. 회귀분석 산점도 (2D)
             plots["regression_scatter"] = self._create_regression_scatter(results)
 
-            # 3. 잔차 분석 플롯
+            # 4. 3D 분포 시각화
+            plots["3d_distribution"] = self._create_3d_distribution_plot(results)
+
+            # 5. 잔차 분석 플롯
             plots["residual_analysis"] = self._create_residual_analysis(results)
 
-            # 4. 이상치 분포 히스토그램
+            # 6. 이상치 분포 히스토그램
             plots["outlier_histogram"] = self._create_outlier_histogram(results)
 
-            # 5. 접두사별 성공률 바차트
+            # 7. 접두사별 성공률 바차트
             plots["prefix_success_rate"] = self._create_prefix_success_rate(results)
 
-            # 6. RT-Log P 상관관계 히트맵
+            # 8. RT-Log P 상관관계 히트맵
             plots["correlation_heatmap"] = self._create_correlation_heatmap(results)
 
-            # 7. 규칙별 분류 결과 파이차트
+            # 9. 규칙별 분류 결과 파이차트
             plots["rule_breakdown_pie"] = self._create_rule_breakdown_pie(results)
 
-            # 8. 시계열 분석 (RT 분포)
+            # 10. 시계열 분석 (RT 분포)
             plots["rt_distribution"] = self._create_rt_distribution(results)
-
-            # 9. 3D 분포 시각화 (새로운 기능)
-            plots["3d_distribution"] = self._create_3d_distribution_plot(results)
 
             return {
                 "status": "success",
-                "message": "시각화 생성 완료",
+                "message": "통합 시각화 생성 완료",
                 "plots": plots,
                 "plot_count": len(plots),
+                "features": {
+                    "has_2d_plots": True,
+                    "has_3d_plots": True,
+                    "has_integrated_view": True
+                }
             }
 
         except Exception as e:
@@ -663,6 +671,623 @@ class VisualizationService:
         )
 
         return fig.to_html(include_plotlyjs="cdn", div_id="rt_distribution")
+
+    def _create_integrated_visualization(self, results: Dict[str, Any]) -> str:
+        """
+        통합 시각화 생성 - 2D 산점도와 3D 분포를 함께 표시
+        탭 인터페이스로 전환 가능한 형태
+        """
+        # 데이터 준비
+        valid_compounds = results.get("valid_compounds", [])
+        outliers = results.get("outliers", [])
+        all_compounds = valid_compounds + outliers
+
+        if not all_compounds:
+            return '<div class="no-data">표시할 데이터가 없습니다.</div>'
+
+        # 데이터 추출
+        names = [c["Name"] for c in all_compounds]
+        retention_times = [c["RT"] for c in all_compounds]
+        log_p_values = [c["Log P"] for c in all_compounds]
+        volumes = [c["Volume"] for c in all_compounds]
+
+        # Mass-to-charge 계산
+        mass_to_charge = [calculate_mass_to_charge(name) for name in names]
+
+        # 상태별 마스크
+        anchor_mask = [c["Anchor"] == "T" for c in all_compounds]
+        outlier_mask = [c in outliers for c in all_compounds]
+
+        # HTML 템플릿 생성
+        html_content = f"""
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통합 시각화 - 2D & 3D 분석</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }}
+        .container {{
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }}
+        .header {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }}
+        .header h1 {{
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }}
+        .header p {{
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }}
+        .tab-container {{
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }}
+        .tab-nav {{
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }}
+        .tab-nav li {{
+            margin: 0 5px;
+        }}
+        .tab-nav button {{
+            background: none;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }}
+        .tab-nav button.active {{
+            background: white;
+            color: #495057;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }}
+        .tab-nav button:hover:not(.active) {{
+            background-color: #e9ecef;
+            color: #495057;
+        }}
+        .tab-content {{
+            padding: 30px;
+            min-height: 600px;
+        }}
+        .tab-pane {{
+            display: none;
+        }}
+        .tab-pane.active {{
+            display: block;
+        }}
+        .plot-container {{
+            width: 100%;
+            height: 700px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }}
+        .info-panel {{
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }}
+        .legend {{
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }}
+        .legend h4 {{
+            margin-top: 0;
+            color: #495057;
+        }}
+        .legend-item {{
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }}
+        .legend-color {{
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }}
+        .controls {{
+            text-align: center;
+            margin-bottom: 20px;
+        }}
+        .btn {{
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+        }}
+        .btn:hover {{
+            background-color: #5a67d8;
+        }}
+        .stats {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }}
+        .stat-card {{
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }}
+        .stat-number {{
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }}
+        .stat-label {{
+            font-size: 0.9em;
+            opacity: 0.9;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧬 통합 LC-MS-MS 데이터 시각화</h1>
+            <p>2D 산점도와 3D 분포 분석을 동시에 제공하는 인터랙티브 플랫폼</p>
+        </div>
+
+        <div class="tab-container">
+            <ul class="tab-nav">
+                <li><button class="tab-btn active" data-tab="tab-2d">📊 2D 산점도</button></li>
+                <li><button class="tab-btn" data-tab="tab-3d">🌌 3D 분포도</button></li>
+                <li><button class="tab-btn" data-tab="tab-comparison">🔄 비교 분석</button></li>
+                <li><button class="tab-btn" data-tab="tab-stats">📈 통계 정보</button></li>
+            </ul>
+        </div>
+
+        <div class="tab-content">
+            <!-- 2D 산점도 탭 -->
+            <div id="tab-2d" class="tab-pane active">
+                <div class="info-panel">
+                    <strong>📊 2D 산점도 분석:</strong> Retention Time vs Log P 관계를 통한 전통적인 분석 방법입니다.
+                    각 점은 화합물을 나타내며, 색상과 모양으로 상태를 구분합니다.
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="reset2DView()">🔄 시점 초기화</button>
+                    <button class="btn" onclick="toggle2DOutliers()">👁️ 이상치 토글</button>
+                    <button class="btn" onclick="show2DRegression()">📈 회귀선 표시</button>
+                </div>
+                <div id="plot-2d" class="plot-container"></div>
+                <div class="legend">
+                    <h4>범례</h4>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: #3498db;"></span>
+                        Anchor 화합물 (T)
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: #2ecc71;"></span>
+                        유효 화합물
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: #e74c3c;"></span>
+                        이상치
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D 분포도 탭 -->
+            <div id="tab-3d" class="tab-pane">
+                <div class="info-panel">
+                    <strong>🌌 3D 분포 분석:</strong> Mass-to-Charge(X), Retention Time(Y), Log P(Z) 3차원 공간에서의
+                    화합물 분포를 시각화합니다. 마우스로 회전하여 다양한 각도에서 관찰할 수 있습니다.
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="reset3DView()">🔄 시점 초기화</button>
+                    <button class="btn" onclick="toggle3DOutliers()">👁️ 이상치 토글</button>
+                    <button class="btn" onclick="toggle3DRegression()">📈 회귀평면 토글</button>
+                </div>
+                <div id="plot-3d" class="plot-container"></div>
+                <div class="legend">
+                    <h4>축 정보</h4>
+                    <div class="legend-item">
+                        <strong>X축:</strong> Mass-to-Charge (m/z)
+                    </div>
+                    <div class="legend-item">
+                        <strong>Y축:</strong> Retention Time (min)
+                    </div>
+                    <div class="legend-item">
+                        <strong>Z축:</strong> Partition Coefficient (Log P)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비교 분석 탭 -->
+            <div id="tab-comparison" class="tab-pane">
+                <div class="info-panel">
+                    <strong>🔄 비교 분석:</strong> 2D와 3D 시각화를 동시에 보여주어 상호 비교가 가능합니다.
+                    각 플롯에서 선택한 화합물은 다른 플롯에서도 하이라이트됩니다.
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h3 style="text-align: center;">2D 산점도</h3>
+                        <div id="plot-2d-comparison" style="height: 400px; border: 1px solid #e9ecef; border-radius: 5px;"></div>
+                    </div>
+                    <div>
+                        <h3 style="text-align: center;">3D 분포도</h3>
+                        <div id="plot-3d-comparison" style="height: 400px; border: 1px solid #e9ecef; border-radius: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 통계 정보 탭 -->
+            <div id="tab-stats" class="tab-pane">
+                <div class="info-panel">
+                    <strong>📈 통계 정보:</strong> 분석된 데이터의 주요 통계 지표와 분포 특성을 확인할 수 있습니다.
+                </div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">{len(all_compounds)}</div>
+                        <div class="stat-label">총 화합물</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                        <div class="stat-number">{len(valid_compounds)}</div>
+                        <div class="stat-label">유효 화합물</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                        <div class="stat-number">{len(outliers)}</div>
+                        <div class="stat-label">이상치</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                        <div class="stat-number">{len([c for c in all_compounds if c["Anchor"] == "T"])}</div>
+                        <div class="stat-label">Anchor 화합물</div>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <h3>데이터 범위</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="background-color: #f8f9fa;">
+                            <th style="padding: 10px; border: 1px solid #e9ecef;">속성</th>
+                            <th style="padding: 10px; border: 1px solid #e9ecef;">최소값</th>
+                            <th style="padding: 10px; border: 1px solid #e9ecef;">최대값</th>
+                            <th style="padding: 10px; border: 1px solid #e9ecef;">평균</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">Mass-to-Charge (m/z)</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{min(mass_to_charge):.1f}</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{max(mass_to_charge):.1f}</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{sum(mass_to_charge)/len(mass_to_charge):.1f}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">Retention Time (min)</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{min(retention_times):.2f}</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{max(retention_times):.2f}</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{sum(retention_times)/len(retention_times):.2f}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">Log P</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{min(log_p_values):.2f}</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{max(log_p_values):.2f}</td>
+                            <td style="padding: 10px; border: 1px solid #e9ecef;">{sum(log_p_values)/len(log_p_values):.2f}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 준비
+        const compoundData = {{
+            names: {names},
+            retention_times: {retention_times},
+            log_p_values: {log_p_values},
+            mass_to_charge: {mass_to_charge},
+            volumes: {volumes},
+            anchor_mask: {anchor_mask},
+            outlier_mask: {outlier_mask}
+        }};
+
+        let showOutliers2D = true;
+        let showOutliers3D = true;
+        let showRegression2D = false;
+        let showRegression3D = false;
+
+        // 탭 전환 기능
+        document.addEventListener('DOMContentLoaded', function() {{
+            // 탭 버튼 이벤트 리스너
+            document.querySelectorAll('.tab-btn').forEach(btn => {{
+                btn.addEventListener('click', function() {{
+                    const targetTab = this.getAttribute('data-tab');
+                    switchTab(targetTab);
+                }});
+            }});
+
+            // 초기 플롯 생성
+            create2DPlot();
+            create3DPlot();
+            create2DComparisonPlot();
+            create3DComparisonPlot();
+        }});
+
+        function switchTab(tabId) {{
+            // 모든 탭 버튼과 패널 비활성화
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            // 선택된 탭 활성화
+            document.querySelector(`[data-tab="${{tabId}}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }}
+
+        function create2DPlot() {{
+            const traces = [];
+
+            // Anchor 화합물
+            const anchorIndices = compoundData.anchor_mask.map((isAnchor, idx) => isAnchor && !compoundData.outlier_mask[idx] ? idx : -1).filter(idx => idx >= 0);
+            if (anchorIndices.length > 0) {{
+                traces.push({{
+                    x: anchorIndices.map(i => compoundData.log_p_values[i]),
+                    y: anchorIndices.map(i => compoundData.retention_times[i]),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'Anchor (T)',
+                    marker: {{
+                        color: '#3498db',
+                        size: 12,
+                        symbol: 'diamond',
+                        line: {{ color: 'white', width: 2 }}
+                    }},
+                    text: anchorIndices.map(i => compoundData.names[i]),
+                    hovertemplate: '<b>%{{text}}</b><br>Log P: %{{x}}<br>RT: %{{y}}<extra></extra>'
+                }});
+            }}
+
+            // 유효 화합물
+            const validIndices = compoundData.anchor_mask.map((isAnchor, idx) => !isAnchor && !compoundData.outlier_mask[idx] ? idx : -1).filter(idx => idx >= 0);
+            if (validIndices.length > 0) {{
+                traces.push({{
+                    x: validIndices.map(i => compoundData.log_p_values[i]),
+                    y: validIndices.map(i => compoundData.retention_times[i]),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'Valid Compounds',
+                    marker: {{
+                        color: '#2ecc71',
+                        size: 8,
+                        line: {{ color: 'white', width: 1 }}
+                    }},
+                    text: validIndices.map(i => compoundData.names[i]),
+                    hovertemplate: '<b>%{{text}}</b><br>Log P: %{{x}}<br>RT: %{{y}}<extra></extra>'
+                }});
+            }}
+
+            // 이상치
+            if (showOutliers2D) {{
+                const outlierIndices = compoundData.outlier_mask.map((isOutlier, idx) => isOutlier ? idx : -1).filter(idx => idx >= 0);
+                if (outlierIndices.length > 0) {{
+                    traces.push({{
+                        x: outlierIndices.map(i => compoundData.log_p_values[i]),
+                        y: outlierIndices.map(i => compoundData.retention_times[i]),
+                        mode: 'markers',
+                        type: 'scatter',
+                        name: 'Outliers',
+                        marker: {{
+                            color: '#e74c3c',
+                            size: 10,
+                            symbol: 'x',
+                            line: {{ width: 2 }}
+                        }},
+                        text: outlierIndices.map(i => compoundData.names[i]),
+                        hovertemplate: '<b>%{{text}}</b><br>Log P: %{{x}}<br>RT: %{{y}}<br><b>이상치</b><extra></extra>'
+                    }});
+                }}
+            }}
+
+            const layout = {{
+                title: 'Retention Time vs Log P (2D)',
+                xaxis: {{ title: 'Log P (Partition Coefficient)' }},
+                yaxis: {{ title: 'Retention Time (min)' }},
+                hovermode: 'closest',
+                showlegend: true,
+                legend: {{ x: 0.02, y: 0.98 }}
+            }};
+
+            Plotly.newPlot('plot-2d', traces, layout, {{ responsive: true }});
+        }}
+
+        function create3DPlot() {{
+            const traces = [];
+
+            // Anchor 화합물
+            const anchorIndices = compoundData.anchor_mask.map((isAnchor, idx) => isAnchor && !compoundData.outlier_mask[idx] ? idx : -1).filter(idx => idx >= 0);
+            if (anchorIndices.length > 0) {{
+                traces.push({{
+                    x: anchorIndices.map(i => compoundData.mass_to_charge[i]),
+                    y: anchorIndices.map(i => compoundData.retention_times[i]),
+                    z: anchorIndices.map(i => compoundData.log_p_values[i]),
+                    mode: 'markers',
+                    type: 'scatter3d',
+                    name: 'Anchor (T)',
+                    marker: {{
+                        color: '#3498db',
+                        size: 8,
+                        symbol: 'diamond',
+                        line: {{ color: 'white', width: 2 }}
+                    }},
+                    text: anchorIndices.map(i => compoundData.names[i]),
+                    hovertemplate: '<b>%{{text}}</b><br>m/z: %{{x:.1f}}<br>RT: %{{y:.3f}}<br>Log P: %{{z:.2f}}<extra></extra>'
+                }});
+            }}
+
+            // 유효 화합물
+            const validIndices = compoundData.anchor_mask.map((isAnchor, idx) => !isAnchor && !compoundData.outlier_mask[idx] ? idx : -1).filter(idx => idx >= 0);
+            if (validIndices.length > 0) {{
+                traces.push({{
+                    x: validIndices.map(i => compoundData.mass_to_charge[i]),
+                    y: validIndices.map(i => compoundData.retention_times[i]),
+                    z: validIndices.map(i => compoundData.log_p_values[i]),
+                    mode: 'markers',
+                    type: 'scatter3d',
+                    name: 'Valid Compounds',
+                    marker: {{
+                        color: '#2ecc71',
+                        size: 6,
+                        line: {{ color: 'white', width: 1 }}
+                    }},
+                    text: validIndices.map(i => compoundData.names[i]),
+                    hovertemplate: '<b>%{{text}}</b><br>m/z: %{{x:.1f}}<br>RT: %{{y:.3f}}<br>Log P: %{{z:.2f}}<extra></extra>'
+                }});
+            }}
+
+            // 이상치
+            if (showOutliers3D) {{
+                const outlierIndices = compoundData.outlier_mask.map((isOutlier, idx) => isOutlier ? idx : -1).filter(idx => idx >= 0);
+                if (outlierIndices.length > 0) {{
+                    traces.push({{
+                        x: outlierIndices.map(i => compoundData.mass_to_charge[i]),
+                        y: outlierIndices.map(i => compoundData.retention_times[i]),
+                        z: outlierIndices.map(i => compoundData.log_p_values[i]),
+                        mode: 'markers',
+                        type: 'scatter3d',
+                        name: 'Outliers',
+                        marker: {{
+                            color: '#e74c3c',
+                            size: 6,
+                            symbol: 'x',
+                            line: {{ width: 2 }}
+                        }},
+                        text: outlierIndices.map(i => compoundData.names[i]),
+                        hovertemplate: '<b>%{{text}}</b><br>m/z: %{{x:.1f}}<br>RT: %{{y:.3f}}<br>Log P: %{{z:.2f}}<br><b>이상치</b><extra></extra>'
+                    }});
+                }}
+            }}
+
+            const layout = {{
+                title: '3D Distribution: m/z vs RT vs Log P',
+                scene: {{
+                    xaxis: {{ title: 'Mass-to-Charge (m/z)' }},
+                    yaxis: {{ title: 'Retention Time (min)' }},
+                    zaxis: {{ title: 'Partition Coefficient (Log P)' }},
+                    camera: {{
+                        eye: {{ x: 1.2, y: 1.2, z: 1.2 }}
+                    }}
+                }},
+                showlegend: true,
+                legend: {{ x: 0.02, y: 0.98 }}
+            }};
+
+            Plotly.newPlot('plot-3d', traces, layout, {{ responsive: true }});
+        }}
+
+        function create2DComparisonPlot() {{
+            // 간소화된 2D 플롯
+            create2DPlot();
+            // 플롯 복사
+            setTimeout(() => {{
+                const plot2d = document.getElementById('plot-2d');
+                if (plot2d && plot2d.data) {{
+                    Plotly.newPlot('plot-2d-comparison', plot2d.data, plot2d.layout, {{ responsive: true }});
+                }}
+            }}, 100);
+        }}
+
+        function create3DComparisonPlot() {{
+            // 간소화된 3D 플롯
+            create3DPlot();
+            // 플롯 복사
+            setTimeout(() => {{
+                const plot3d = document.getElementById('plot-3d');
+                if (plot3d && plot3d.data) {{
+                    Plotly.newPlot('plot-3d-comparison', plot3d.data, plot3d.layout, {{ responsive: true }});
+                }}
+            }}, 100);
+        }}
+
+        // 컨트롤 함수들
+        function reset2DView() {{
+            Plotly.relayout('plot-2d', {{
+                'xaxis.autorange': true,
+                'yaxis.autorange': true
+            }});
+        }}
+
+        function reset3DView() {{
+            Plotly.relayout('plot-3d', {{
+                'scene.camera': {{
+                    eye: {{ x: 1.2, y: 1.2, z: 1.2 }}
+                }}
+            }});
+        }}
+
+        function toggle2DOutliers() {{
+            showOutliers2D = !showOutliers2D;
+            create2DPlot();
+        }}
+
+        function toggle3DOutliers() {{
+            showOutliers3D = !showOutliers3D;
+            create3DPlot();
+        }}
+
+        function show2DRegression() {{
+            showRegression2D = !showRegression2D;
+            // 회귀선 구현 (추후 추가 가능)
+            create2DPlot();
+        }}
+
+        function toggle3DRegression() {{
+            showRegression3D = !showRegression3D;
+            // 회귀평면 구현 (추후 추가 가능)
+            create3DPlot();
+        }}
+
+        // 창 크기 변경 시 플롯 리사이즈
+        window.addEventListener('resize', function() {{
+            ['plot-2d', 'plot-3d', 'plot-2d-comparison', 'plot-3d-comparison'].forEach(id => {{
+                const element = document.getElementById(id);
+                if (element && element.data) {{
+                    Plotly.Plots.resize(element);
+                }}
+            }});
+        }});
+    </script>
+</body>
+</html>
+        """
+
+        return html_content
 
     def _create_3d_distribution_plot(self, results: Dict[str, Any]) -> str:
         """

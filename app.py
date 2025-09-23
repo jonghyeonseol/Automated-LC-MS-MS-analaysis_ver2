@@ -120,6 +120,16 @@ def simple_analyzer():
     return render_template("analyzer.html")
 
 
+@app.route("/integrated")
+def integrated_view():
+    """통합 시각화 페이지 - 2D와 3D를 함께 표시"""
+    try:
+        with open("integrated_visualization.html", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return "통합 시각화 파일을 찾을 수 없습니다.", 404
+
+
 @app.route("/api/health")
 def health_check():
     """헬스 체크 엔드포인트"""
