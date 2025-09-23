@@ -236,6 +236,48 @@ def create_visualizations():
         ), 500
 
 
+@app.route("/api/visualize-3d", methods=["POST"])
+def create_3d_visualization():
+    """3D 분포 시각화 전용 엔드포인트"""
+    try:
+        data = request.get_json()
+        if not data or "results" not in data:
+            return jsonify(
+                {"error": "분석 결과 데이터가 필요합니다."}
+            ), 400
+
+        results = data["results"]
+
+        # 3D 시각화만 생성
+        plot_html = visualization_service._create_3d_distribution_plot(results)
+
+        # 구조화된 데이터도 함께 제공
+        viz_data = visualization_service.create_visualization_data(results)
+
+        return jsonify({
+            "message": "3D 시각화 생성 완료",
+            "plot_html": plot_html,
+            "visualization_data": {
+                "title": viz_data.title,
+                "data_points": len(viz_data.x_data),
+                "x_range": [min(viz_data.x_data), max(viz_data.x_data)] if viz_data.x_data else [0, 0],
+                "y_range": [min(viz_data.y_data), max(viz_data.y_data)] if viz_data.y_data else [0, 0],
+                "z_range": [min(viz_data.z_data), max(viz_data.z_data)] if viz_data.z_data else [0, 0],
+                "axis_labels": {
+                    "x": viz_data.x_label,
+                    "y": viz_data.y_label,
+                    "z": viz_data.z_label
+                }
+            }
+        })
+
+    except Exception as e:
+        print(f"3D Visualization error: {str(e)}")
+        return jsonify(
+            {"error": f"3D 시각화 생성 중 오류 발생: {str(e)}"}
+        ), 500
+
+
 @app.route("/api/settings", methods=["GET", "POST"])
 def manage_settings():
     """설정 관리"""

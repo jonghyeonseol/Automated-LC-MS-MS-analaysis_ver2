@@ -11,11 +11,12 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 
-class EnhancedGangliosideDataProcessor:
+class GangliosideDataProcessor:
     def __init__(self):
         self.r2_threshold = 0.99
         self.outlier_threshold = 3.0
         self.rt_tolerance = 0.1
+        print("🔬 Ganglioside Data Processor 초기화 완료")
 
     def update_settings(
         self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None

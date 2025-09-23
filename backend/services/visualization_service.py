@@ -10,6 +10,8 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+from backend.utils.data_structures import VisualizationData, calculate_mass_to_charge
+
 
 class VisualizationService:
     def __init__(self):
@@ -52,6 +54,9 @@ class VisualizationService:
 
             # 8. 시계열 분석 (RT 분포)
             plots["rt_distribution"] = self._create_rt_distribution(results)
+
+            # 9. 3D 분포 시각화 (새로운 기능)
+            plots["3d_distribution"] = self._create_3d_distribution_plot(results)
 
             return {
                 "status": "success",
@@ -658,3 +663,267 @@ class VisualizationService:
         )
 
         return fig.to_html(include_plotlyjs="cdn", div_id="rt_distribution")
+
+    def _create_3d_distribution_plot(self, results: Dict[str, Any]) -> str:
+        """
+        3D 분포 시각화 생성 - Mass-to-Charge(X) vs Retention Time(Y) vs Log P(Z)
+        데이터의 분포를 3차원으로 표현하여 패턴 분석
+        """
+        fig = go.Figure()
+
+        # 유효 화합물과 이상치 데이터 분리
+        valid_compounds = results.get("valid_compounds", [])
+        outliers = results.get("outliers", [])
+
+        # 유효 화합물 3D 산점도
+        if valid_compounds:
+            # 데이터 준비
+            names = [c["Name"] for c in valid_compounds]
+            retention_times = [c["RT"] for c in valid_compounds]
+            log_p_values = [c["Log P"] for c in valid_compounds]
+            volumes = [c["Volume"] for c in valid_compounds]
+
+            # Mass-to-charge 계산
+            mass_to_charge = [calculate_mass_to_charge(name) for name in names]
+
+            # Anchor 상태 확인
+            anchor_mask = [c["Anchor"] == "T" for c in valid_compounds]
+
+            # 접두사별 색상 매핑
+            prefixes = [name.split("(")[0] if "(" in name else name for name in names]
+            unique_prefixes = list(set(prefixes))
+            color_map = {prefix: i for i, prefix in enumerate(unique_prefixes)}
+            colors = [color_map[prefix] for prefix in prefixes]
+
+            # Volume에 따른 크기 조정 (정규화)
+            min_vol, max_vol = min(volumes), max(volumes)
+            if max_vol > min_vol:
+                normalized_sizes = [(v - min_vol) / (max_vol - min_vol) * 20 + 5 for v in volumes]
+            else:
+                normalized_sizes = [10] * len(volumes)
+
+            # Anchor 화합물 (다이아몬드 마커)
+            anchor_indices = [i for i, is_anchor in enumerate(anchor_mask) if is_anchor]
+            if anchor_indices:
+                fig.add_trace(go.Scatter3d(
+                    x=[mass_to_charge[i] for i in anchor_indices],
+                    y=[retention_times[i] for i in anchor_indices],
+                    z=[log_p_values[i] for i in anchor_indices],
+                    mode='markers',
+                    marker=dict(
+                        size=[normalized_sizes[i] for i in anchor_indices],
+                        color=self.color_palette["anchor"],
+                        symbol='diamond',
+                        line=dict(width=2, color='white'),
+                        opacity=0.9
+                    ),
+                    name='Anchor Compounds (T)',
+                    text=[f"<b>{names[i]}</b><br>m/z: {mass_to_charge[i]:.1f}<br>RT: {retention_times[i]:.3f}<br>Log P: {log_p_values[i]:.2f}<br>Volume: {volumes[i]:,}" for i in anchor_indices],
+                    hovertemplate='%{text}<extra></extra>'
+                ))
+
+            # 일반 유효 화합물 (구형 마커)
+            non_anchor_indices = [i for i, is_anchor in enumerate(anchor_mask) if not is_anchor]
+            if non_anchor_indices:
+                fig.add_trace(go.Scatter3d(
+                    x=[mass_to_charge[i] for i in non_anchor_indices],
+                    y=[retention_times[i] for i in non_anchor_indices],
+                    z=[log_p_values[i] for i in non_anchor_indices],
+                    mode='markers',
+                    marker=dict(
+                        size=[normalized_sizes[i] for i in non_anchor_indices],
+                        color=[colors[i] for i in non_anchor_indices],
+                        colorscale='Viridis',
+                        showscale=True,
+                        colorbar=dict(title="Ganglioside Type", x=1.1),
+                        line=dict(width=1, color='white'),
+                        opacity=0.8
+                    ),
+                    name='Valid Compounds',
+                    text=[f"<b>{names[i]}</b><br>m/z: {mass_to_charge[i]:.1f}<br>RT: {retention_times[i]:.3f}<br>Log P: {log_p_values[i]:.2f}<br>Volume: {volumes[i]:,}" for i in non_anchor_indices],
+                    hovertemplate='%{text}<extra></extra>'
+                ))
+
+        # 이상치 3D 산점도
+        if outliers:
+            outlier_names = [c["Name"] for c in outliers]
+            outlier_rt = [c["RT"] for c in outliers]
+            outlier_log_p = [c["Log P"] for c in outliers]
+            outlier_volumes = [c["Volume"] for c in outliers]
+            outlier_reasons = [c.get("outlier_reason", "Unknown") for c in outliers]
+
+            # Mass-to-charge 계산
+            outlier_mz = [calculate_mass_to_charge(name) for name in outlier_names]
+
+            # Volume에 따른 크기 조정
+            if outlier_volumes:
+                min_vol, max_vol = min(outlier_volumes), max(outlier_volumes)
+                if max_vol > min_vol:
+                    outlier_sizes = [(v - min_vol) / (max_vol - min_vol) * 15 + 5 for v in outlier_volumes]
+                else:
+                    outlier_sizes = [8] * len(outlier_volumes)
+
+                fig.add_trace(go.Scatter3d(
+                    x=outlier_mz,
+                    y=outlier_rt,
+                    z=outlier_log_p,
+                    mode='markers',
+                    marker=dict(
+                        size=outlier_sizes,
+                        color=self.color_palette["outlier"],
+                        symbol='x',
+                        line=dict(width=2),
+                        opacity=0.7
+                    ),
+                    name='Outliers',
+                    text=[f"<b>{name}</b><br>m/z: {mz:.1f}<br>RT: {rt:.3f}<br>Log P: {lp:.2f}<br>Volume: {vol:,}<br>Reason: {reason}"
+                          for name, mz, rt, lp, vol, reason in zip(outlier_names, outlier_mz, outlier_rt, outlier_log_p, outlier_volumes, outlier_reasons)],
+                    hovertemplate='%{text}<extra></extra>'
+                ))
+
+        # 3D 회귀 평면 추가 (선택적)
+        if results.get("regression_analysis"):
+            self._add_3d_regression_planes(fig, results, valid_compounds)
+
+        # 레이아웃 설정
+        fig.update_layout(
+            title=dict(
+                text="3D Distribution: Mass-to-Charge vs Retention Time vs Log P",
+                x=0.5,
+                font=dict(size=16)
+            ),
+            scene=dict(
+                xaxis_title="Mass-to-Charge (m/z)",
+                yaxis_title="Retention Time (min)",
+                zaxis_title="Partition Coefficient (Log P)",
+                camera=dict(
+                    eye=dict(x=1.2, y=1.2, z=1.2)
+                ),
+                aspectmode='cube'
+            ),
+            width=900,
+            height=700,
+            margin=dict(l=0, r=0, t=50, b=0),
+            legend=dict(
+                x=0.02,
+                y=0.98,
+                bgcolor='rgba(255,255,255,0.8)',
+                bordercolor='rgba(0,0,0,0.2)',
+                borderwidth=1
+            ),
+            hovermode='closest'
+        )
+
+        return fig.to_html(include_plotlyjs="cdn", div_id="3d_distribution")
+
+    def _add_3d_regression_planes(self, fig: go.Figure, results: Dict[str, Any], valid_compounds: list):
+        """
+        3D 회귀 평면 추가 (선택적 기능)
+        각 접두사 그룹별로 RT-LogP 관계를 나타내는 평면 표시
+        """
+        regression_analysis = results.get("regression_analysis", {})
+
+        for prefix, reg_data in regression_analysis.items():
+            if reg_data["r2"] < 0.95:  # R²가 낮은 경우 평면 생략
+                continue
+
+            # 해당 접두사의 화합물들 필터링
+            prefix_compounds = [c for c in valid_compounds if c["Name"].startswith(prefix)]
+            if len(prefix_compounds) < 3:
+                continue
+
+            # Log P 범위 설정
+            log_p_values = [c["Log P"] for c in prefix_compounds]
+            log_p_min, log_p_max = min(log_p_values), max(log_p_values)
+
+            # 평면을 위한 격자 생성
+            log_p_grid = np.linspace(log_p_min, log_p_max, 10)
+
+            # Mass-to-charge 추정 (해당 접두사의 평균값 사용)
+            mz_values = [calculate_mass_to_charge(c["Name"]) for c in prefix_compounds]
+            avg_mz = np.mean(mz_values)
+            mz_grid = np.full_like(log_p_grid, avg_mz)
+
+            # 회귀선에 따른 RT 계산
+            slope = reg_data["slope"]
+            intercept = reg_data["intercept"]
+            rt_grid = slope * log_p_grid + intercept
+
+            # 평면 추가 (선 형태로 단순화)
+            fig.add_trace(go.Scatter3d(
+                x=mz_grid,
+                y=rt_grid,
+                z=log_p_grid,
+                mode='lines',
+                line=dict(
+                    color=self.color_palette["regression"],
+                    width=4,
+                    dash='dash'
+                ),
+                name=f'{prefix} Regression (R²={reg_data["r2"]:.3f})',
+                showlegend=True,
+                hovertemplate=f'<b>{prefix}</b><br>Predicted RT: %{{y:.3f}}<br>Log P: %{{z:.2f}}<extra></extra>'
+            ))
+
+    def create_visualization_data(self, results: Dict[str, Any]) -> VisualizationData:
+        """
+        분석 결과를 VisualizationData 구조체로 변환
+        외부에서 사용할 수 있는 구조화된 3D 데이터 제공
+        """
+        valid_compounds = results.get("valid_compounds", [])
+        outliers = results.get("outliers", [])
+        all_compounds = valid_compounds + outliers
+
+        if not all_compounds:
+            return VisualizationData(
+                x_data=[], y_data=[], z_data=[], labels=[], colors=[], sizes=[],
+                anchor_mask=[], title="Empty Dataset"
+            )
+
+        # 데이터 추출
+        names = [c["Name"] for c in all_compounds]
+        retention_times = [c["RT"] for c in all_compounds]
+        log_p_values = [c["Log P"] for c in all_compounds]
+        volumes = [c["Volume"] for c in all_compounds]
+
+        # Mass-to-charge 계산
+        mass_to_charge = [calculate_mass_to_charge(name) for name in names]
+
+        # 상태별 마스크
+        anchor_mask = [c["Anchor"] == "T" for c in all_compounds]
+        outlier_mask = [c in outliers for c in all_compounds]
+
+        # 색상 및 크기 설정
+        colors = []
+        sizes = []
+        for i, compound in enumerate(all_compounds):
+            if outlier_mask[i]:
+                colors.append(self.color_palette["outlier"])
+                sizes.append(8)
+            elif anchor_mask[i]:
+                colors.append(self.color_palette["anchor"])
+                sizes.append(12)
+            else:
+                colors.append(self.color_palette["valid"])
+                sizes.append(10)
+
+        # 접두사별 그룹 매핑
+        prefix_groups = {}
+        for i, name in enumerate(names):
+            prefix = name.split("(")[0] if "(" in name else name
+            if prefix not in prefix_groups:
+                prefix_groups[prefix] = []
+            prefix_groups[prefix].append(i)
+
+        return VisualizationData(
+            x_data=mass_to_charge,
+            y_data=retention_times,
+            z_data=log_p_values,
+            labels=names,
+            colors=colors,
+            sizes=sizes,
+            anchor_mask=anchor_mask,
+            outlier_mask=outlier_mask,
+            prefix_groups=prefix_groups,
+            title="LC-MS-MS Ganglioside Analysis Results"
+        )
