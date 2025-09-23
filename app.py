@@ -7,8 +7,10 @@ import io
 import os
 import traceback
 from datetime import datetime
+import json
 
 import pandas as pd
+import numpy as np
 from flask import Flask, jsonify, render_template, request, send_file
 from flask_cors import CORS
 
@@ -62,6 +64,42 @@ visualization_service = VisualizationService()
 regression_analyzer = RegressionAnalyzer()
 
 print("🧬 Ganglioside Analyzer Flask 서버 초기화 완료")
+
+
+def convert_to_serializable(obj):
+    """Convert numpy types to JSON serializable types recursively"""
+    if obj is None:
+        return None
+    elif isinstance(obj, dict):
+        return {key: convert_to_serializable(value) for key, value in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [convert_to_serializable(item) for item in obj]
+    elif isinstance(obj, (np.integer, np.int32, np.int64)):
+        return int(obj)
+    elif isinstance(obj, (np.floating, np.float32, np.float64)):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, (pd.Timestamp, pd.DatetimeIndex)):
+        return obj.isoformat() if hasattr(obj, 'isoformat') else str(obj)
+    elif hasattr(obj, '__dict__'):  # For custom objects
+        return convert_to_serializable(obj.__dict__)
+    else:
+        # Check if it's a pandas NA value
+        try:
+            if pd.isna(obj):
+                return None
+        except (TypeError, ValueError):
+            pass
+
+        # Try to convert to standard Python types
+        try:
+            if isinstance(obj, (int, float, str, bool)):
+                return obj
+            else:
+                return str(obj)  # Fallback to string representation
+        except:
+            return str(obj)
 
 
 @app.route("/")
@@ -197,14 +235,25 @@ def analyze_data():
             "analysis_timestamp": datetime.now().isoformat(),
         }
 
+        # Convert to JSON serializable format
+        results = convert_to_serializable(results)
+
         success_rate = results['statistics']['success_rate']
         print(f"✅ 분석 완료: {success_rate:.1f}% 성공률")
 
-        return jsonify({
+        # Use Flask Response with manual JSON encoding
+        from flask import Response
+        response_data = {
             "message": "분석 완료",
             "filename": file.filename,
             "results": results
-        })
+        }
+
+        return Response(
+            json.dumps(response_data, ensure_ascii=False, indent=2),
+            mimetype='application/json',
+            headers={'Content-Type': 'application/json; charset=utf-8'}
+        )
 
     except Exception as e:
         print(f"Analysis error: {str(e)}")
@@ -226,6 +275,7 @@ def create_visualizations():
 
         # 시각화 생성
         plots = visualization_service.create_all_plots(results)
+        plots = convert_to_serializable(plots)
 
         return jsonify({"message": "시각화 생성 완료", "plots": plots})
 
@@ -254,7 +304,7 @@ def create_3d_visualization():
         # 구조화된 데이터도 함께 제공
         viz_data = visualization_service.create_visualization_data(results)
 
-        return jsonify({
+        response_data = {
             "message": "3D 시각화 생성 완료",
             "plot_html": plot_html,
             "visualization_data": {
@@ -269,7 +319,9 @@ def create_3d_visualization():
                     "z": viz_data.z_label
                 }
             }
-        })
+        }
+
+        return jsonify(convert_to_serializable(response_data))
 
     except Exception as e:
         print(f"3D Visualization error: {str(e)}")
@@ -615,5 +667,5 @@ def _get_challenge_sample_data():
 
 if __name__ == "__main__":
     print("🚀 Ganglioside Analyzer Flask 서버 시작")
-    print("🌐 http://localhost:5000 에서 접속 가능")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    print("🌐 http://localhost:5001 에서 접속 가능")
+    app.run(host="0.0.0.0", port=5001, debug=True)
