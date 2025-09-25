@@ -1,9 +1,10 @@
 """
-API 라우터 초기화
+API Routes Initialization - Flask Blueprints
 """
 
-from .data import router as data_router
-from .settings import router as settings_router
-from .web import router as web_router
+from .analysis import analysis_bp
+from .visualization import visualization_bp
+from .settings import settings_bp
+from .web import web_bp
 
-__all__ = ["data_router", "settings_router", "web_router"]
+__all__ = ["analysis_bp", "visualization_bp", "settings_bp", "web_bp"]

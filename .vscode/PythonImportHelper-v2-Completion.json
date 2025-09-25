@@ -9,12 +9,254 @@
         "documentation": {}
     },
     {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "pandas",
         "description": "pandas",
         "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
         "documentation": {}
     },
     {
@@ -50,38 +292,6 @@
         "documentation": {}
     },
     {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "Request",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "FastAPI",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -91,14 +301,6 @@
     },
     {
         "label": "JSONResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
-        "isExtraImport": true,
-        "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
-        "label": "HTMLResponse",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
         "isExtraImport": true,
@@ -122,23 +324,6 @@
         "documentation": {}
     },
     {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "Jinja2Templates",
-        "importPath": "fastapi.templating",
-        "description": "fastapi.templating",
-        "isExtraImport": true,
-        "detail": "fastapi.templating",
-        "documentation": {}
-    },
-    {
         "label": "Any",
         "importPath": "typing",
         "description": "typing",
@@ -259,12 +444,35 @@
         "documentation": {}
     },
     {
-        "label": "numpy",
-        "kind": 6,
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "importPath": "numpy",
-        "description": "numpy",
-        "detail": "numpy",
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -334,6 +542,39 @@
         "documentation": {}
     },
     {
+        "label": "VisualizationData",
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "isExtraImport": true,
+        "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_mass_to_charge",
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "isExtraImport": true,
+        "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
@@ -358,108 +599,20 @@
         "documentation": {}
     },
     {
-        "label": "traceback",
+        "label": "json",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "traceback",
-        "description": "traceback",
-        "detail": "traceback",
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
         "documentation": {}
     },
     {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
         "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "jsonify",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "render_template",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "send_file",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "jsonify",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "render_template",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "request",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
-        "documentation": {}
-    },
-    {
-        "label": "send_file",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
+        "detail": "flask_cors",
         "documentation": {}
     },
     {
@@ -503,65 +656,373 @@
         "documentation": {}
     },
     {
+        "label": "analysis_bp",
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "init_services",
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "visualization_bp",
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "init_visualization_service",
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "settings_bp",
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "init_processor_service",
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "web_bp",
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "isExtraImport": true,
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "init_services",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "def init_services(ganglioside_processor, reg_analyzer, vis_service):\n    \"\"\"서비스 인스턴스들을 초기화\"\"\"\n    global processor, regression_analyzer, visualization_service\n    processor = ganglioside_processor\n    regression_analyzer = reg_analyzer\n    visualization_service = vis_service\ndef convert_to_serializable(obj):\n    \"\"\"NumPy/pandas 객체를 JSON 직렬화 가능한 형태로 변환\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "convert_to_serializable",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "def convert_to_serializable(obj):\n    \"\"\"NumPy/pandas 객체를 JSON 직렬화 가능한 형태로 변환\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}\n    elif isinstance(obj, list):\n        return [convert_to_serializable(item) for item in obj]\n    elif isinstance(obj, (np.integer, np.int32, np.int64)):\n        return int(obj)\n    elif isinstance(obj, (np.floating, np.float32, np.float64)):\n        return float(obj)",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "upload_csv",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "def upload_csv():\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if \"file\" not in request.files:\n            return jsonify({\"error\": \"파일이 없습니다.\"}), 400\n        file = request.files[\"file\"]\n        if file.filename == \"\":\n            return jsonify({\"error\": \"파일이 선택되지 않았습니다.\"}), 400\n        if not file.filename.lower().endswith('.csv'):\n            return jsonify({\"error\": \"CSV 파일만 업로드 가능합니다.\"}), 400",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_data",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "def analyze_data():\n    \"\"\"데이터 분석 실행\"\"\"\n    try:\n        # 파일 및 설정 가져오기\n        if \"file\" not in request.files:\n            return jsonify({\"error\": \"분석할 파일이 없습니다.\"}), 400\n        file = request.files[\"file\"]\n        data_type = request.form.get(\"data_type\", \"Porcine\")\n        outlier_threshold = float(request.form.get(\"outlier_threshold\", 3.0))\n        r2_threshold = float(request.form.get(\"r2_threshold\", 0.99))",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "sample_test",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "def sample_test():\n    \"\"\"샘플 데이터 테스트\"\"\"\n    try:\n        # 요청에서 설정 가져오기\n        data = request.get_json()\n        if not data:\n            return jsonify({\"error\": \"JSON 데이터가 필요합니다.\"}), 400\n        data_type = data.get(\"data_type\", \"Porcine\")\n        outlier_threshold = float(data.get(\"outlier_threshold\", 3.0))\n        r2_threshold = float(data.get(\"r2_threshold\", 0.99))",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "download_results",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "def download_results():\n    \"\"\"분석 결과 다운로드\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify({\"error\": \"분석 결과 데이터가 없습니다.\"}), 400\n        results = data[\"results\"]\n        # CSV 형태로 변환\n        output_data = []\n        # 유효한 화합물들",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "processor",
+        "kind": 5,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "processor = None\nregression_analyzer = None\nvisualization_service = None\n# Blueprint 생성\nanalysis_bp = Blueprint('analysis', __name__, url_prefix='/api')\ndef init_services(ganglioside_processor, reg_analyzer, vis_service):\n    \"\"\"서비스 인스턴스들을 초기화\"\"\"\n    global processor, regression_analyzer, visualization_service\n    processor = ganglioside_processor\n    regression_analyzer = reg_analyzer",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "regression_analyzer",
+        "kind": 5,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "regression_analyzer = None\nvisualization_service = None\n# Blueprint 생성\nanalysis_bp = Blueprint('analysis', __name__, url_prefix='/api')\ndef init_services(ganglioside_processor, reg_analyzer, vis_service):\n    \"\"\"서비스 인스턴스들을 초기화\"\"\"\n    global processor, regression_analyzer, visualization_service\n    processor = ganglioside_processor\n    regression_analyzer = reg_analyzer\n    visualization_service = vis_service",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "visualization_service",
+        "kind": 5,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "visualization_service = None\n# Blueprint 생성\nanalysis_bp = Blueprint('analysis', __name__, url_prefix='/api')\ndef init_services(ganglioside_processor, reg_analyzer, vis_service):\n    \"\"\"서비스 인스턴스들을 초기화\"\"\"\n    global processor, regression_analyzer, visualization_service\n    processor = ganglioside_processor\n    regression_analyzer = reg_analyzer\n    visualization_service = vis_service\ndef convert_to_serializable(obj):",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "analysis_bp",
+        "kind": 5,
+        "importPath": "backend.api.routes.analysis",
+        "description": "backend.api.routes.analysis",
+        "peekOfCode": "analysis_bp = Blueprint('analysis', __name__, url_prefix='/api')\ndef init_services(ganglioside_processor, reg_analyzer, vis_service):\n    \"\"\"서비스 인스턴스들을 초기화\"\"\"\n    global processor, regression_analyzer, visualization_service\n    processor = ganglioside_processor\n    regression_analyzer = reg_analyzer\n    visualization_service = vis_service\ndef convert_to_serializable(obj):\n    \"\"\"NumPy/pandas 객체를 JSON 직렬화 가능한 형태로 변환\"\"\"\n    if isinstance(obj, dict):",
+        "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
         "label": "get_data_processor",
         "kind": 2,
-        "importPath": "backend.api.routes.data",
-        "description": "backend.api.routes.data",
+        "importPath": "backend.api.routes.data_legacy",
+        "description": "backend.api.routes.data_legacy",
         "peekOfCode": "def get_data_processor():\n    return data_processor\ndef get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith(\".csv\"):\n            raise HTTPException(",
-        "detail": "backend.api.routes.data",
+        "detail": "backend.api.routes.data_legacy",
         "documentation": {}
     },
     {
         "label": "get_visualization_service",
         "kind": 2,
-        "importPath": "backend.api.routes.data",
-        "description": "backend.api.routes.data",
+        "importPath": "backend.api.routes.data_legacy",
+        "description": "backend.api.routes.data_legacy",
         "peekOfCode": "def get_visualization_service():\n    return visualization_service\n@router.post(\"/upload\")\nasync def upload_csv(file: UploadFile = File(...)):\n    \"\"\"CSV 파일 업로드 및 기본 검증\"\"\"\n    try:\n        if not file.filename.endswith(\".csv\"):\n            raise HTTPException(\n                status_code=400, detail=\"CSV 파일만 업로드 가능합니다.\"\n            )",
-        "detail": "backend.api.routes.data",
+        "detail": "backend.api.routes.data_legacy",
         "documentation": {}
     },
     {
         "label": "router",
         "kind": 5,
-        "importPath": "backend.api.routes.data",
-        "description": "backend.api.routes.data",
+        "importPath": "backend.api.routes.data_legacy",
+        "description": "backend.api.routes.data_legacy",
         "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"data\"])\n# 서비스 인스턴스 초기화\ntry:\n    from backend.services.data_processor import GangliosideDataProcessor\n    from backend.services.visualization_service import VisualizationService\n    data_processor = GangliosideDataProcessor()\n    visualization_service = VisualizationService()\n    print(\"✅ 실제 분석 모듈 로드 성공\")\nexcept ImportError as e:\n    print(f\"⚠️ 분석 모듈 로드 실패: {e}\")",
-        "detail": "backend.api.routes.data",
+        "detail": "backend.api.routes.data_legacy",
         "documentation": {}
     },
     {
-        "label": "router",
-        "kind": 5,
+        "label": "init_processor_service",
+        "kind": 2,
         "importPath": "backend.api.routes.settings",
         "description": "backend.api.routes.settings",
-        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"settings\"])\n@router.get(\"/settings\")\nasync def get_current_settings():\n    \"\"\"현재 분석 설정 조회\"\"\"\n    data_processor = get_data_processor()\n    return {\n        \"current_settings\": {\n            \"outlier_threshold\": data_processor.outlier_threshold,\n            \"r2_threshold\": data_processor.r2_threshold,\n            \"rt_tolerance\": data_processor.rt_tolerance,",
+        "peekOfCode": "def init_processor_service(ganglioside_processor):\n    \"\"\"Initialize processor service instance\"\"\"\n    global processor\n    processor = ganglioside_processor\n@settings_bp.route(\"/settings\", methods=[\"GET\", \"POST\"])\ndef manage_settings():\n    \"\"\"Settings management - get or update analysis parameters\"\"\"\n    try:\n        if request.method == \"GET\":\n            # Return current settings",
         "detail": "backend.api.routes.settings",
         "documentation": {}
     },
     {
-        "label": "router",
+        "label": "manage_settings",
+        "kind": 2,
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "peekOfCode": "def manage_settings():\n    \"\"\"Settings management - get or update analysis parameters\"\"\"\n    try:\n        if request.method == \"GET\":\n            # Return current settings\n            current_settings = processor.get_settings()\n            return jsonify({\n                \"message\": \"Current settings retrieved\",\n                \"settings\": current_settings,\n                \"timestamp\": datetime.now().isoformat()",
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "health_check",
+        "kind": 2,
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "peekOfCode": "def health_check():\n    \"\"\"Health check endpoint for service status\"\"\"\n    try:\n        # Check if processor is available and working\n        if processor is None:\n            return jsonify({\n                \"status\": \"unhealthy\",\n                \"error\": \"Processor service not initialized\"\n            }), 503\n        # Get current settings as a basic health check",
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "processor",
         "kind": 5,
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "peekOfCode": "processor = None\n# Blueprint creation\nsettings_bp = Blueprint('settings', __name__, url_prefix='/api')\ndef init_processor_service(ganglioside_processor):\n    \"\"\"Initialize processor service instance\"\"\"\n    global processor\n    processor = ganglioside_processor\n@settings_bp.route(\"/settings\", methods=[\"GET\", \"POST\"])\ndef manage_settings():\n    \"\"\"Settings management - get or update analysis parameters\"\"\"",
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "settings_bp",
+        "kind": 5,
+        "importPath": "backend.api.routes.settings",
+        "description": "backend.api.routes.settings",
+        "peekOfCode": "settings_bp = Blueprint('settings', __name__, url_prefix='/api')\ndef init_processor_service(ganglioside_processor):\n    \"\"\"Initialize processor service instance\"\"\"\n    global processor\n    processor = ganglioside_processor\n@settings_bp.route(\"/settings\", methods=[\"GET\", \"POST\"])\ndef manage_settings():\n    \"\"\"Settings management - get or update analysis parameters\"\"\"\n    try:\n        if request.method == \"GET\":",
+        "detail": "backend.api.routes.settings",
+        "documentation": {}
+    },
+    {
+        "label": "init_visualization_service",
+        "kind": 2,
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "peekOfCode": "def init_visualization_service(vis_service):\n    \"\"\"Initialize visualization service instance\"\"\"\n    global visualization_service\n    visualization_service = vis_service\ndef convert_to_serializable(obj):\n    \"\"\"Convert NumPy/pandas objects to JSON serializable format\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}\n    elif isinstance(obj, list):\n        return [convert_to_serializable(item) for item in obj]",
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "convert_to_serializable",
+        "kind": 2,
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "peekOfCode": "def convert_to_serializable(obj):\n    \"\"\"Convert NumPy/pandas objects to JSON serializable format\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}\n    elif isinstance(obj, list):\n        return [convert_to_serializable(item) for item in obj]\n    elif isinstance(obj, (np.integer, np.int32, np.int64)):\n        return int(obj)\n    elif isinstance(obj, (np.floating, np.float32, np.float64)):\n        return float(obj)",
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "create_visualizations",
+        "kind": 2,
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "peekOfCode": "def create_visualizations():\n    \"\"\"Create all visualizations from analysis results\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify({\"error\": \"Analysis results data is required.\"}), 400\n        results = data[\"results\"]\n        # Generate all visualizations\n        plots = visualization_service.create_all_plots(results)\n        return jsonify({",
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "create_3d_visualization",
+        "kind": 2,
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "peekOfCode": "def create_3d_visualization():\n    \"\"\"Dedicated endpoint for 3D distribution visualization\"\"\"\n    try:\n        data = request.get_json()\n        if not data:\n            return jsonify({\"error\": \"Request data is required.\"}), 400\n        # Check for file data\n        if \"file_data\" in data:\n            # Process CSV data directly\n            df = pd.DataFrame(data[\"file_data\"])",
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "visualization_service",
+        "kind": 5,
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "peekOfCode": "visualization_service = None\n# Blueprint creation\nvisualization_bp = Blueprint('visualization', __name__, url_prefix='/api')\ndef init_visualization_service(vis_service):\n    \"\"\"Initialize visualization service instance\"\"\"\n    global visualization_service\n    visualization_service = vis_service\ndef convert_to_serializable(obj):\n    \"\"\"Convert NumPy/pandas objects to JSON serializable format\"\"\"\n    if isinstance(obj, dict):",
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "visualization_bp",
+        "kind": 5,
+        "importPath": "backend.api.routes.visualization",
+        "description": "backend.api.routes.visualization",
+        "peekOfCode": "visualization_bp = Blueprint('visualization', __name__, url_prefix='/api')\ndef init_visualization_service(vis_service):\n    \"\"\"Initialize visualization service instance\"\"\"\n    global visualization_service\n    visualization_service = vis_service\ndef convert_to_serializable(obj):\n    \"\"\"Convert NumPy/pandas objects to JSON serializable format\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}\n    elif isinstance(obj, list):",
+        "detail": "backend.api.routes.visualization",
+        "documentation": {}
+    },
+    {
+        "label": "index",
+        "kind": 2,
         "importPath": "backend.api.routes.web",
         "description": "backend.api.routes.web",
-        "peekOfCode": "router = APIRouter(tags=[\"web\"])\n# 템플릿 설정\ntemplate_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\n        \"simple_test_page.html\", {\"request\": request}\n    )",
+        "peekOfCode": "def index():\n    \"\"\"Main page - Working analyzer\"\"\"\n    try:\n        with open(\"working_analyzer.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Working analyzer file not found.\", 404\n    except Exception as e:\n        print(f\"Error serving working analyzer: {str(e)}\")\n        return f\"Error loading working analyzer: {str(e)}\", 500",
         "detail": "backend.api.routes.web",
         "documentation": {}
     },
     {
-        "label": "template_dir",
-        "kind": 5,
+        "label": "interactive_analyzer",
+        "kind": 2,
         "importPath": "backend.api.routes.web",
         "description": "backend.api.routes.web",
-        "peekOfCode": "template_dir = os.path.join(os.path.dirname(__file__), \"..\", \"..\", \"templates\")\ntemplates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\n        \"simple_test_page.html\", {\"request\": request}\n    )\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):",
+        "peekOfCode": "def interactive_analyzer():\n    \"\"\"Interactive analyzer page\"\"\"\n    try:\n        return render_template(\"interactive_analyzer.html\")\n    except Exception as e:\n        print(f\"Template error for interactive: {str(e)}\")\n        return f\"Template rendering error: {str(e)}\", 500\n@web_bp.route(\"/legacy\")\ndef simple_analyzer():\n    \"\"\"Simple analyzer page (legacy)\"\"\"",
         "detail": "backend.api.routes.web",
         "documentation": {}
     },
     {
-        "label": "templates",
+        "label": "simple_analyzer",
+        "kind": 2,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "def simple_analyzer():\n    \"\"\"Simple analyzer page (legacy)\"\"\"\n    try:\n        return render_template(\"analyzer.html\")\n    except Exception as e:\n        print(f\"Template error for legacy: {str(e)}\")\n        return f\"Template rendering error: {str(e)}\", 500\n@web_bp.route(\"/integrated\")\ndef integrated_view():\n    \"\"\"Integrated visualization page - combined 2D and 3D displays\"\"\"",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "integrated_view",
+        "kind": 2,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "def integrated_view():\n    \"\"\"Integrated visualization page - combined 2D and 3D displays\"\"\"\n    try:\n        with open(\"integrated_visualization_english.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Integrated visualization file not found.\", 404\n    except Exception as e:\n        print(f\"Error serving integrated view: {str(e)}\")\n        return f\"Error loading integrated view: {str(e)}\", 500",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "diagnostic_test",
+        "kind": 2,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "def diagnostic_test():\n    \"\"\"Diagnostic test page for JavaScript debugging\"\"\"\n    try:\n        with open(\"diagnostic_test.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Diagnostic test file not found.\", 404\n    except Exception as e:\n        print(f\"Error serving diagnostic test: {str(e)}\")\n        return f\"Error loading diagnostic test: {str(e)}\", 500",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "simple_analyzer_working",
+        "kind": 2,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "def simple_analyzer_working():\n    \"\"\"Simple working analyzer page\"\"\"\n    try:\n        with open(\"simple_analyzer.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Simple analyzer file not found.\", 404\n    except Exception as e:\n        print(f\"Error serving simple analyzer: {str(e)}\")\n        return f\"Error loading simple analyzer: {str(e)}\", 500",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "working_analyzer",
+        "kind": 2,
+        "importPath": "backend.api.routes.web",
+        "description": "backend.api.routes.web",
+        "peekOfCode": "def working_analyzer():\n    \"\"\"Working analyzer with integrated features\"\"\"\n    try:\n        with open(\"working_analyzer.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Working analyzer file not found.\", 404\n    except Exception as e:\n        print(f\"Error serving working analyzer: {str(e)}\")\n        return f\"Error loading working analyzer: {str(e)}\", 500",
+        "detail": "backend.api.routes.web",
+        "documentation": {}
+    },
+    {
+        "label": "web_bp",
         "kind": 5,
         "importPath": "backend.api.routes.web",
         "description": "backend.api.routes.web",
-        "peekOfCode": "templates = Jinja2Templates(directory=template_dir)\n@router.get(\"/test\", response_class=HTMLResponse)\nasync def test_page(request: Request):\n    \"\"\"브라우저 테스트 페이지\"\"\"\n    return templates.TemplateResponse(\n        \"simple_test_page.html\", {\"request\": request}\n    )\n@router.get(\"/analyzer\", response_class=HTMLResponse)\nasync def analyzer_page(request: Request):\n    \"\"\"Ganglioside 분석기 메인 페이지\"\"\"",
+        "peekOfCode": "web_bp = Blueprint('web', __name__)\n@web_bp.route(\"/\")\ndef index():\n    \"\"\"Main page - Working analyzer\"\"\"\n    try:\n        with open(\"working_analyzer.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Working analyzer file not found.\", 404\n    except Exception as e:",
         "detail": "backend.api.routes.web",
         "documentation": {}
     },
@@ -611,11 +1072,11 @@
         "documentation": {}
     },
     {
-        "label": "EnhancedGangliosideDataProcessor",
+        "label": "GangliosideDataProcessor",
         "kind": 6,
         "importPath": "backend.services.data_processor",
         "description": "backend.services.data_processor",
-        "peekOfCode": "class EnhancedGangliosideDataProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):\n        \"\"\"분석 설정 업데이트\"\"\"\n        if outlier_threshold is not None:",
+        "peekOfCode": "class GangliosideDataProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🔬 Ganglioside Data Processor 초기화 완료\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):\n        \"\"\"분석 설정 업데이트\"\"\"",
         "detail": "backend.services.data_processor",
         "documentation": {}
     },
@@ -644,6 +1105,51 @@
         "description": "backend.services.visualization_service",
         "peekOfCode": "class VisualizationService:\n    def __init__(self):\n        self.color_palette = {\n            \"valid\": \"#2ecc71\",  # Green\n            \"outlier\": \"#e74c3c\",  # Red\n            \"anchor\": \"#3498db\",  # Blue\n            \"regression\": \"#9b59b6\",  # Purple\n            \"background\": \"#ecf0f1\",  # Light gray\n            \"grid\": \"#bdc3c7\",  # Gray\n        }",
         "detail": "backend.services.visualization_service",
+        "documentation": {}
+    },
+    {
+        "label": "CompoundData",
+        "kind": 6,
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "peekOfCode": "class CompoundData:\n    \"\"\"Single compound data structure\"\"\"\n    name: str\n    rt: float  # Retention Time\n    volume: float\n    log_p: float  # Partition Coefficient (Log P)\n    anchor: str  # 'T' or 'F'\n    # Derived properties\n    prefix: Optional[str] = None\n    suffix: Optional[str] = None",
+        "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "VisualizationData",
+        "kind": 6,
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "peekOfCode": "class VisualizationData:\n    \"\"\"3D visualization data structure\"\"\"\n    x_data: List[float]  # Mass-to-charge ratio (m/z)\n    y_data: List[float]  # Retention Time\n    z_data: List[float]  # Partition Coefficient (Log P)\n    # Additional properties\n    labels: List[str]\n    colors: List[str]\n    sizes: List[float]\n    anchor_mask: List[bool]",
+        "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "RegressionResult",
+        "kind": 6,
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "peekOfCode": "class RegressionResult:\n    \"\"\"Regression analysis result\"\"\"\n    prefix: str\n    slope: float\n    intercept: float\n    r2: float\n    n_samples: int\n    equation: str\n    p_value: float\n    def predict(self, log_p_values: np.ndarray) -> np.ndarray:",
+        "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "AnalysisResults",
+        "kind": 6,
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "peekOfCode": "class AnalysisResults:\n    \"\"\"Complete analysis results structure\"\"\"\n    valid_compounds: List[CompoundData]\n    outliers: List[CompoundData]\n    regression_results: Dict[str, RegressionResult]\n    statistics: Dict[str, Any]\n    # Additional analysis data\n    sugar_analysis: Dict[str, Any]\n    oacetylation_analysis: Dict[str, Any]\n    detailed_analysis: Dict[str, Any]",
+        "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_mass_to_charge",
+        "kind": 2,
+        "importPath": "backend.utils.data_structures",
+        "description": "backend.utils.data_structures",
+        "peekOfCode": "def calculate_mass_to_charge(compound_name: str, base_mass: Optional[float] = None) -> float:\n    \"\"\"\n    Calculate mass-to-charge ratio from compound name\n    Args:\n        compound_name: Compound name like \"GD1a(36:1;O2)\"\n        base_mass: Optional base mass for the ganglioside class\n    Returns:\n        Estimated m/z ratio\n    \"\"\"\n    import re",
+        "detail": "backend.utils.data_structures",
         "documentation": {}
     },
     {
@@ -683,6 +1189,15 @@
         "documentation": {}
     },
     {
+        "label": "convert_to_serializable",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def convert_to_serializable(obj):\n    \"\"\"Convert numpy types to JSON serializable types recursively\"\"\"\n    if obj is None:\n        return None\n    elif isinstance(obj, dict):\n        return {key: convert_to_serializable(value) for key, value in obj.items()}\n    elif isinstance(obj, (list, tuple)):\n        return [convert_to_serializable(item) for item in obj]\n    elif isinstance(obj, (np.integer, np.int32, np.int64)):\n        return int(obj)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "index",
         "kind": 2,
         "importPath": "app",
@@ -696,7 +1211,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/simple\")\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
+        "peekOfCode": "def interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/simple\")\ndef simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/integrated\")\ndef integrated_view():\n    \"\"\"통합 시각화 페이지 - 2D와 3D를 함께 표시\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -705,7 +1220,16 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"\n    return jsonify(\n        {\n            \"status\": \"healthy\",\n            \"service\": \"ganglioside-analyzer-flask\",",
+        "peekOfCode": "def simple_analyzer():\n    \"\"\"기존 단순 분석기\"\"\"\n    return render_template(\"analyzer.html\")\n@app.route(\"/integrated\")\ndef integrated_view():\n    \"\"\"통합 시각화 페이지 - 2D와 3D를 함께 표시\"\"\"\n    try:\n        with open(\"integrated_visualization.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "integrated_view",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def integrated_view():\n    \"\"\"통합 시각화 페이지 - 2D와 3D를 함께 표시\"\"\"\n    try:\n        with open(\"integrated_visualization.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"통합 시각화 파일을 찾을 수 없습니다.\", 404\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -742,6 +1266,15 @@
         "importPath": "app",
         "description": "app",
         "peekOfCode": "def create_visualizations():\n    \"\"\"시각화 생성\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify(\n                {\"error\": \"분석 결과 데이터가 필요합니다.\"}\n            ), 400\n        results = data[\"results\"]\n        # 시각화 생성",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "create_3d_visualization",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def create_3d_visualization():\n    \"\"\"3D 분포 시각화 전용 엔드포인트\"\"\"\n    try:\n        data = request.get_json()\n        if not data or \"results\" not in data:\n            return jsonify(\n                {\"error\": \"분석 결과 데이터가 필요합니다.\"}\n            ), 400\n        results = data[\"results\"]\n        # 3D 시각화만 생성",
         "detail": "app",
         "documentation": {}
     },
@@ -786,7 +1319,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "ganglioside_processor = GangliosideProcessor()\nvisualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():",
+        "peekOfCode": "ganglioside_processor = GangliosideProcessor()\nvisualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\ndef convert_to_serializable(obj):\n    \"\"\"Convert numpy types to JSON serializable types recursively\"\"\"\n    if obj is None:\n        return None\n    elif isinstance(obj, dict):\n        return {key: convert_to_serializable(value) for key, value in obj.items()}",
         "detail": "app",
         "documentation": {}
     },
@@ -795,7 +1328,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "visualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"",
+        "peekOfCode": "visualization_service = VisualizationService()\nregression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\ndef convert_to_serializable(obj):\n    \"\"\"Convert numpy types to JSON serializable types recursively\"\"\"\n    if obj is None:\n        return None\n    elif isinstance(obj, dict):\n        return {key: convert_to_serializable(value) for key, value in obj.items()}\n    elif isinstance(obj, (list, tuple)):",
         "detail": "app",
         "documentation": {}
     },
@@ -804,7 +1337,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")",
+        "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\ndef convert_to_serializable(obj):\n    \"\"\"Convert numpy types to JSON serializable types recursively\"\"\"\n    if obj is None:\n        return None\n    elif isinstance(obj, dict):\n        return {key: convert_to_serializable(value) for key, value in obj.items()}\n    elif isinstance(obj, (list, tuple)):\n        return [convert_to_serializable(item) for item in obj]",
         "detail": "app",
         "documentation": {}
     },
@@ -932,6 +1465,114 @@
         "description": "app_backup",
         "peekOfCode": "regression_analyzer = RegressionAnalyzer()\nprint(\"🧬 Ganglioside Analyzer Flask 서버 초기화 완료\")\n@app.route(\"/\")\ndef index():\n    \"\"\"메인 페이지 - 인터랙티브 분석기\"\"\"\n    return render_template(\"interactive_analyzer.html\")\n@app.route(\"/interactive\")\ndef interactive_analyzer():\n    \"\"\"인터랙티브 분석기 페이지\"\"\"\n    return render_template(\"interactive_analyzer.html\")",
         "detail": "app_backup",
+        "documentation": {}
+    },
+    {
+        "label": "create_app",
+        "kind": 2,
+        "importPath": "app_refactored",
+        "description": "app_refactored",
+        "peekOfCode": "def create_app():\n    \"\"\"Flask application factory\"\"\"\n    # Flask app initialization\n    app = Flask(\n        __name__,\n        template_folder=\"backend/templates\",\n        static_folder=\"backend/static\"\n    )\n    CORS(app)  # CORS settings\n    # Configuration",
+        "detail": "app_refactored",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "app_refactored",
+        "description": "app_refactored",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function\"\"\"\n    app = create_app()\n    print(\"🚀 Starting Ganglioside Analyzer Flask server\")\n    print(\"🌐 Available at http://localhost:5001\")\n    try:\n        app.run(\n            host=\"0.0.0.0\",  # Listen on all interfaces\n            port=5001,       # Use port 5001 (5000 conflicts with AirPlay on macOS)\n            debug=True,      # Enable debug mode",
+        "detail": "app_refactored",
+        "documentation": {}
+    },
+    {
+        "label": "test_all_endpoints",
+        "kind": 2,
+        "importPath": "comprehensive_test",
+        "description": "comprehensive_test",
+        "peekOfCode": "def test_all_endpoints():\n    \"\"\"Test all web endpoints\"\"\"\n    print(\"🌐 Testing all web endpoints...\")\n    endpoints = [\n        (\"/\", \"Main page (working analyzer)\"),\n        (\"/working\", \"Working analyzer page\"),\n        (\"/simple\", \"Simple analyzer page\"),\n        (\"/integrated\", \"Integrated analyzer page\"),\n        (\"/diagnostic\", \"Diagnostic test page\"),\n        (\"/api/health\", \"Health API endpoint\")",
+        "detail": "comprehensive_test",
+        "documentation": {}
+    },
+    {
+        "label": "test_full_analysis_workflow",
+        "kind": 2,
+        "importPath": "comprehensive_test",
+        "description": "comprehensive_test",
+        "peekOfCode": "def test_full_analysis_workflow():\n    \"\"\"Test complete analysis workflow\"\"\"\n    print(\"\\n🧬 Testing complete analysis workflow...\")\n    # Step 1: Health check\n    print(\"1. Health check...\")\n    try:\n        response = requests.get(f\"{BASE_URL}/api/health\")\n        if response.status_code == 200:\n            data = response.json()\n            print(f\"   ✅ Server healthy: {data['status']}\")",
+        "detail": "comprehensive_test",
+        "documentation": {}
+    },
+    {
+        "label": "test_functionality_summary",
+        "kind": 2,
+        "importPath": "comprehensive_test",
+        "description": "comprehensive_test",
+        "peekOfCode": "def test_functionality_summary():\n    \"\"\"Test and report functionality summary\"\"\"\n    print(\"\\n📋 Functionality Summary:\")\n    features = [\n        (\"File upload\", \"✅ Working\"),\n        (\"Settings adjustment\", \"✅ Working\"),\n        (\"Analysis API\", \"✅ Working\"),\n        (\"Visualization API\", \"✅ Working\"),\n        (\"2D regression plots\", \"✅ Working\"),\n        (\"3D distribution plots\", \"✅ Working\"),",
+        "detail": "comprehensive_test",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "comprehensive_test",
+        "description": "comprehensive_test",
+        "peekOfCode": "def main():\n    \"\"\"Run comprehensive tests\"\"\"\n    print(\"🧬 LC-MS-MS Analysis Platform - Comprehensive Test Suite\")\n    print(\"=\" * 60)\n    # Test 1: All web endpoints\n    test_all_endpoints()\n    # Test 2: Complete workflow\n    success = test_full_analysis_workflow()\n    # Test 3: Functionality summary\n    test_functionality_summary()",
+        "detail": "comprehensive_test",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_URL",
+        "kind": 5,
+        "importPath": "comprehensive_test",
+        "description": "comprehensive_test",
+        "peekOfCode": "BASE_URL = \"http://localhost:5001\"\ndef test_all_endpoints():\n    \"\"\"Test all web endpoints\"\"\"\n    print(\"🌐 Testing all web endpoints...\")\n    endpoints = [\n        (\"/\", \"Main page (working analyzer)\"),\n        (\"/working\", \"Working analyzer page\"),\n        (\"/simple\", \"Simple analyzer page\"),\n        (\"/integrated\", \"Integrated analyzer page\"),\n        (\"/diagnostic\", \"Diagnostic test page\"),",
+        "detail": "comprehensive_test",
+        "documentation": {}
+    },
+    {
+        "label": "test_health",
+        "kind": 2,
+        "importPath": "test_functionality",
+        "description": "test_functionality",
+        "peekOfCode": "def test_health():\n    \"\"\"Test health endpoint\"\"\"\n    print(\"🔌 Testing health endpoint...\")\n    try:\n        response = requests.get(f\"{BASE_URL}/api/health\")\n        if response.status_code == 200:\n            data = response.json()\n            print(f\"✅ Health check passed: {data['status']}\")\n            return True\n        else:",
+        "detail": "test_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "test_analysis",
+        "kind": 2,
+        "importPath": "test_functionality",
+        "description": "test_functionality",
+        "peekOfCode": "def test_analysis():\n    \"\"\"Test analysis endpoint with sample file\"\"\"\n    print(\"🚀 Testing analysis endpoint...\")\n    try:\n        # Read sample CSV file\n        with open(\"data/sample/testwork.csv\", \"rb\") as f:\n            files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}\n            data = {\n                \"data_type\": \"Porcine\",\n                \"outlier_threshold\": 3.0,",
+        "detail": "test_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "test_visualization",
+        "kind": 2,
+        "importPath": "test_functionality",
+        "description": "test_functionality",
+        "peekOfCode": "def test_visualization(results):\n    \"\"\"Test visualization endpoint\"\"\"\n    print(\"📊 Testing visualization endpoint...\")\n    try:\n        payload = {\"results\": results}\n        response = requests.post(\n            f\"{BASE_URL}/api/visualize\",\n            headers={\"Content-Type\": \"application/json\"},\n            data=json.dumps(payload)\n        )",
+        "detail": "test_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "test_functionality",
+        "description": "test_functionality",
+        "peekOfCode": "def main():\n    \"\"\"Run all tests\"\"\"\n    print(\"🧬 Starting LC-MS-MS API functionality tests...\\n\")\n    # Test 1: Health check\n    if not test_health():\n        print(\"\\n❌ Health check failed - aborting tests\")\n        sys.exit(1)\n    print()\n    # Test 2: Analysis\n    results = test_analysis()",
+        "detail": "test_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_URL",
+        "kind": 5,
+        "importPath": "test_functionality",
+        "description": "test_functionality",
+        "peekOfCode": "BASE_URL = \"http://localhost:5001\"\ndef test_health():\n    \"\"\"Test health endpoint\"\"\"\n    print(\"🔌 Testing health endpoint...\")\n    try:\n        response = requests.get(f\"{BASE_URL}/api/health\")\n        if response.status_code == 200:\n            data = response.json()\n            print(f\"✅ Health check passed: {data['status']}\")\n            return True",
+        "detail": "test_functionality",
         "documentation": {}
     }
 ]

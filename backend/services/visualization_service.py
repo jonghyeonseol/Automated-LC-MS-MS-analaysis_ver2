@@ -120,11 +120,21 @@ class VisualizationService:
 
         # 2. 규칙별 분석 바차트
         rule_names = ["Rule 1", "Rule 4", "Rule 5"]
-        rule_values = [
-            stats["rule_breakdown"]["rule1_regression"],
-            stats["rule_breakdown"]["rule4_oacetylation"],
-            stats["rule_breakdown"]["rule5_rt_filtering"],
-        ]
+        # 안전한 rule_breakdown 접근
+        if "rule_breakdown" in stats:
+            rule_values = [
+                stats["rule_breakdown"].get("rule1_regression", 0),
+                stats["rule_breakdown"].get("rule4_oacetylation", 0),
+                stats["rule_breakdown"].get("rule5_rt_filtering", 0),
+            ]
+        else:
+            # rule_breakdown이 없는 경우 기본값 사용
+            rule_values = [
+                stats.get("valid_compounds", 0),
+                0,
+                0,
+            ]
+            print("Visualization error: 'rule_breakdown'")
 
         fig.add_trace(
             go.Bar(
@@ -586,34 +596,51 @@ class VisualizationService:
         fig = go.Figure()
 
         stats = results["statistics"]
-        rule_breakdown = stats["rule_breakdown"]
 
-        # 데이터 준비
-        labels = [
-            "Rule 1 Valid",
-            "Rule 4 Valid",
-            "Rule 5 Valid",
-            "Rule 1 Outliers",
-            "Rule 4 Outliers",
-            "Rule 5 Outliers",
-        ]
-        values = [
-            rule_breakdown["rule1_regression"],
-            rule_breakdown["rule4_oacetylation"],
-            rule_breakdown["rule5_rt_filtering"],
-            rule_breakdown["rule1_outliers"],
-            rule_breakdown["rule4_outliers"],
-            rule_breakdown["rule5_outliers"],
-        ]
+        # 안전한 rule_breakdown 접근
+        if "rule_breakdown" in stats:
+            rule_breakdown = stats["rule_breakdown"]
+            # 데이터 준비
+            labels = [
+                "Rule 1 Valid",
+                "Rule 4 Valid",
+                "Rule 5 Valid",
+                "Rule 1 Outliers",
+                "Rule 4 Outliers",
+                "Rule 5 Outliers",
+            ]
+            values = [
+                rule_breakdown.get("rule1_regression", 0),
+                rule_breakdown.get("rule4_oacetylation", 0),
+                rule_breakdown.get("rule5_rt_filtering", 0),
+                rule_breakdown.get("rule1_outliers", 0),
+                rule_breakdown.get("rule4_outliers", 0),
+                rule_breakdown.get("rule5_outliers", 0),
+            ]
+        else:
+            # rule_breakdown이 없는 경우 기본 데이터 사용
+            print("Visualization error: 'rule1_outliers'")
+            labels = ["Valid Compounds", "Outliers"]
+            values = [
+                stats.get("valid_compounds", 0),
+                stats.get("outliers", 0),
+            ]
 
-        colors = [
-            self.color_palette["valid"],
-            self.color_palette["anchor"],
-            self.color_palette["regression"],
-            self.color_palette["outlier"],
-            "#ff7675",
-            "#fd79a8",
-        ]
+        # colors 배열도 조건부 설정
+        if "rule_breakdown" in stats:
+            colors = [
+                self.color_palette["valid"],
+                self.color_palette["anchor"],
+                self.color_palette["regression"],
+                self.color_palette["outlier"],
+                "#ff7675",
+                "#fd79a8",
+            ]
+        else:
+            colors = [
+                self.color_palette["valid"],
+                self.color_palette["outlier"],
+            ]
 
         fig.add_trace(
             go.Pie(

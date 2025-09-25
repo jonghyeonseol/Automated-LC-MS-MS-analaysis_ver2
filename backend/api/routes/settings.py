@@ -1,201 +1,119 @@
 """
-설정 관련 API 라우터
-분석 파라미터 설정, 조회, 리셋 엔드포인트
+Settings API Routes - Configuration management endpoints
 """
 
-import pandas as pd
-from fastapi import APIRouter, HTTPException
+import traceback
+from datetime import datetime
 
-from .data import get_data_processor
+from flask import Blueprint, jsonify, request
 
-router = APIRouter(prefix="/api", tags=["settings"])
+# Global service instances
+processor = None
 
-
-@router.get("/settings")
-async def get_current_settings():
-    """현재 분석 설정 조회"""
-    data_processor = get_data_processor()
-
-    return {
-        "current_settings": {
-            "outlier_threshold": data_processor.outlier_threshold,
-            "r2_threshold": data_processor.r2_threshold,
-            "rt_tolerance": data_processor.rt_tolerance,
-        },
-        "default_settings": {
-            "outlier_threshold": 3.0,
-            "r2_threshold": 0.99,
-            "rt_tolerance": 0.1,
-        },
-        "setting_ranges": {
-            "outlier_threshold": {"min": 1.0, "max": 5.0, "step": 0.1},
-            "r2_threshold": {"min": 0.90, "max": 0.999, "step": 0.001},
-            "rt_tolerance": {"min": 0.05, "max": 0.5, "step": 0.01},
-        },
-    }
+# Blueprint creation
+settings_bp = Blueprint('settings', __name__, url_prefix='/api')
 
 
-@router.post("/settings")
-async def update_settings(
-    outlier_threshold: float = 3.0,
-    r2_threshold: float = 0.99,
-    rt_tolerance: float = 0.1,
-):
-    """분석 설정 업데이트"""
+def init_processor_service(ganglioside_processor):
+    """Initialize processor service instance"""
+    global processor
+    processor = ganglioside_processor
+
+
+@settings_bp.route("/settings", methods=["GET", "POST"])
+def manage_settings():
+    """Settings management - get or update analysis parameters"""
     try:
-        data_processor = get_data_processor()
+        if request.method == "GET":
+            # Return current settings
+            current_settings = processor.get_settings()
+            return jsonify({
+                "message": "Current settings retrieved",
+                "settings": current_settings,
+                "timestamp": datetime.now().isoformat()
+            })
 
-        # 설정 범위 검증
-        if not (1.0 <= outlier_threshold <= 5.0):
-            raise HTTPException(
-                status_code=400,
-                detail="outlier_threshold must be between 1.0 and 5.0"
+        elif request.method == "POST":
+            # Update settings
+            data = request.get_json()
+            if not data:
+                return jsonify({"error": "Settings data is required."}), 400
+
+            # Extract settings with validation
+            outlier_threshold = data.get("outlier_threshold")
+            r2_threshold = data.get("r2_threshold")
+            rt_tolerance = data.get("rt_tolerance")
+
+            # Validate numeric values
+            try:
+                if outlier_threshold is not None:
+                    outlier_threshold = float(outlier_threshold)
+                    if outlier_threshold <= 0:
+                        return jsonify({"error": "Outlier threshold must be positive"}), 400
+
+                if r2_threshold is not None:
+                    r2_threshold = float(r2_threshold)
+                    if not (0 <= r2_threshold <= 1):
+                        return jsonify({"error": "R² threshold must be between 0 and 1"}), 400
+
+                if rt_tolerance is not None:
+                    rt_tolerance = float(rt_tolerance)
+                    if rt_tolerance < 0:
+                        return jsonify({"error": "RT tolerance must be non-negative"}), 400
+
+            except ValueError:
+                return jsonify({"error": "Settings must be valid numbers"}), 400
+
+            # Update processor settings
+            processor.update_settings(
+                outlier_threshold=outlier_threshold,
+                r2_threshold=r2_threshold,
+                rt_tolerance=rt_tolerance
             )
-        if not (0.90 <= r2_threshold <= 0.999):
-            raise HTTPException(
-                status_code=400,
-                detail="r2_threshold must be between 0.90 and 0.999"
-            )
-        if not (0.05 <= rt_tolerance <= 0.5):
-            raise HTTPException(
-                status_code=400,
-                detail="rt_tolerance must be between 0.05 and 0.5"
-            )
 
-        # 설정 업데이트
-        data_processor.outlier_threshold = outlier_threshold
-        data_processor.r2_threshold = r2_threshold
-        data_processor.rt_tolerance = rt_tolerance
-
-        print(
-            f"⚙️ 설정 업데이트: outlier={outlier_threshold}, "
-            f"r2={r2_threshold}, rt={rt_tolerance}"
-        )
-
-        return {
-            "message": "Settings updated successfully",
-            "updated_settings": {
-                "outlier_threshold": outlier_threshold,
-                "r2_threshold": r2_threshold,
-                "rt_tolerance": rt_tolerance,
-            },
-            "timestamp": pd.Timestamp.now().isoformat(),
-        }
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"설정 업데이트 중 오류 발생: {str(e)}"
-        )
-
-
-@router.post("/reset-settings")
-async def reset_settings():
-    """설정을 기본값으로 리셋"""
-    try:
-        data_processor = get_data_processor()
-
-        data_processor.outlier_threshold = 3.0
-        data_processor.r2_threshold = 0.99
-        data_processor.rt_tolerance = 0.1
-
-        print("🔄 설정 리셋: 모든 값이 기본값으로 복원됨")
-
-        return {
-            "message": "Settings reset to default values",
-            "default_settings": {
-                "outlier_threshold": 3.0,
-                "r2_threshold": 0.99,
-                "rt_tolerance": 0.1,
-            },
-            "timestamp": pd.Timestamp.now().isoformat(),
-        }
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"설정 리셋 중 오류 발생: {str(e)}"
-        )
-
-
-@router.get("/analysis-preview")
-async def analysis_preview(
-    outlier_threshold: float = 3.0,
-    r2_threshold: float = 0.99,
-    rt_tolerance: float = 0.1,
-    data_type: str = "Porcine",
-):
-    """
-    설정 변경에 따른 분석 결과 미리보기 (샘플 데이터 사용)
-    """
-    try:
-        data_processor = get_data_processor()
-
-        # 샘플 데이터 생성
-        sample_data = {
-            "Name": [
-                "GD1a(36:1;O2)",
-                "GM1a(36:1;O2)",
-                "GM3(36:1;O2)",
-                "GD3(36:1;O2)",
-                "GT1b(36:1;O2)",
-            ],
-            "RT": [9.572, 10.452, 10.606, 10.126, 8.701],
-            "Volume": [1000000, 500000, 2000000, 800000, 1200000],
-            "Log P": [1.53, 4.00, 7.74, 5.27, -0.94],
-            "Anchor": ["T", "F", "F", "T", "T"],
-        }
-        df = pd.DataFrame(sample_data)
-
-        # 임시 설정으로 분석
-        original_settings = {
-            "outlier_threshold": data_processor.outlier_threshold,
-            "r2_threshold": data_processor.r2_threshold,
-            "rt_tolerance": data_processor.rt_tolerance,
-        }
-
-        # 미리보기용 설정 적용
-        data_processor.outlier_threshold = outlier_threshold
-        data_processor.r2_threshold = r2_threshold
-        data_processor.rt_tolerance = rt_tolerance
-
-        # 분석 실행
-        preview_results = data_processor.process_data(df, data_type=data_type)
-
-        # 원래 설정 복원
-        data_processor.outlier_threshold = (
-            original_settings["outlier_threshold"]
-        )
-        data_processor.r2_threshold = original_settings["r2_threshold"]
-        data_processor.rt_tolerance = original_settings["rt_tolerance"]
-
-        return {
-            "message": "Analysis preview completed",
-            "preview_settings": {
-                "outlier_threshold": outlier_threshold,
-                "r2_threshold": r2_threshold,
-                "rt_tolerance": rt_tolerance,
-                "data_type": data_type,
-            },
-            "preview_results": {
-                "success_rate": preview_results["statistics"]["success_rate"],
-                "valid_compounds": (
-                    preview_results["statistics"]["valid_compounds"]
-                ),
-                "outliers": preview_results["statistics"]["outliers"],
-                "setting_impact": preview_results.get("setting_impact", {}),
-                "quality_grade": (
-                    preview_results["analysis_summary"]["data_quality"]
-                ),
-            },
-            "comparison_note": (
-                "Preview based on sample data - actual results may vary"
-            ),
-        }
+            # Return updated settings
+            updated_settings = processor.get_settings()
+            return jsonify({
+                "message": "Settings updated successfully",
+                "settings": updated_settings,
+                "timestamp": datetime.now().isoformat()
+            })
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"미리보기 중 오류 발생: {str(e)}"
-        )
+        error_msg = f"Settings management error: {str(e)}"
+        print(f"Settings error: {error_msg}")
+        print(f"Traceback: {traceback.format_exc()}")
+        return jsonify({"error": error_msg}), 500
+
+
+@settings_bp.route("/health", methods=["GET"])
+def health_check():
+    """Health check endpoint for service status"""
+    try:
+        # Check if processor is available and working
+        if processor is None:
+            return jsonify({
+                "status": "unhealthy",
+                "error": "Processor service not initialized"
+            }), 503
+
+        # Get current settings as a basic health check
+        settings = processor.get_settings()
+
+        return jsonify({
+            "status": "healthy",
+            "message": "All services operational",
+            "processor_status": "active",
+            "current_settings": settings,
+            "timestamp": datetime.now().isoformat(),
+            "version": "2.0.2"
+        })
+
+    except Exception as e:
+        error_msg = f"Health check failed: {str(e)}"
+        print(f"Health check error: {error_msg}")
+        return jsonify({
+            "status": "unhealthy",
+            "error": error_msg,
+            "timestamp": datetime.now().isoformat()
+        }), 500

@@ -93,6 +93,15 @@
             transform: scale(1.02);
         }
 
+        .file-upload.uploaded {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .file-upload.uploaded:hover {
+            background: rgba(39, 174, 96, 0.15);
+        }
+
         /* 설정 슬라이더 */
         .slider-group {
             margin-bottom: 15px;
@@ -422,6 +431,24 @@
                         <input type="file" id="csvFile" accept=".csv" style="display: none;">
                     </div>
                     <div id="fileStatus" style="text-align: center; color: #6c757d; font-size: 0.9em;">파일을 선택해주세요</div>
+
+                    <!-- 업로드된 파일 정보 패널 -->
+                    <div id="fileInfoPanel" style="display: none; margin-top: 15px; background: #f8f9fa; border-radius: 8px; padding: 15px; border: 1px solid #e9ecef;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 10px;">
+                            <h4 style="margin: 0; color: #2c3e50; font-size: 1em;">📋 업로드된 파일 정보</h4>
+                            <button id="removeFileBtn" onclick="removeUploadedFile()" style="background: #e74c3c; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 0.8em; cursor: pointer;">✕ 삭제</button>
+                        </div>
+                        <div id="fileDetails">
+                            <div><strong>파일명:</strong> <span id="fileName">-</span></div>
+                            <div><strong>파일 크기:</strong> <span id="fileSize">-</span></div>
+                            <div><strong>업로드 시간:</strong> <span id="uploadTime">-</span></div>
+                            <div><strong>상태:</strong> <span id="fileStatusDetail" style="color: #27ae60;">✅ 업로드 완료</span></div>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e9ecef;">
+                            <button onclick="previewFile()" style="background: #3498db; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 0.9em; cursor: pointer; margin-right: 8px;">👁️ 미리보기</button>
+                            <button onclick="document.getElementById('csvFile').click()" style="background: #f39c12; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 0.9em; cursor: pointer;">🔄 파일 교체</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 분석 설정 -->
@@ -683,10 +710,25 @@
                 fileUpload.classList.remove('dragover');
 
                 const files = e.dataTransfer.files;
-                if (files.length > 0 && files[0].name.endsWith('.csv')) {
-                    document.getElementById('csvFile').files = files;
-                    handleFileUpload({target: {files: files}});
+                if (files.length === 0) {
+                    showStatus('❌ 드롭된 파일이 없습니다.', 'error');
+                    return;
                 }
+
+                if (files.length > 1) {
+                    showStatus('⚠️ 한 번에 하나의 파일만 업로드할 수 있습니다.', 'error');
+                    return;
+                }
+
+                const file = files[0];
+                if (!file.name.endsWith('.csv')) {
+                    showStatus('❌ CSV 파일만 드래그 앤 드롭할 수 있습니다.', 'error');
+                    return;
+                }
+
+                showStatus('🎯 파일이 드롭되었습니다! 처리 중...', 'loading');
+                document.getElementById('csvFile').files = files;
+                handleFileUpload({target: {files: files}});
             });
         }
 
@@ -696,7 +738,10 @@
             document.getElementById('outlierValue').textContent = value.toFixed(1);
             currentSettings.outlierThreshold = value;
 
+            showStatus(`⚙️ 이상치 임계값이 ${value.toFixed(1)}로 변경되었습니다.`, 'info');
+
             if (uploadedFile) {
+                showStatus('🔄 설정이 변경되어 자동으로 재분석이 시작됩니다...', 'loading');
                 debounceAnalysis();
             }
         }
@@ -706,7 +751,10 @@
             document.getElementById('r2Value').textContent = value.toFixed(3);
             currentSettings.r2Threshold = value;
 
+            showStatus(`⚙️ R² 임계값이 ${value.toFixed(3)}로 변경되었습니다.`, 'info');
+
             if (uploadedFile) {
+                showStatus('🔄 설정이 변경되어 자동으로 재분석이 시작됩니다...', 'loading');
                 debounceAnalysis();
             }
         }
@@ -716,7 +764,10 @@
             document.getElementById('rtValue').textContent = `±${value.toFixed(2)}`;
             currentSettings.rtTolerance = value;
 
+            showStatus(`⚙️ RT 허용값이 ±${value.toFixed(2)}분으로 변경되었습니다.`, 'info');
+
             if (uploadedFile) {
+                showStatus('🔄 설정이 변경되어 자동으로 재분석이 시작됩니다...', 'loading');
                 debounceAnalysis();
             }
         }
@@ -730,13 +781,19 @@
             document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
             currentSettings.analysisMode = mode;
 
+            const modeIcon = mode === 'Porcine' ? '🐷' : '🐭';
+            showStatus(`${modeIcon} 분석 모드가 ${mode}로 변경되었습니다!`, 'success');
+
             if (uploadedFile) {
+                showStatus('🔄 모드 변경으로 인해 자동으로 재분석이 시작됩니다...', 'loading');
                 debounceAnalysis();
             }
         }
 
         // 설정 초기화
         function resetSettings() {
+            showStatus('🔄 설정을 초기값으로 재설정하는 중...', 'loading');
+
             currentSettings = {
                 outlierThreshold: 3.0,
                 r2Threshold: 0.99,
@@ -753,34 +810,191 @@
 
             selectMode('Porcine');
 
+            showStatus('✅ 모든 설정이 기본값으로 초기화되었습니다! (이상치: 3.0, R²: 0.99, RT: ±0.10, 모드: Porcine)', 'success');
+
             if (uploadedFile) {
-                runAnalysis();
+                setTimeout(() => {
+                    showStatus('🚀 초기화된 설정으로 재분석을 시작합니다...', 'loading');
+                    runAnalysis();
+                }, 1000);
             }
         }
 
         // 파일 업로드 처리
         function handleFileUpload(event) {
             console.log('File upload event triggered:', event);
+
+            // Show loading feedback immediately
+            showStatus('📂 파일을 처리하는 중...', 'loading');
+            document.getElementById('fileStatus').textContent = '파일 처리 중...';
+            document.getElementById('fileStatus').style.color = '#f39c12';
+
             const file = event.target.files[0];
             console.log('Selected file:', file);
 
             if (!file) {
                 console.log('No file selected');
+                showStatus('❌ 파일이 선택되지 않았습니다.', 'error');
+                document.getElementById('fileStatus').textContent = '파일을 선택해주세요';
+                document.getElementById('fileStatus').style.color = '#6c757d';
                 return;
             }
 
             if (!file.name.endsWith('.csv')) {
-                showStatus('❌ CSV 파일만 업로드 가능합니다.', 'error');
+                showStatus('❌ CSV 파일만 업로드 가능합니다. 다른 파일 형식은 지원되지 않습니다.', 'error');
                 console.log('Invalid file type:', file.name);
+                document.getElementById('fileStatus').textContent = `❌ 지원되지 않는 파일: ${file.name}`;
+                document.getElementById('fileStatus').style.color = '#e74c3c';
                 return;
+            }
+
+            // Check file size (optional - warn for very large files)
+            const maxSize = 50 * 1024 * 1024; // 50MB
+            if (file.size > maxSize) {
+                showStatus(`⚠️ 파일이 매우 큽니다 (${(file.size/1024/1024).toFixed(1)} MB). 처리 시간이 오래 걸릴 수 있습니다.`, 'loading');
             }
 
             uploadedFile = file;
             console.log('File uploaded successfully:', file.name, file.size, 'bytes');
 
-            document.getElementById('fileStatus').textContent = `✅ ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            // Enhanced success feedback
+            const fileSizeKB = (file.size/1024).toFixed(1);
+            const fileSizeMB = (file.size/1024/1024).toFixed(2);
+            const sizeDisplay = file.size > 1024*1024 ? `${fileSizeMB} MB` : `${fileSizeKB} KB`;
+
+            document.getElementById('fileStatus').textContent = `✅ ${file.name} (${sizeDisplay})`;
             document.getElementById('fileStatus').style.color = '#27ae60';
-            showStatus(`✅ 파일 업로드 완료: ${file.name}`, 'success');
+            showStatus(`🎉 데이터 파일이 업로드되었습니다! 파일명: ${file.name}, 크기: ${sizeDisplay}`, 'success');
+
+            // Show detailed file information panel
+            showFileInfoPanel(file, sizeDisplay);
+
+            // Update upload area visual state
+            document.getElementById('fileUpload').classList.add('uploaded');
+
+            // Add a brief preview of file info
+            setTimeout(() => {
+                showStatus(`📋 업로드된 파일: ${file.name} | 이제 '분석 시작' 버튼을 클릭하여 LC-MS-MS 데이터 분석을 시작할 수 있습니다.`, 'info');
+            }, 2000);
+        }
+
+        // 파일 정보 패널 표시
+        function showFileInfoPanel(file, sizeDisplay) {
+            const panel = document.getElementById('fileInfoPanel');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const uploadTime = document.getElementById('uploadTime');
+            const fileStatusDetail = document.getElementById('fileStatusDetail');
+
+            // 업로드 시간 표시
+            const now = new Date();
+            const timeString = now.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            // 파일 정보 업데이트
+            fileName.textContent = file.name;
+            fileSize.textContent = sizeDisplay;
+            uploadTime.textContent = timeString;
+            fileStatusDetail.innerHTML = '✅ 업로드 완료';
+            fileStatusDetail.style.color = '#27ae60';
+
+            // 패널 표시
+            panel.style.display = 'block';
+
+            // 애니메이션 효과
+            panel.style.opacity = '0';
+            panel.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                panel.style.transition = 'all 0.3s ease';
+                panel.style.opacity = '1';
+                panel.style.transform = 'translateY(0)';
+            }, 100);
+        }
+
+        // 업로드된 파일 삭제
+        function removeUploadedFile() {
+            if (confirm('업로드된 파일을 삭제하시겠습니까?')) {
+                uploadedFile = null;
+
+                // UI 초기화
+                document.getElementById('csvFile').value = '';
+                document.getElementById('fileStatus').textContent = '파일을 선택해주세요';
+                document.getElementById('fileStatus').style.color = '#6c757d';
+                document.getElementById('fileInfoPanel').style.display = 'none';
+                document.getElementById('fileUpload').classList.remove('uploaded');
+
+                // 분석 결과 초기화
+                currentAnalysisResults = null;
+                document.getElementById('visualizeBtn').style.display = 'none';
+                document.getElementById('downloadBtn').style.display = 'none';
+
+                showStatus('🗑️ 파일이 삭제되었습니다. 새로운 파일을 업로드해주세요.', 'info');
+            }
+        }
+
+        // 파일 미리보기
+        function previewFile() {
+            if (!uploadedFile) {
+                showStatus('❌ 미리볼 파일이 없습니다.', 'error');
+                return;
+            }
+
+            showStatus('📖 파일 미리보기를 로드하는 중...', 'loading');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                const previewLines = lines.slice(0, 10); // 처음 10줄만 표시
+
+                // 미리보기 모달 생성
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.5); display: flex; justify-content: center;
+                    align-items: center; z-index: 1000;
+                `;
+
+                modal.innerHTML = `
+                    <div style="background: white; border-radius: 10px; padding: 20px; max-width: 80%; max-height: 80%; overflow-y: auto;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>📖 파일 미리보기: ${uploadedFile.name}</h3>
+                            <button onclick="this.closest('.modal').remove()" style="background: #e74c3c; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer;">✕ 닫기</button>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 0.9em; white-space: pre-wrap; overflow-x: auto;">
+${previewLines.join('\n')}
+${lines.length > 10 ? '\n... (총 ' + lines.length + '줄, 처음 10줄만 표시)' : ''}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                            <strong>파일 정보:</strong> ${lines.length}줄, ${uploadedFile.size} bytes
+                        </div>
+                    </div>
+                `;
+
+                modal.className = 'modal';
+                document.body.appendChild(modal);
+
+                // 모달 외부 클릭으로 닫기
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                });
+
+                showStatus('✅ 파일 미리보기가 준비되었습니다.', 'success');
+            };
+
+            reader.onerror = function() {
+                showStatus('❌ 파일을 읽을 수 없습니다.', 'error');
+            };
+
+            reader.readAsText(uploadedFile);
         }
 
         // 디바운스 분석 실행
@@ -795,14 +1009,19 @@
         // 분석 실행
         async function runAnalysis(isAutoReanalysis = false) {
             if (!uploadedFile) {
-                showStatus('❌ 먼저 CSV 파일을 업로드해주세요.', 'error');
+                showStatus('❌ 먼저 CSV 파일을 업로드해주세요. 위의 파일 업로드 영역을 클릭하거나 CSV 파일을 드래그해주세요.', 'error');
                 return;
             }
 
             try {
-                const prefix = isAutoReanalysis ? '🔄 실시간 재분석' : '🔬 분석';
-                showStatus(`${prefix} 진행 중...`, 'loading');
-                showRealtimeStatus('분석 중...');
+                const prefix = isAutoReanalysis ? '🔄 실시간 재분석' : '🚀 LC-MS-MS 데이터 분석';
+                showStatus(`${prefix} 시작됩니다! 파일명: ${uploadedFile.name} | 분석 모드: ${currentSettings.analysisMode}`, 'loading');
+                showRealtimeStatus('분석 서버에 요청 중...');
+
+                // Show detailed analysis parameters
+                setTimeout(() => {
+                    showStatus(`⚙️ 분석 설정 - 이상치 임계값: ${currentSettings.outlierThreshold}, R² 임계값: ${currentSettings.r2Threshold}, RT 허용값: ${currentSettings.rtTolerance}`, 'loading');
+                }, 500);
 
                 console.log('Starting analysis with file:', uploadedFile.name);
 
