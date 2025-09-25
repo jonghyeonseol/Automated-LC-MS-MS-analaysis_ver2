@@ -923,6 +923,14 @@
         "documentation": {}
     },
     {
+        "label": "GangliosideProcessor",
+        "importPath": "backend.services.ganglioside_processor",
+        "description": "backend.services.ganglioside_processor",
+        "isExtraImport": true,
+        "detail": "backend.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
         "label": "GangliosideProcessorFixed",
         "importPath": "backend.services.ganglioside_processor_fixed",
         "description": "backend.services.ganglioside_processor_fixed",
@@ -1348,7 +1356,7 @@
         "kind": 6,
         "importPath": "backend.services.ganglioside_processor",
         "description": "backend.services.ganglioside_processor",
-        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧬 Ganglioside Processor 초기화 완료\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):\n        \"\"\"분석 설정 업데이트\"\"\"",
+        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        print(\"🧬 Ganglioside Processor 초기화 완료 (Fixed Version)\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):",
         "detail": "backend.services.ganglioside_processor",
         "documentation": {}
     },
@@ -1501,7 +1509,16 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def integrated_view():\n    \"\"\"통합 시각화 페이지 - 2D와 3D를 함께 표시\"\"\"\n    try:\n        with open(\"integrated_visualization.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"통합 시각화 파일을 찾을 수 없습니다.\", 404\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
+        "peekOfCode": "def integrated_view():\n    \"\"\"통합 시각화 페이지 - 2D와 3D를 함께 표시\"\"\"\n    try:\n        with open(\"integrated_visualization.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"통합 시각화 파일을 찾을 수 없습니다.\", 404\n@app.route(\"/working\")\ndef working_analyzer():\n    \"\"\"Working analyzer with fixed visualization\"\"\"",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "working_analyzer",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def working_analyzer():\n    \"\"\"Working analyzer with fixed visualization\"\"\"\n    try:\n        with open(\"working_analyzer.html\", \"r\", encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        return \"Working analyzer file not found.\", 404\n@app.route(\"/api/health\")\ndef health_check():\n    \"\"\"헬스 체크 엔드포인트\"\"\"",
         "detail": "app",
         "documentation": {}
     },
@@ -1812,6 +1829,69 @@
         "documentation": {}
     },
     {
+        "label": "create_working_regression_fix",
+        "kind": 2,
+        "importPath": "create_working_regression",
+        "description": "create_working_regression",
+        "peekOfCode": "def create_working_regression_fix():\n    print(\"🔧 Creating Working Regression Fix\")\n    print(\"=\" * 40)\n    # Read the test data to understand what we're working with\n    import pandas as pd\n    df = pd.read_csv(\"data/sample/testwork.csv\")\n    print(f\"📊 Test data: {len(df)} compounds\")\n    # Show the actual data\n    print(\"\\n📋 Compound Data:\")\n    for _, row in df.iterrows():",
+        "detail": "create_working_regression",
+        "documentation": {}
+    },
+    {
+        "label": "debug_regression_structure",
+        "kind": 2,
+        "importPath": "debug_regression_structure",
+        "description": "debug_regression_structure",
+        "peekOfCode": "def debug_regression_structure():\n    print(\"🔍 DEBUGGING REGRESSION ANALYSIS STRUCTURE\")\n    print(\"=\" * 50)\n    base_url = \"http://localhost:5001\"\n    # Run analysis and examine detailed structure\n    print(\"1. Running analysis with detailed structure inspection...\")\n    try:\n        with open(\"data/sample/testwork.csv\", \"rb\") as f:\n            files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}\n            data = {",
+        "detail": "debug_regression_structure",
+        "documentation": {}
+    },
+    {
+        "label": "debug_visualization",
+        "kind": 2,
+        "importPath": "debug_visualization_detailed",
+        "description": "debug_visualization_detailed",
+        "peekOfCode": "def debug_visualization():\n    print(\"🔍 DETAILED VISUALIZATION DIAGNOSIS\")\n    print(\"=\" * 50)\n    base_url = \"http://localhost:5001\"\n    # Step 1: Run analysis\n    print(\"1. Running analysis...\")\n    try:\n        with open(\"data/sample/testwork.csv\", \"rb\") as f:\n            files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}\n            data = {",
+        "detail": "debug_visualization_detailed",
+        "documentation": {}
+    },
+    {
+        "label": "debug_visualization_structure",
+        "kind": 2,
+        "importPath": "debug_viz_structure",
+        "description": "debug_viz_structure",
+        "peekOfCode": "def debug_visualization_structure():\n    print(\"🔍 Debugging Visualization Data Structure\")\n    print(\"=\" * 50)\n    # Run analysis\n    with open(\"data/sample/testwork.csv\", \"rb\") as f:\n        files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}\n        data = {\n            \"data_type\": \"Porcine\",\n            \"outlier_threshold\": 2.5,\n            \"r2_threshold\": 0.75,",
+        "detail": "debug_viz_structure",
+        "documentation": {}
+    },
+    {
+        "label": "quick_test",
+        "kind": 2,
+        "importPath": "quick_test_fix",
+        "description": "quick_test_fix",
+        "peekOfCode": "def quick_test():\n    print(\"🧬 Quick Test - Fixed Regression Analysis\")\n    print(\"=\" * 45)\n    # Load data\n    df = pd.read_csv(\"data/sample/testwork.csv\")\n    print(f\"📄 Loaded: {len(df)} compounds\")\n    # Test processor\n    processor = GangliosideProcessor()\n    print(\"🔍 Settings:\")\n    settings = processor.get_settings()",
+        "detail": "quick_test_fix",
+        "documentation": {}
+    },
+    {
+        "label": "test_analysis_api",
+        "kind": 2,
+        "importPath": "test_api_fix",
+        "description": "test_api_fix",
+        "peekOfCode": "def test_analysis_api():\n    print(\"🧪 Testing Fixed Analysis API\")\n    print(\"=\" * 30)\n    # Test health\n    print(\"1. Health check...\")\n    health = requests.get(\"http://localhost:5001/api/health\")\n    print(f\"   Status: {health.status_code}\")\n    # Test analysis with real file\n    print(\"2. Analysis test...\")\n    with open(\"data/sample/testwork.csv\", \"rb\") as f:",
+        "detail": "test_api_fix",
+        "documentation": {}
+    },
+    {
+        "label": "test_complete_pipeline",
+        "kind": 2,
+        "importPath": "test_complete_pipeline",
+        "description": "test_complete_pipeline",
+        "peekOfCode": "def test_complete_pipeline():\n    print(\"🎯 Testing Complete Analysis & Visualization Pipeline\")\n    print(\"=\" * 55)\n    # Use the running server on port 5001\n    base_url = \"http://localhost:5001\"\n    # Step 1: Test health\n    print(\"1. Health check...\")\n    try:\n        health = requests.get(f\"{base_url}/api/health\")\n        print(f\"   Status: {health.status_code}\")",
+        "detail": "test_complete_pipeline",
+        "documentation": {}
+    },
+    {
         "label": "test_fixed_processor",
         "kind": 2,
         "importPath": "test_fixed_regression",
@@ -1881,6 +1961,60 @@
         "description": "test_functionality",
         "peekOfCode": "BASE_URL = \"http://localhost:5001\"\ndef test_health():\n    \"\"\"Test health endpoint\"\"\"\n    print(\"🔌 Testing health endpoint...\")\n    try:\n        response = requests.get(f\"{BASE_URL}/api/health\")\n        if response.status_code == 200:\n            data = response.json()\n            print(f\"✅ Health check passed: {data['status']}\")\n            return True",
         "detail": "test_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "test_complete_workflow",
+        "kind": 2,
+        "importPath": "test_tabs_functionality",
+        "description": "test_tabs_functionality",
+        "peekOfCode": "def test_complete_workflow():\n    print(\"🧪 TESTING COMPLETE TAB FUNCTIONALITY\")\n    print(\"=\" * 60)\n    base_url = \"http://localhost:5001\"\n    test_file = \"testwork_user.csv\"\n    # Step 1: Run the analysis\n    print(\"1. 🚀 Running analysis...\")\n    try:\n        with open(test_file, \"rb\") as f:\n            files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}",
+        "detail": "test_tabs_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "test_tabs_functionality",
+        "description": "test_tabs_functionality",
+        "peekOfCode": "def main():\n    print(\"🔧 TAB FUNCTIONALITY TEST\")\n    print(\"This test verifies the backend generates proper visualizations\")\n    print(\"Manual steps required:\")\n    print(\"1. Open http://localhost:5001/working in your browser\")\n    print(\"2. Upload testwork_user.csv\")\n    print(\"3. Click 'Start Analysis'\")\n    print(\"4. Click 'Generate Visualizations'\")\n    print(\"5. Test switching between tabs:\")\n    print(\"   - Combined View (should work)\")",
+        "detail": "test_tabs_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "test_user_data_complete",
+        "kind": 2,
+        "importPath": "test_user_data_complete",
+        "description": "test_user_data_complete",
+        "peekOfCode": "def test_user_data_complete():\n    print(\"🧪 COMPREHENSIVE TEST - USER'S ACTUAL DATA\")\n    print(\"=\" * 60)\n    base_url = \"http://localhost:5001\"\n    test_file = \"testwork_user.csv\"\n    # Step 1: Analyze the data first\n    print(\"1. 📊 Analyzing user's test data...\")\n    try:\n        df = pd.read_csv(test_file)\n        total_compounds = len(df)",
+        "detail": "test_user_data_complete",
+        "documentation": {}
+    },
+    {
+        "label": "test_visualization_strict",
+        "kind": 2,
+        "importPath": "test_user_data_complete",
+        "description": "test_user_data_complete",
+        "peekOfCode": "def test_visualization_strict(analysis_result):\n    \"\"\"Strict test of visualization with user's data\"\"\"\n    print(\"\\n4. 📊 STRICT VISUALIZATION TEST\")\n    print(\"-\" * 40)\n    base_url = \"http://localhost:5001\"\n    try:\n        # Extract analysis results for visualization\n        analysis_data = analysis_result['results']\n        viz_payload = {\"results\": analysis_data}\n        viz_response = requests.post(",
+        "detail": "test_user_data_complete",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "test_user_data_complete",
+        "description": "test_user_data_complete",
+        "peekOfCode": "def main():\n    print(\"🚀 STARTING COMPREHENSIVE VISUALIZATION TEST\")\n    print(\"📁 Using user's actual file: testwork_user.csv\")\n    print(\"🎯 Testing complete pipeline with REAL DATA\")\n    # Run analysis\n    analysis_result = test_user_data_complete()\n    if not analysis_result:\n        print(\"\\n❌ ANALYSIS FAILED - Cannot continue to visualization test\")\n        return False\n    # Run strict visualization test",
+        "detail": "test_user_data_complete",
+        "documentation": {}
+    },
+    {
+        "label": "test_visualization",
+        "kind": 2,
+        "importPath": "test_visualization",
+        "description": "test_visualization",
+        "peekOfCode": "def test_visualization():\n    print(\"📊 Testing Visualization Pipeline\")\n    print(\"=\" * 40)\n    # Step 1: Run analysis to get results\n    print(\"1. Running analysis...\")\n    with open(\"data/sample/testwork.csv\", \"rb\") as f:\n        files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}\n        data = {\n            \"data_type\": \"Porcine\",\n            \"outlier_threshold\": 2.5,",
+        "detail": "test_visualization",
         "documentation": {}
     }
 ]

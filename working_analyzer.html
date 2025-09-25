@@ -173,13 +173,13 @@
             <div class="settings">
                 <div class="setting-group">
                     <label>Outlier Threshold</label>
-                    <input type="range" id="outlierThreshold" min="1.0" max="5.0" step="0.1" value="3.0">
-                    <div class="setting-value" id="outlierValue">3.0</div>
+                    <input type="range" id="outlierThreshold" min="1.0" max="5.0" step="0.1" value="2.5">
+                    <div class="setting-value" id="outlierValue">2.5</div>
                 </div>
                 <div class="setting-group">
                     <label>R² Threshold</label>
-                    <input type="range" id="r2Threshold" min="0.900" max="0.999" step="0.001" value="0.990">
-                    <div class="setting-value" id="r2Value">0.990</div>
+                    <input type="range" id="r2Threshold" min="0.500" max="0.990" step="0.001" value="0.750">
+                    <div class="setting-value" id="r2Value">0.750</div>
                 </div>
                 <div class="setting-group">
                     <label>RT Tolerance</label>
@@ -235,8 +235,8 @@
         let uploadedFile = null;
         let currentAnalysisResults = null;
         let currentSettings = {
-            outlierThreshold: 3.0,
-            r2Threshold: 0.99,
+            outlierThreshold: 2.5,
+            r2Threshold: 0.75,
             rtTolerance: 0.1
         };
 
@@ -441,18 +441,111 @@
                 document.getElementById('visualizationArea').style.display = 'block';
 
                 // Insert plots into different containers
+                console.log('📊 Available plot data structure:', Object.keys(result.plots || {}));
+
                 if (result.plots) {
-                    if (result.plots.regression_scatter) {
-                        // Combined view - smaller plots
-                        document.getElementById('plot-2d').innerHTML = result.plots.regression_scatter;
-                        // Full view - larger plot
-                        document.getElementById('plot-2d-full').innerHTML = result.plots.regression_scatter;
+                    // Handle nested plots structure from backend
+                    const plotsData = result.plots.plots || result.plots;
+                    console.log('📊 Plots data keys:', Object.keys(plotsData || {}));
+
+                    // Look for regression scatter plot (multiple possible keys)
+                    const regressionKeys = ['regression_scatter', 'scatter', '2d_regression', 'regression'];
+                    let regressionPlot = null;
+
+                    for (const key of regressionKeys) {
+                        if (plotsData && plotsData[key]) {
+                            regressionPlot = plotsData[key];
+                            console.log('✅ Found regression plot with key:', key);
+                            break;
+                        }
                     }
-                    if (result.plots['3d_distribution']) {
-                        // Combined view - smaller plots
-                        document.getElementById('plot-3d').innerHTML = result.plots['3d_distribution'];
-                        // Full view - larger plot
-                        document.getElementById('plot-3d-full').innerHTML = result.plots['3d_distribution'];
+
+                    // Look for 3D distribution plot (multiple possible keys)
+                    const distributionKeys = ['3d_distribution', '3d', 'distribution', 'dashboard'];
+                    let distributionPlot = null;
+
+                    for (const key of distributionKeys) {
+                        if (plotsData && plotsData[key]) {
+                            distributionPlot = plotsData[key];
+                            console.log('✅ Found 3D plot with key:', key);
+                            break;
+                        }
+                    }
+
+                    // Helper function to properly insert and execute Plotly plots
+                    function insertPlotlyHTML(elementId, plotHTML) {
+                        console.log(`📊 Inserting plot into ${elementId}, size: ${plotHTML.length} chars`);
+
+                        const element = document.getElementById(elementId);
+                        if (!element) {
+                            console.error(`❌ Element ${elementId} not found`);
+                            return false;
+                        }
+
+                        // Clear existing content
+                        element.innerHTML = '';
+
+                        // Create a temporary container
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = plotHTML;
+
+                        // Move all content to the target element
+                        while (tempDiv.firstChild) {
+                            element.appendChild(tempDiv.firstChild);
+                        }
+
+                        // Execute any script tags
+                        const scripts = element.querySelectorAll('script');
+                        scripts.forEach(script => {
+                            if (script.textContent) {
+                                try {
+                                    eval(script.textContent);
+                                    console.log(`✅ Executed script for ${elementId}`);
+                                } catch (e) {
+                                    console.warn(`⚠️ Script execution warning for ${elementId}:`, e);
+                                }
+                            }
+                        });
+
+                        return true;
+                    }
+
+                    // Insert regression plot if found (only into combined view)
+                    if (regressionPlot) {
+                        insertPlotlyHTML('plot-2d', regressionPlot);
+                        console.log('✅ Regression plot inserted into combined view');
+                    } else {
+                        console.log('❌ No regression plot found in keys:', Object.keys(plotsData || {}));
+                    }
+
+                    // Insert 3D distribution plot if found (only into combined view)
+                    if (distributionPlot) {
+                        insertPlotlyHTML('plot-3d', distributionPlot);
+                        console.log('✅ 3D distribution plot inserted into combined view');
+                    } else {
+                        console.log('❌ No 3D distribution plot found in keys:', Object.keys(plotsData || {}));
+                    }
+
+                    // ADDITIONAL: Insert all available plots for debugging
+                    console.log('🔍 All available plots for debugging:');
+                    for (const [plotKey, plotContent] of Object.entries(plotsData || {})) {
+                        if (plotContent && typeof plotContent === 'string' && plotContent.length > 1000) {
+                            console.log(`   📊 ${plotKey}: ${plotContent.length} chars`);
+                        }
+                    }
+
+                    // If no specific plots found, try to use any available plot
+                    if (!regressionPlot && !distributionPlot && plotsData) {
+                        const availableKeys = Object.keys(plotsData);
+                        console.log('🔍 Trying fallback with available keys:', availableKeys);
+
+                        if (availableKeys.length > 0) {
+                            const fallbackPlot = plotsData[availableKeys[0]];
+                            if (fallbackPlot && typeof fallbackPlot === 'string' && fallbackPlot.length > 1000) {
+                                insertPlotlyHTML('plot-2d', fallbackPlot);
+                                console.log('✅ Used fallback plot from key:', availableKeys[0]);
+                            }
+                        }
                     }
                 }
 
@@ -482,6 +575,99 @@
             event.target.classList.add('active');
 
             console.log(`📊 Switched to ${tabName} tab`);
+
+            // CRITICAL FIX: Load plots for newly visible tabs
+            setTimeout(() => {
+                if (tabName === '2d') {
+                    const plot2dFull = document.getElementById('plot-2d-full');
+                    const combinedPlot = document.getElementById('plot-2d');
+
+                    console.log('🔍 2D Tab Debug:', {
+                        fullTabExists: !!plot2dFull,
+                        fullTabChildren: plot2dFull ? plot2dFull.children.length : 0,
+                        combinedExists: !!combinedPlot,
+                        combinedChildren: combinedPlot ? combinedPlot.children.length : 0
+                    });
+
+                    if (plot2dFull && combinedPlot && combinedPlot.children.length > 0) {
+                        console.log('📊 Copying 2D plot from combined view to individual tab');
+
+                        // Clear the full tab first
+                        plot2dFull.innerHTML = '';
+
+                        // Clone the content instead of copying innerHTML to avoid script issues
+                        const clone = combinedPlot.cloneNode(true);
+                        plot2dFull.appendChild(clone);
+
+                        // Also try direct innerHTML copy as fallback
+                        if (plot2dFull.children.length === 0) {
+                            plot2dFull.innerHTML = combinedPlot.innerHTML;
+                        }
+
+                        // Re-execute scripts
+                        const scripts = plot2dFull.querySelectorAll('script');
+                        console.log(`🔍 Found ${scripts.length} scripts to re-execute in 2D tab`);
+                        scripts.forEach((script, index) => {
+                            if (script.textContent) {
+                                try {
+                                    eval(script.textContent);
+                                    console.log(`✅ Re-executed 2D plot script ${index + 1} in individual tab`);
+                                } catch (e) {
+                                    console.warn(`⚠️ Script ${index + 1} re-execution warning:`, e);
+                                }
+                            }
+                        });
+
+                        console.log(`✅ 2D tab now has ${plot2dFull.children.length} child elements`);
+                    } else {
+                        console.log('❌ Cannot copy 2D plot - missing elements or no content in combined view');
+                    }
+                } else if (tabName === '3d') {
+                    const plot3dFull = document.getElementById('plot-3d-full');
+                    const combinedPlot = document.getElementById('plot-3d');
+
+                    console.log('🔍 3D Tab Debug:', {
+                        fullTabExists: !!plot3dFull,
+                        fullTabChildren: plot3dFull ? plot3dFull.children.length : 0,
+                        combinedExists: !!combinedPlot,
+                        combinedChildren: combinedPlot ? combinedPlot.children.length : 0
+                    });
+
+                    if (plot3dFull && combinedPlot && combinedPlot.children.length > 0) {
+                        console.log('📊 Copying 3D plot from combined view to individual tab');
+
+                        // Clear the full tab first
+                        plot3dFull.innerHTML = '';
+
+                        // Clone the content instead of copying innerHTML to avoid script issues
+                        const clone = combinedPlot.cloneNode(true);
+                        plot3dFull.appendChild(clone);
+
+                        // Also try direct innerHTML copy as fallback
+                        if (plot3dFull.children.length === 0) {
+                            plot3dFull.innerHTML = combinedPlot.innerHTML;
+                        }
+
+                        // Re-execute scripts
+                        const scripts = plot3dFull.querySelectorAll('script');
+                        console.log(`🔍 Found ${scripts.length} scripts to re-execute in 3D tab`);
+                        scripts.forEach((script, index) => {
+                            if (script.textContent) {
+                                try {
+                                    eval(script.textContent);
+                                    console.log(`✅ Re-executed 3D plot script ${index + 1} in individual tab`);
+                                } catch (e) {
+                                    console.warn(`⚠️ Script ${index + 1} re-execution warning:`, e);
+                                }
+                            }
+                        });
+
+                        console.log(`✅ 3D tab now has ${plot3dFull.children.length} child elements`);
+                    } else {
+                        console.log('❌ Cannot copy 3D plot - missing elements or no content in combined view');
+                    }
+                }
+            }, 150); // Slightly longer delay to ensure tab is fully visible
         }
 
         function showStatus(message, type = 'info') {
