@@ -58,6 +58,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -132,6 +140,46 @@
         "documentation": {}
     },
     {
+        "label": "g",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Blueprint",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
         "label": "Blueprint",
         "importPath": "flask",
         "description": "flask",
@@ -260,67 +308,51 @@
         "documentation": {}
     },
     {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "flask",
         "documentation": {}
     },
     {
-        "label": "File",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "typing",
         "documentation": {}
     },
     {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "typing",
         "documentation": {}
     },
     {
-        "label": "UploadFile",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "typing",
         "documentation": {}
     },
     {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "typing",
         "documentation": {}
     },
     {
-        "label": "JSONResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
-        "label": "DummyGangliosideDataProcessor",
-        "importPath": "backend.services.dummy.processors",
-        "description": "backend.services.dummy.processors",
-        "isExtraImport": true,
-        "detail": "backend.services.dummy.processors",
-        "documentation": {}
-    },
-    {
-        "label": "DummyVisualizationService",
-        "importPath": "backend.services.dummy.processors",
-        "description": "backend.services.dummy.processors",
-        "isExtraImport": true,
-        "detail": "backend.services.dummy.processors",
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -397,6 +429,46 @@
     },
     {
         "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -476,6 +548,86 @@
         "documentation": {}
     },
     {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "JSONResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "DummyGangliosideDataProcessor",
+        "importPath": "backend.services.dummy.processors",
+        "description": "backend.services.dummy.processors",
+        "isExtraImport": true,
+        "detail": "backend.services.dummy.processors",
+        "documentation": {}
+    },
+    {
+        "label": "DummyVisualizationService",
+        "importPath": "backend.services.dummy.processors",
+        "description": "backend.services.dummy.processors",
+        "isExtraImport": true,
+        "detail": "backend.services.dummy.processors",
+        "documentation": {}
+    },
+    {
         "label": "LinearRegression",
         "importPath": "sklearn.linear_model",
         "description": "sklearn.linear_model",
@@ -489,6 +641,22 @@
         "description": "sklearn.linear_model",
         "isExtraImport": true,
         "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "LinearRegression",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
         "documentation": {}
     },
     {
@@ -514,6 +682,14 @@
         "importPath": "warnings",
         "description": "warnings",
         "detail": "warnings",
+        "documentation": {}
+    },
+    {
+        "label": "stats",
+        "importPath": "scipy",
+        "description": "scipy",
+        "isExtraImport": true,
+        "detail": "scipy",
         "documentation": {}
     },
     {
@@ -632,6 +808,14 @@
         "documentation": {}
     },
     {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
         "label": "GangliosideProcessor",
         "importPath": "services.ganglioside_processor",
         "description": "services.ganglioside_processor",
@@ -712,15 +896,6 @@
         "documentation": {}
     },
     {
-        "label": "requests",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "requests",
-        "description": "requests",
-        "detail": "requests",
-        "documentation": {}
-    },
-    {
         "label": "sys",
         "kind": 6,
         "isExtraImport": true,
@@ -730,12 +905,37 @@
         "documentation": {}
     },
     {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
         "label": "time",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "time",
         "description": "time",
         "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessorFixed",
+        "importPath": "backend.services.ganglioside_processor_fixed",
+        "description": "backend.services.ganglioside_processor_fixed",
+        "isExtraImport": true,
+        "detail": "backend.services.ganglioside_processor_fixed",
+        "documentation": {}
+    },
+    {
+        "label": "AnalysisService",
+        "importPath": "backend.core.analysis_service",
+        "description": "backend.core.analysis_service",
+        "isExtraImport": true,
+        "detail": "backend.core.analysis_service",
         "documentation": {}
     },
     {
@@ -826,6 +1026,60 @@
         "description": "backend.api.routes.analysis",
         "peekOfCode": "analysis_bp = Blueprint('analysis', __name__, url_prefix='/api')\ndef init_services(ganglioside_processor, reg_analyzer, vis_service):\n    \"\"\"서비스 인스턴스들을 초기화\"\"\"\n    global processor, regression_analyzer, visualization_service\n    processor = ganglioside_processor\n    regression_analyzer = reg_analyzer\n    visualization_service = vis_service\ndef convert_to_serializable(obj):\n    \"\"\"NumPy/pandas 객체를 JSON 직렬화 가능한 형태로 변환\"\"\"\n    if isinstance(obj, dict):",
         "detail": "backend.api.routes.analysis",
+        "documentation": {}
+    },
+    {
+        "label": "convert_to_serializable",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis_fixed",
+        "description": "backend.api.routes.analysis_fixed",
+        "peekOfCode": "def convert_to_serializable(obj: Any) -> Any:\n    \"\"\"Convert NumPy/pandas objects to JSON serializable format\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}\n    elif isinstance(obj, list):\n        return [convert_to_serializable(item) for item in obj]\n    elif isinstance(obj, (np.integer, np.int32, np.int64)):\n        return int(obj)\n    elif isinstance(obj, (np.floating, np.float32, np.float64)):\n        return float(obj)",
+        "detail": "backend.api.routes.analysis_fixed",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_data_enhanced",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis_fixed",
+        "description": "backend.api.routes.analysis_fixed",
+        "peekOfCode": "def analyze_data_enhanced():\n    \"\"\"\n    Enhanced data analysis with fixed regression algorithms\n    \"\"\"\n    try:\n        print(\"🚀 Enhanced analysis request received\")\n        # Validate request\n        if 'file' not in request.files:\n            return jsonify({\"error\": \"No file provided\"}), 400\n        file = request.files['file']",
+        "detail": "backend.api.routes.analysis_fixed",
+        "documentation": {}
+    },
+    {
+        "label": "upload_csv_enhanced",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis_fixed",
+        "description": "backend.api.routes.analysis_fixed",
+        "peekOfCode": "def upload_csv_enhanced():\n    \"\"\"Enhanced CSV upload with better validation\"\"\"\n    try:\n        if 'file' not in request.files:\n            return jsonify({\"error\": \"No file provided\"}), 400\n        file = request.files['file']\n        if file.filename == '' or not file.filename.endswith('.csv'):\n            return jsonify({\"error\": \"Invalid file. Please upload a CSV file.\"}), 400\n        # Read and validate CSV\n        try:",
+        "detail": "backend.api.routes.analysis_fixed",
+        "documentation": {}
+    },
+    {
+        "label": "analysis_settings",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis_fixed",
+        "description": "backend.api.routes.analysis_fixed",
+        "peekOfCode": "def analysis_settings():\n    \"\"\"Get or update analysis settings\"\"\"\n    try:\n        if request.method == \"GET\":\n            # Return current settings\n            current_settings = g.analysis_service.get_current_settings()\n            return jsonify({\n                \"status\": \"success\",\n                \"settings\": current_settings,\n                \"timestamp\": datetime.now().isoformat()",
+        "detail": "backend.api.routes.analysis_fixed",
+        "documentation": {}
+    },
+    {
+        "label": "export_results",
+        "kind": 2,
+        "importPath": "backend.api.routes.analysis_fixed",
+        "description": "backend.api.routes.analysis_fixed",
+        "peekOfCode": "def export_results(format: str):\n    \"\"\"Export analysis results in different formats\"\"\"\n    try:\n        # This would typically use stored results from a session or database\n        # For now, return a placeholder\n        if format not in ['csv', 'xlsx', 'json']:\n            return jsonify({\"error\": \"Unsupported format. Use: csv, xlsx, json\"}), 400\n        return jsonify({\n            \"message\": f\"Export in {format} format - Feature coming soon\",\n            \"available_formats\": [\"csv\", \"xlsx\", \"json\"],",
+        "detail": "backend.api.routes.analysis_fixed",
+        "documentation": {}
+    },
+    {
+        "label": "analysis_bp",
+        "kind": 5,
+        "importPath": "backend.api.routes.analysis_fixed",
+        "description": "backend.api.routes.analysis_fixed",
+        "peekOfCode": "analysis_bp = Blueprint('analysis', __name__)\ndef convert_to_serializable(obj: Any) -> Any:\n    \"\"\"Convert NumPy/pandas objects to JSON serializable format\"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_serializable(v) for k, v in obj.items()}\n    elif isinstance(obj, list):\n        return [convert_to_serializable(item) for item in obj]\n    elif isinstance(obj, (np.integer, np.int32, np.int64)):\n        return int(obj)\n    elif isinstance(obj, (np.floating, np.float32, np.float64)):",
+        "detail": "backend.api.routes.analysis_fixed",
         "documentation": {}
     },
     {
@@ -1027,6 +1281,15 @@
         "documentation": {}
     },
     {
+        "label": "AnalysisService",
+        "kind": 6,
+        "importPath": "backend.core.analysis_service",
+        "description": "backend.core.analysis_service",
+        "peekOfCode": "class AnalysisService:\n    \"\"\"\n    Central analysis service that orchestrates all analysis components\n    \"\"\"\n    def __init__(self):\n        \"\"\"Initialize all analysis components\"\"\"\n        self.ganglioside_processor = GangliosideProcessorFixed()\n        self.regression_analyzer = RegressionAnalyzer()\n        self.visualization_service = VisualizationService()\n        print(\"🚀 Analysis Service 초기화 완료\")",
+        "detail": "backend.core.analysis_service",
+        "documentation": {}
+    },
+    {
         "label": "DummyGangliosideDataProcessor",
         "kind": 6,
         "importPath": "backend.services.dummy.processors_backup",
@@ -1087,6 +1350,15 @@
         "description": "backend.services.ganglioside_processor",
         "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.rt_tolerance = 0.1\n        print(\"🧬 Ganglioside Processor 초기화 완료\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):\n        \"\"\"분석 설정 업데이트\"\"\"",
         "detail": "backend.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessorFixed",
+        "kind": 6,
+        "importPath": "backend.services.ganglioside_processor_fixed",
+        "description": "backend.services.ganglioside_processor_fixed",
+        "peekOfCode": "class GangliosideProcessorFixed:\n    \"\"\"\n    Fixed Ganglioside Processor with improved regression analysis\n    \"\"\"\n    def __init__(self):\n        # Realistic thresholds for chemical analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        self.min_compounds_for_regression = 2",
+        "detail": "backend.services.ganglioside_processor_fixed",
         "documentation": {}
     },
     {
@@ -1486,6 +1758,15 @@
         "documentation": {}
     },
     {
+        "label": "create_app",
+        "kind": 2,
+        "importPath": "app_refactored_fixed",
+        "description": "app_refactored_fixed",
+        "peekOfCode": "def create_app() -> Flask:\n    \"\"\"\n    Application factory with dependency injection and improved error handling\n    \"\"\"\n    print(\"🔧 Initializing enhanced analysis services...\")\n    try:\n        # Initialize core services\n        analysis_service = AnalysisService()\n        visualization_service = VisualizationService()\n        print(\"✅ Enhanced services initialized successfully\")",
+        "detail": "app_refactored_fixed",
+        "documentation": {}
+    },
+    {
         "label": "test_all_endpoints",
         "kind": 2,
         "importPath": "comprehensive_test",
@@ -1528,6 +1809,33 @@
         "description": "comprehensive_test",
         "peekOfCode": "BASE_URL = \"http://localhost:5001\"\ndef test_all_endpoints():\n    \"\"\"Test all web endpoints\"\"\"\n    print(\"🌐 Testing all web endpoints...\")\n    endpoints = [\n        (\"/\", \"Main page (working analyzer)\"),\n        (\"/working\", \"Working analyzer page\"),\n        (\"/simple\", \"Simple analyzer page\"),\n        (\"/integrated\", \"Integrated analyzer page\"),\n        (\"/diagnostic\", \"Diagnostic test page\"),",
         "detail": "comprehensive_test",
+        "documentation": {}
+    },
+    {
+        "label": "test_fixed_processor",
+        "kind": 2,
+        "importPath": "test_fixed_regression",
+        "description": "test_fixed_regression",
+        "peekOfCode": "def test_fixed_processor():\n    \"\"\"Test the fixed processor with sample data\"\"\"\n    print(\"🧬 Testing Fixed Ganglioside Processor\")\n    print(\"=\" * 50)\n    # Initialize fixed processor\n    processor = GangliosideProcessorFixed()\n    # Load sample data\n    try:\n        df = pd.read_csv(\"data/sample/testwork.csv\")\n        print(f\"📄 Loaded sample data: {len(df)} compounds\")",
+        "detail": "test_fixed_regression",
+        "documentation": {}
+    },
+    {
+        "label": "test_analysis_service",
+        "kind": 2,
+        "importPath": "test_fixed_regression",
+        "description": "test_fixed_regression",
+        "peekOfCode": "def test_analysis_service():\n    \"\"\"Test the enhanced analysis service\"\"\"\n    print(\"\\n🚀 Testing Enhanced Analysis Service\")\n    print(\"=\" * 50)\n    try:\n        # Initialize analysis service\n        analysis_service = AnalysisService()\n        # Load sample data\n        df = pd.read_csv(\"data/sample/testwork.csv\")\n        # Test comprehensive analysis",
+        "detail": "test_fixed_regression",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "test_fixed_regression",
+        "description": "test_fixed_regression",
+        "peekOfCode": "def main():\n    \"\"\"Main test runner\"\"\"\n    print(\"🧬 LC-MS-MS Fixed Regression Analysis Test\")\n    print(\"Testing improved algorithms and realistic thresholds\")\n    print(\"=\" * 60)\n    success_count = 0\n    # Test 1: Fixed processor\n    if test_fixed_processor():\n        success_count += 1\n    # Test 2: Analysis service",
+        "detail": "test_fixed_regression",
         "documentation": {}
     },
     {
