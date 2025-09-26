@@ -10,6 +10,12 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
+# Import the categorizer
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from utils.ganglioside_categorizer import GangliosideCategorizer
+
 
 class GangliosideProcessor:
     def __init__(self):
@@ -18,7 +24,10 @@ class GangliosideProcessor:
         self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity
         self.rt_tolerance = 0.1
 
-        print("🧬 Ganglioside Processor 초기화 완료 (Fixed Version)")
+        # Initialize categorizer
+        self.categorizer = GangliosideCategorizer()
+
+        print("🧬 Ganglioside Processor 초기화 완료 (Fixed Version with Categorization)")
 
     def update_settings(
         self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None
@@ -671,9 +680,7 @@ class GangliosideProcessor:
             },
             "regression_summary": {
                 "total_groups": len(rule1_results["regression_results"]),
-                "avg_r2": np.mean(
-                    [r["r2"] for r in rule1_results["regression_results"].values()]
-                )
+                "avg_r2": sum(r["r2"] for r in rule1_results["regression_results"].values()) / len(rule1_results["regression_results"])
                 if rule1_results["regression_results"]
                 else 0,
                 "high_quality_groups": len(
@@ -799,6 +806,8 @@ class GangliosideProcessor:
                 if statistics["success_rate"] >= 70
                 else "Low",
             },
+            # ADD CATEGORIZATION DATA
+            "categorization": self._generate_categorization_results(df),
         }
 
     def _enhance_outlier_detection(
@@ -854,3 +863,65 @@ class GangliosideProcessor:
             total = info["total_sugars"]
             sugar_counts[total] = sugar_counts.get(total, 0) + 1
         return sugar_counts
+
+    def _generate_categorization_results(self, df: pd.DataFrame) -> Dict[str, Any]:
+        """Generate categorization results using the GangliosideCategorizer"""
+        try:
+            print("📊 생성 중: 강글리오시드 카테고리 분석...")
+
+            # Perform categorization
+            categorization_results = self.categorizer.categorize_compounds(df, 'Name')
+
+            # Generate grouped data
+            grouped_data = self.categorizer.create_category_grouped_data(df, 'Name')
+
+            # Get color scheme
+            colors = self.categorizer.get_category_colors()
+
+            # Generate summary statistics
+            category_stats = {}
+            for category, info in categorization_results['categories'].items():
+                category_stats[category] = {
+                    'count': info['count'],
+                    'percentage': (info['count'] / len(df)) * 100 if len(df) > 0 else 0,
+                    'color': colors.get(category, '#888888'),
+                    'description': info['info']['description'],
+                    'examples': info['compounds'][:3]  # First 3 examples
+                }
+
+            print(f"   ✅ 카테고리 분석 완료: {len(categorization_results['categories'])}개 카테고리")
+
+            return {
+                'categories': categorization_results['categories'],
+                'category_stats': category_stats,
+                'base_prefixes': categorization_results['base_prefixes'],
+                'modifications': categorization_results['modifications'],
+                'colors': colors,
+                'statistics': categorization_results['statistics'],
+                'grouped_data_summary': {
+                    category: {
+                        'count': len(group_df),
+                        'base_prefixes': dict(group_df['Base_Prefix'].value_counts()) if 'Base_Prefix' in group_df.columns else {},
+                        'modifications': dict(group_df['Modifications'].value_counts()) if 'Modifications' in group_df.columns else {}
+                    }
+                    for category, group_df in grouped_data.items()
+                }
+            }
+
+        except Exception as e:
+            print(f"   ❌ 카테고리 분석 실패: {e}")
+            return {
+                'categories': {},
+                'category_stats': {},
+                'base_prefixes': {},
+                'modifications': {},
+                'colors': {},
+                'statistics': {
+                    'total_compounds': len(df),
+                    'total_categories': 0,
+                    'total_base_prefixes': 0,
+                    'total_modifications': 0,
+                    'error': str(e)
+                },
+                'grouped_data_summary': {}
+            }

@@ -548,6 +548,38 @@
         "documentation": {}
     },
     {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Any",
         "importPath": "typing",
         "description": "typing",
@@ -676,6 +708,48 @@
         "documentation": {}
     },
     {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideCategorizer",
+        "importPath": "utils.ganglioside_categorizer",
+        "description": "utils.ganglioside_categorizer",
+        "isExtraImport": true,
+        "detail": "utils.ganglioside_categorizer",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideCategorizer",
+        "importPath": "utils.ganglioside_categorizer",
+        "description": "utils.ganglioside_categorizer",
+        "isExtraImport": true,
+        "detail": "utils.ganglioside_categorizer",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideCategorizer",
+        "importPath": "utils.ganglioside_categorizer",
+        "description": "utils.ganglioside_categorizer",
+        "isExtraImport": true,
+        "detail": "utils.ganglioside_categorizer",
+        "documentation": {}
+    },
+    {
         "label": "warnings",
         "kind": 6,
         "isExtraImport": true,
@@ -718,6 +792,14 @@
         "documentation": {}
     },
     {
+        "label": "make_subplots",
+        "importPath": "plotly.subplots",
+        "description": "plotly.subplots",
+        "isExtraImport": true,
+        "detail": "plotly.subplots",
+        "documentation": {}
+    },
+    {
         "label": "VisualizationData",
         "importPath": "backend.utils.data_structures",
         "description": "backend.utils.data_structures",
@@ -742,12 +824,20 @@
         "documentation": {}
     },
     {
-        "label": "os",
+        "label": "re",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "defaultdict",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
         "documentation": {}
     },
     {
@@ -813,6 +903,14 @@
         "description": "flask_cors",
         "isExtraImport": true,
         "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessor",
+        "importPath": "services.ganglioside_processor",
+        "description": "services.ganglioside_processor",
+        "isExtraImport": true,
+        "detail": "services.ganglioside_processor",
         "documentation": {}
     },
     {
@@ -896,12 +994,12 @@
         "documentation": {}
     },
     {
-        "label": "sys",
+        "label": "plotly.express",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
+        "importPath": "plotly.express",
+        "description": "plotly.express",
+        "detail": "plotly.express",
         "documentation": {}
     },
     {
@@ -1356,7 +1454,7 @@
         "kind": 6,
         "importPath": "backend.services.ganglioside_processor",
         "description": "backend.services.ganglioside_processor",
-        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        print(\"🧬 Ganglioside Processor 초기화 완료 (Fixed Version)\")\n    def update_settings(\n        self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None\n    ):",
+        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        print(\"🧬 Ganglioside Processor 초기화 완료 (Fixed Version with Categorization)\")\n    def update_settings(",
         "detail": "backend.services.ganglioside_processor",
         "documentation": {}
     },
@@ -1430,6 +1528,24 @@
         "description": "backend.utils.data_structures",
         "peekOfCode": "def calculate_mass_to_charge(compound_name: str, base_mass: Optional[float] = None) -> float:\n    \"\"\"\n    Calculate mass-to-charge ratio from compound name\n    Args:\n        compound_name: Compound name like \"GD1a(36:1;O2)\"\n        base_mass: Optional base mass for the ganglioside class\n    Returns:\n        Estimated m/z ratio\n    \"\"\"\n    import re",
         "detail": "backend.utils.data_structures",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideCategorizer",
+        "kind": 6,
+        "importPath": "backend.utils.ganglioside_categorizer",
+        "description": "backend.utils.ganglioside_categorizer",
+        "peekOfCode": "class GangliosideCategorizer:\n    \"\"\"\n    Categorizes gangliosides based on their prefix patterns for better visualization grouping.\n    Examples:\n    - GD1(34:1;O2) → Base: GD1, Category: GD (disialo)\n    - GD1+dHex(36:1;O2) → Base: GD1, Category: GD (disialo), Modified: dHex\n    - GM3+OAc(18:1;O2) → Base: GM3, Category: GM (monosialo), Modified: OAc\n    \"\"\"\n    def __init__(self):\n        # Define ganglioside categories based on sialic acid content",
+        "detail": "backend.utils.ganglioside_categorizer",
+        "documentation": {}
+    },
+    {
+        "label": "test_categorizer",
+        "kind": 2,
+        "importPath": "backend.utils.ganglioside_categorizer",
+        "description": "backend.utils.ganglioside_categorizer",
+        "peekOfCode": "def test_categorizer():\n    \"\"\"Test function for the categorizer\"\"\"\n    import pandas as pd\n    # Sample data\n    test_data = {\n        'Name': [\n            'GD1(34:1;O2)',\n            'GD1+dHex(36:1;O2)',\n            'GM3+OAc(18:1;O2)',\n            'GT1(40:1;O2)',",
+        "detail": "backend.utils.ganglioside_categorizer",
         "documentation": {}
     },
     {
@@ -1784,6 +1900,42 @@
         "documentation": {}
     },
     {
+        "label": "create_category_scatter_plot",
+        "kind": 2,
+        "importPath": "category_visualization_demo",
+        "description": "category_visualization_demo",
+        "peekOfCode": "def create_category_scatter_plot(df, categorizer):\n    \"\"\"Create a scatter plot colored by ganglioside categories\"\"\"\n    # Get categorization\n    categorization = categorizer.categorize_compounds(df)\n    colors = categorizer.get_category_colors()\n    # Add category information to dataframe\n    df_viz = df.copy()\n    df_viz['Category'] = df_viz['Name'].apply(\n        lambda x: categorization['compound_mapping'][x]['category']\n    )",
+        "detail": "category_visualization_demo",
+        "documentation": {}
+    },
+    {
+        "label": "create_category_distribution_charts",
+        "kind": 2,
+        "importPath": "category_visualization_demo",
+        "description": "category_visualization_demo",
+        "peekOfCode": "def create_category_distribution_charts(df, categorizer):\n    \"\"\"Create distribution charts for categories\"\"\"\n    categorization = categorizer.categorize_compounds(df)\n    colors = categorizer.get_category_colors()\n    # Create subplots\n    fig = make_subplots(\n        rows=2, cols=2,\n        subplot_titles=(\n            '📊 Category Distribution',\n            '🏷️ Base Prefix Distribution',",
+        "detail": "category_visualization_demo",
+        "documentation": {}
+    },
+    {
+        "label": "create_category_3d_plot",
+        "kind": 2,
+        "importPath": "category_visualization_demo",
+        "description": "category_visualization_demo",
+        "peekOfCode": "def create_category_3d_plot(df, categorizer):\n    \"\"\"Create 3D plot showing RT vs Log P vs Volume by category\"\"\"\n    # Get categorization\n    categorization = categorizer.categorize_compounds(df)\n    colors = categorizer.get_category_colors()\n    # Add category information\n    df_viz = df.copy()\n    df_viz['Category'] = df_viz['Name'].apply(\n        lambda x: categorization['compound_mapping'][x]['category']\n    )",
+        "detail": "category_visualization_demo",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "category_visualization_demo",
+        "description": "category_visualization_demo",
+        "peekOfCode": "def main():\n    print(\"🎨 GANGLIOSIDE CATEGORIZATION VISUALIZATION DEMO\")\n    print(\"=\" * 60)\n    # Load data\n    df = pd.read_csv('testwork_user.csv')\n    print(f\"📁 Loaded {len(df)} compounds\")\n    # Initialize categorizer\n    categorizer = GangliosideCategorizer()\n    # Generate categorization summary\n    summary = categorizer.generate_categorization_summary(df)",
+        "detail": "category_visualization_demo",
+        "documentation": {}
+    },
+    {
         "label": "test_all_endpoints",
         "kind": 2,
         "importPath": "comprehensive_test",
@@ -1883,12 +2035,39 @@
         "documentation": {}
     },
     {
+        "label": "test_with_real_data",
+        "kind": 2,
+        "importPath": "test_categorizer_real_data",
+        "description": "test_categorizer_real_data",
+        "peekOfCode": "def test_with_real_data():\n    print(\"🧪 TESTING CATEGORIZER WITH REAL USER DATA\")\n    print(\"=\" * 60)\n    # Load user data\n    try:\n        df = pd.read_csv('testwork_user.csv')\n        print(f\"📁 Loaded {len(df)} compounds from testwork_user.csv\")\n    except Exception as e:\n        print(f\"❌ Failed to load data: {e}\")\n        return",
+        "detail": "test_categorizer_real_data",
+        "documentation": {}
+    },
+    {
         "label": "test_complete_pipeline",
         "kind": 2,
         "importPath": "test_complete_pipeline",
         "description": "test_complete_pipeline",
         "peekOfCode": "def test_complete_pipeline():\n    print(\"🎯 Testing Complete Analysis & Visualization Pipeline\")\n    print(\"=\" * 55)\n    # Use the running server on port 5001\n    base_url = \"http://localhost:5001\"\n    # Step 1: Test health\n    print(\"1. Health check...\")\n    try:\n        health = requests.get(f\"{base_url}/api/health\")\n        print(f\"   Status: {health.status_code}\")",
         "detail": "test_complete_pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "test_direct_integration",
+        "kind": 2,
+        "importPath": "test_direct_integration",
+        "description": "test_direct_integration",
+        "peekOfCode": "def test_direct_integration():\n    print(\"🧪 DIRECT CATEGORIZATION INTEGRATION TEST\")\n    print(\"=\" * 50)\n    # Load test data\n    df = pd.read_csv('testwork_user.csv')\n    print(f\"📁 Loaded {len(df)} compounds\")\n    # Create processor\n    processor = GangliosideProcessor()\n    print(\"✅ Processor created\")\n    # Test categorization method directly",
+        "detail": "test_direct_integration",
+        "documentation": {}
+    },
+    {
+        "label": "test_full_analysis",
+        "kind": 2,
+        "importPath": "test_direct_integration",
+        "description": "test_direct_integration",
+        "peekOfCode": "def test_full_analysis():\n    print(\"\\n🔬 FULL ANALYSIS WITH CATEGORIZATION TEST\")\n    print(\"=\" * 50)\n    # Load test data\n    df = pd.read_csv('testwork_user.csv')\n    # Create processor and run full analysis\n    processor = GangliosideProcessor()\n    try:\n        results = processor.process_data(df, \"Porcine\")\n        print(\"✅ Full analysis completed\")",
+        "detail": "test_direct_integration",
         "documentation": {}
     },
     {
@@ -1961,6 +2140,33 @@
         "description": "test_functionality",
         "peekOfCode": "BASE_URL = \"http://localhost:5001\"\ndef test_health():\n    \"\"\"Test health endpoint\"\"\"\n    print(\"🔌 Testing health endpoint...\")\n    try:\n        response = requests.get(f\"{BASE_URL}/api/health\")\n        if response.status_code == 200:\n            data = response.json()\n            print(f\"✅ Health check passed: {data['status']}\")\n            return True",
         "detail": "test_functionality",
+        "documentation": {}
+    },
+    {
+        "label": "test_integrated_categorization",
+        "kind": 2,
+        "importPath": "test_integrated_categorization",
+        "description": "test_integrated_categorization",
+        "peekOfCode": "def test_integrated_categorization():\n    print(\"🧪 TESTING INTEGRATED CATEGORIZATION SYSTEM\")\n    print(\"=\" * 60)\n    base_url = \"http://localhost:5001\"\n    test_file = \"testwork_user.csv\"\n    # Step 1: Load and analyze the data\n    print(\"1. 📊 Loading test data...\")\n    try:\n        df = pd.read_csv(test_file)\n        print(f\"   📁 Loaded {len(df)} compounds\")",
+        "detail": "test_integrated_categorization",
+        "documentation": {}
+    },
+    {
+        "label": "test_visualization_with_categorization",
+        "kind": 2,
+        "importPath": "test_integrated_categorization",
+        "description": "test_integrated_categorization",
+        "peekOfCode": "def test_visualization_with_categorization():\n    \"\"\"Test if visualization can access categorization data\"\"\"\n    print(\"\\n3. 📊 Testing visualization with categorization data...\")\n    base_url = \"http://localhost:5001\"\n    test_file = \"testwork_user.csv\"\n    try:\n        # Run analysis first\n        with open(test_file, \"rb\") as f:\n            files = {\"file\": (\"testwork.csv\", f, \"text/csv\")}\n            data = {",
+        "detail": "test_integrated_categorization",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "test_integrated_categorization",
+        "description": "test_integrated_categorization",
+        "peekOfCode": "def main():\n    print(\"🔬 INTEGRATED CATEGORIZATION SYSTEM TEST\")\n    print(\"Testing the complete pipeline with categorization\")\n    print()\n    # Test 1: Basic categorization integration\n    cat_success = test_integrated_categorization()\n    # Test 2: Visualization compatibility\n    viz_success = test_visualization_with_categorization()\n    # Final result\n    print(\"\\n\" + \"=\" * 60)",
+        "detail": "test_integrated_categorization",
         "documentation": {}
     },
     {
