@@ -3,15 +3,16 @@
 Demo script showing category-based visualization
 """
 
+import sys
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 from plotly.subplots import make_subplots
-import sys
 
 # Add paths
 sys.path.append('backend')
+# flake8: noqa: E402
 from utils.ganglioside_categorizer import GangliosideCategorizer
+
 
 def create_category_scatter_plot(df, categorizer):
     """Create a scatter plot colored by ganglioside categories"""
@@ -61,7 +62,8 @@ def create_category_scatter_plot(df, categorizer):
 
     fig.update_layout(
         title={
-            'text': '🧬 Ganglioside Classification by Category<br><sub>LC-MS-MS Data Analysis with Automated Categorization</sub>',
+            'text': '🧬 Ganglioside Classification by Category<br>' +
+                    '<sub>LC-MS-MS Data Analysis with Automated Categorization</sub>',
             'x': 0.5,
             'font': {'size': 16}
         },
@@ -80,6 +82,7 @@ def create_category_scatter_plot(df, categorizer):
     )
 
     return fig
+
 
 def create_category_distribution_charts(df, categorizer):
     """Create distribution charts for categories"""
@@ -168,6 +171,7 @@ def create_category_distribution_charts(df, categorizer):
 
     return fig
 
+
 def create_category_3d_plot(df, categorizer):
     """Create 3D plot showing RT vs Log P vs Volume by category"""
 
@@ -225,6 +229,7 @@ def create_category_3d_plot(df, categorizer):
 
     return fig
 
+
 def main():
     print("🎨 GANGLIOSIDE CATEGORIZATION VISUALIZATION DEMO")
     print("=" * 60)
@@ -264,6 +269,7 @@ def main():
     print("   2. Category analysis dashboard")
     print("   3. 3D category distribution plot")
     print("\n🌐 Open the HTML files in your browser to view the interactive plots!")
+
 
 if __name__ == "__main__":
     main()

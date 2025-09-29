@@ -4,14 +4,15 @@ Direct test of categorization integration
 """
 
 import sys
-import os
 import pandas as pd
 
 # Add paths
 sys.path.append('backend')
 sys.path.append('backend/services')
 
+# flake8: noqa: E402
 from services.ganglioside_processor import GangliosideProcessor
+
 
 def test_direct_integration():
     print("🧪 DIRECT CATEGORIZATION INTEGRATION TEST")
@@ -28,7 +29,7 @@ def test_direct_integration():
     # Test categorization method directly
     try:
         cat_results = processor._generate_categorization_results(df)
-        print(f"✅ Categorization successful!")
+        print("✅ Categorization successful!")
         print(f"📊 Categories: {len(cat_results.get('categories', {}))}")
         print(f"🏷️ Category stats: {len(cat_results.get('category_stats', {}))}")
 
@@ -43,6 +44,7 @@ def test_direct_integration():
         import traceback
         traceback.print_exc()
         return False
+
 
 def test_full_analysis():
     print("\n🔬 FULL ANALYSIS WITH CATEGORIZATION TEST")
@@ -73,6 +75,7 @@ def test_full_analysis():
         import traceback
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     print("🔧 TESTING CATEGORIZATION INTEGRATION")

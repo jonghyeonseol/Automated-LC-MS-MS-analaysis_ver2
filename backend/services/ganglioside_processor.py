@@ -3,6 +3,8 @@ Ganglioside Data Processor - 실제 분석 로직 구현
 5가지 규칙 기반 산성 당지질 데이터 자동 분류 시스템
 """
 
+import sys
+import os
 from typing import Any, Dict, List
 
 import numpy as np
@@ -11,9 +13,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 # Import the categorizer
-import sys
-import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# flake8: noqa: E402
 from utils.ganglioside_categorizer import GangliosideCategorizer
 
 
@@ -304,7 +305,8 @@ class GangliosideProcessor:
                                 if not outlier_mask[idx]:
                                     valid_compounds.append(row_dict)
                                 else:
-                                    row_dict["outlier_reason"] = f"Rule 1 (Fallback): Std residual = {std_residuals[idx]:.3f}"
+                                    row_dict["outlier_reason"] = \
+                                        f"Rule 1 (Fallback): Std residual = {std_residuals[idx]:.3f}"
                                     outliers.append(row_dict)
 
                             print(f"   ✅ Fallback regression successful: R² = {r2:.3f}")
@@ -680,7 +682,8 @@ class GangliosideProcessor:
             },
             "regression_summary": {
                 "total_groups": len(rule1_results["regression_results"]),
-                "avg_r2": sum(r["r2"] for r in rule1_results["regression_results"].values()) / len(rule1_results["regression_results"])
+                "avg_r2": (sum(r["r2"] for r in rule1_results["regression_results"].values()) /
+                           len(rule1_results["regression_results"]))
                 if rule1_results["regression_results"]
                 else 0,
                 "high_quality_groups": len(
@@ -901,8 +904,10 @@ class GangliosideProcessor:
                 'grouped_data_summary': {
                     category: {
                         'count': len(group_df),
-                        'base_prefixes': dict(group_df['Base_Prefix'].value_counts()) if 'Base_Prefix' in group_df.columns else {},
-                        'modifications': dict(group_df['Modifications'].value_counts()) if 'Modifications' in group_df.columns else {}
+                        'base_prefixes': (dict(group_df['Base_Prefix'].value_counts())
+                                          if 'Base_Prefix' in group_df.columns else {}),
+                        'modifications': (dict(group_df['Modifications'].value_counts())
+                                          if 'Modifications' in group_df.columns else {})
                     }
                     for category, group_df in grouped_data.items()
                 }

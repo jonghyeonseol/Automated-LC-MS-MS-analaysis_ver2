@@ -184,7 +184,8 @@ class GangliosideCategorizer:
             'total_base_prefixes': len(base_prefix_counts),
             'total_modifications': len(modification_counts),
             'most_common_category': max(category_counts, key=category_counts.get) if category_counts else None,
-            'most_common_base_prefix': max(base_prefix_counts, key=base_prefix_counts.get) if base_prefix_counts else None
+            'most_common_base_prefix': (max(base_prefix_counts, key=base_prefix_counts.get)
+                                        if base_prefix_counts else None)
         }
 
         return categorization_results
@@ -258,12 +259,12 @@ class GangliosideCategorizer:
             category_info = info['info']
             summary += f"\n- {category}: {info['count']} compounds ({category_info['name']})"
 
-        summary += f"\n\n🔧 Base Prefix Distribution:"
+        summary += "\n\n🔧 Base Prefix Distribution:"
         for base_prefix, count in sorted(categorization['base_prefixes'].items(), key=lambda x: x[1], reverse=True):
             summary += f"\n- {base_prefix}: {count} compounds"
 
         if categorization['modifications']:
-            summary += f"\n\n⚗️ Modifications Found:"
+            summary += "\n\n⚗️ Modifications Found:"
             for mod, count in sorted(categorization['modifications'].items(), key=lambda x: x[1], reverse=True):
                 mod_desc = self.modification_patterns.get(mod, 'Unknown modification')
                 summary += f"\n- {mod}: {count} compounds ({mod_desc})"
@@ -293,7 +294,7 @@ def test_categorizer():
     categorizer = GangliosideCategorizer()
 
     # Test categorization
-    results = categorizer.categorize_compounds(df)
+    categorizer.categorize_compounds(df)
     print(categorizer.generate_categorization_summary(df))
 
     # Test grouped data
