@@ -8,10 +8,10 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# Add paths
-sys.path.append('backend')
-# flake8: noqa: E402
-from utils.ganglioside_categorizer import GangliosideCategorizer
+# Add paths for import
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from src.utils.ganglioside_categorizer import GangliosideCategorizer
 
 
 def create_category_scatter_plot(df, categorizer):
@@ -235,7 +235,7 @@ def main():
     print("=" * 60)
 
     # Load data
-    df = pd.read_csv('testwork_user.csv')
+    df = pd.read_csv('data/samples/testwork_user.csv')
     print(f"📁 Loaded {len(df)} compounds")
 
     # Initialize categorizer

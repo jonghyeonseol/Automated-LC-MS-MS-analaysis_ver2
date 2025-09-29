@@ -6,12 +6,11 @@ Direct test of categorization integration
 import sys
 import pandas as pd
 
-# Add paths
-sys.path.append('backend')
-sys.path.append('backend/services')
-
-# flake8: noqa: E402
-from services.ganglioside_processor import GangliosideProcessor
+# Import from new structure
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from src.services.ganglioside_processor import GangliosideProcessor
 
 
 def test_direct_integration():
@@ -19,7 +18,7 @@ def test_direct_integration():
     print("=" * 50)
 
     # Load test data
-    df = pd.read_csv('testwork_user.csv')
+    df = pd.read_csv('../../data/samples/testwork_user.csv')
     print(f"📁 Loaded {len(df)} compounds")
 
     # Create processor
@@ -51,7 +50,7 @@ def test_full_analysis():
     print("=" * 50)
 
     # Load test data
-    df = pd.read_csv('testwork_user.csv')
+    df = pd.read_csv('../../data/samples/testwork_user.csv')
 
     # Create processor and run full analysis
     processor = GangliosideProcessor()

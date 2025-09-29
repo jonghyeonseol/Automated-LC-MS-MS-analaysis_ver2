@@ -16,18 +16,17 @@ from flask_cors import CORS
 
 # 분석 서비스 import
 try:
-    from backend.services.data_processor import \
-        GangliosideDataProcessor as GangliosideProcessor
-    from backend.services.regression_analyzer import RegressionAnalyzer
-    from backend.services.visualization_service import VisualizationService
+    from src.services.ganglioside_processor import GangliosideProcessor
+    from src.services.regression_analyzer import RegressionAnalyzer
+    from src.services.visualization_service import VisualizationService
 
     print("✅ 실제 분석 모듈 로드 성공")
 except ImportError as e:
     print(f"⚠️ 분석 모듈 로드 실패: {e}")
     print("더미 모듈을 사용합니다...")
-    from backend.services.dummy import \
+    from src.services.dummy import \
         DummyGangliosideDataProcessor as GangliosideProcessor
-    from backend.services.dummy import \
+    from src.services.dummy import \
         DummyVisualizationService as VisualizationService
 
     # 더미 RegressionAnalyzer 클래스
