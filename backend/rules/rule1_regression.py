@@ -6,7 +6,7 @@ Groups compounds by prefix and performs multiple regression with functional feat
 from typing import Any, Dict, List
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import r2_score
 
 
@@ -21,16 +21,28 @@ class Rule1PrefixRegression:
     - Only uses anchor compounds (Anchor='T') for training
     """
 
-    def __init__(self, r2_threshold: float = 0.99, outlier_threshold: float = 2.0):
+    def __init__(
+        self,
+        r2_threshold: float = 0.99,
+        outlier_threshold: float = 2.0,
+        use_ridge: bool = True,
+        regularization_alpha: float = 1.0
+    ):
         """
         Initialize Rule 1
 
         Args:
             r2_threshold: Minimum R² for valid regression (default: 0.99)
             outlier_threshold: Standardized residual threshold for outliers (default: 2.0σ)
+            use_ridge: Use Ridge regression instead of LinearRegression (default: True)
+            regularization_alpha: Ridge regularization strength (default: 1.0)
+                                 Higher values = more regularization
+                                 Recommended range: 0.1 - 10.0
         """
         self.r2_threshold = r2_threshold
         self.outlier_threshold = outlier_threshold
+        self.use_ridge = use_ridge
+        self.regularization_alpha = regularization_alpha
 
         # Feature names for multiple regression
         self.feature_names = [
@@ -48,6 +60,7 @@ class Rule1PrefixRegression:
         print("📊 Rule 1: Prefix-based Regression initialized")
         print(f"   - R² threshold: {r2_threshold}")
         print(f"   - Outlier threshold: ±{outlier_threshold}σ")
+        print(f"   - Regularization: {'Ridge (α=' + str(regularization_alpha) + ')' if use_ridge else 'None (LinearRegression)'}")
         print(f"   - Features: {len(self.feature_names)}")
 
     def apply(self, df: pd.DataFrame) -> Dict[str, Any]:
@@ -166,14 +179,19 @@ class Rule1PrefixRegression:
                 }
 
             # Train model
-            model = LinearRegression()
+            if self.use_ridge:
+                model = Ridge(alpha=self.regularization_alpha)
+            else:
+                model = LinearRegression()
+
             model.fit(X, y)
 
             # Predict on training set
             y_pred = model.predict(X)
             r2 = r2_score(y, y_pred)
 
-            print(f"      R² = {r2:.4f}, Features = {len(available_features)}")
+            reg_type = f"Ridge(α={self.regularization_alpha})" if self.use_ridge else "LinearReg"
+            print(f"      R² = {r2:.4f}, Features = {len(available_features)}, Model = {reg_type}")
 
             # Check R² threshold
             if r2 < self.r2_threshold:
@@ -237,6 +255,8 @@ class Rule1PrefixRegression:
                 "equation": equation,
                 "durbin_watson": dw_stat,
                 "rmse": float(np.sqrt(np.mean(residuals**2))),
+                "regularization": "Ridge" if self.use_ridge else "None",
+                "regularization_alpha": float(self.regularization_alpha) if self.use_ridge else 0.0,
                 # Legacy compatibility
                 "slope": float(model.coef_[0]) if len(model.coef_) > 0 else 0,
             }
