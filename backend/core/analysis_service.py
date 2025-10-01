@@ -113,7 +113,7 @@ class AnalysisService:
             return self._create_error_result(df, str(e))
 
     def _perform_enhanced_regression_analysis(self, valid_compounds: list) -> Dict[str, Any]:
-        """Perform enhanced regression analysis on valid compounds"""
+        """Perform enhanced regression analysis on valid compounds with multiple features"""
 
         if len(valid_compounds) < 2:
             return {"error": "Insufficient data for enhanced regression"}
@@ -121,32 +121,64 @@ class AnalysisService:
         # Convert to arrays for regression analysis
         import numpy as np
 
-        log_p_values = []
+        # 다중회귀 특성 정의
+        feature_names = [
+            "Log P",
+            "a_component",
+            "b_component",
+            "oxygen_count",
+            "sugar_count",
+            "sialic_acid_count",
+            "has_OAc",
+            "has_dHex",
+            "has_HexNAc"
+        ]
+
+        feature_data = []
         rt_values = []
         compound_names = []
+        available_features = None
 
         for compound in valid_compounds:
-            if "Log P" in compound and "RT" in compound:
-                log_p_values.append(compound["Log P"])
-                rt_values.append(compound["RT"])
-                compound_names.append(compound.get("Name", f"Compound_{len(compound_names)}"))
+            if "RT" not in compound:
+                continue
 
-        if len(log_p_values) < 2:
-            return {"error": "Insufficient valid Log P - RT pairs for regression"}
+            # Extract all available features
+            feature_row = []
+            row_features = []
 
-        x_data = np.array(log_p_values)
+            for feat in feature_names:
+                if feat in compound and compound[feat] is not None:
+                    feature_row.append(compound[feat])
+                    if feat not in row_features:
+                        row_features.append(feat)
+
+            # Only add if we have at least Log P
+            if len(feature_row) > 0 and "Log P" in compound:
+                if available_features is None:
+                    available_features = row_features
+                elif row_features == available_features:
+                    feature_data.append(feature_row)
+                    rt_values.append(compound["RT"])
+                    compound_names.append(compound.get("Name", f"Compound_{len(compound_names)}"))
+
+        if len(feature_data) < 2:
+            return {"error": "Insufficient valid feature data for regression"}
+
+        x_data = np.array(feature_data)
         y_data = np.array(rt_values)
 
         # Perform comprehensive regression analysis
         regression_results = self.regression_analyzer.perform_comprehensive_regression(
-            x_data, y_data, compound_names
+            x_data, y_data, compound_names, available_features
         )
 
         return {
             "regression_analysis": regression_results,
             "data_summary": {
-                "n_compounds": len(valid_compounds),
-                "log_p_range": [float(np.min(x_data)), float(np.max(x_data))],
+                "n_compounds": len(compound_names),
+                "n_features": len(available_features),
+                "feature_names": available_features,
                 "rt_range": [float(np.min(y_data)), float(np.max(y_data))],
                 "compounds_analyzed": compound_names
             }

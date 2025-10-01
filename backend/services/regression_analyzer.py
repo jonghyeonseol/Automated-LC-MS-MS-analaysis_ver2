@@ -21,26 +21,39 @@ class RegressionAnalyzer:
         print("📈 Regression Analyzer 초기화 완료")
 
     def perform_comprehensive_regression(
-        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None
+        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None,
+        feature_names: List[str] = None
     ) -> Dict[str, Any]:
         """
-        종합적인 회귀분석 수행
+        종합적인 회귀분석 수행 (다중회귀 지원)
 
         Args:
-            x_data: 독립변수 (Log P)
+            x_data: 독립변수 (1D: Log P만 또는 2D: 여러 특성)
             y_data: 종속변수 (RT)
             compound_names: 화합물 이름 리스트
+            feature_names: 특성 이름 리스트 (e.g., ['Log P', 'Carbon', 'Sugar'])
 
         Returns:
             종합 회귀분석 결과
         """
 
+        # x_data를 2D 배열로 변환
+        if len(x_data.shape) == 1:
+            x_data = x_data.reshape(-1, 1)
+
+        # 기본 feature_names 설정
+        if feature_names is None:
+            if x_data.shape[1] == 1:
+                feature_names = ['Log P']
+            else:
+                feature_names = [f'Feature_{i+1}' for i in range(x_data.shape[1])]
+
         if len(x_data) < 3:
-            return self._minimal_regression_result(x_data, y_data)
+            return self._minimal_regression_result(x_data, y_data, feature_names)
 
         try:
             # 1. 기본 OLS 회귀분석
-            basic_regression = self._perform_ols_regression(x_data, y_data)
+            basic_regression = self._perform_ols_regression(x_data, y_data, feature_names)
 
             # 2. 잔차 진단
             residual_diagnostics = self._comprehensive_residual_analysis(
@@ -82,6 +95,8 @@ class RegressionAnalyzer:
                 "assumption_tests": assumption_tests,
                 "prediction_intervals": prediction_intervals,
                 "model_quality": model_quality,
+                "feature_names": feature_names,
+                "n_features": x_data.shape[1],
                 "analysis_summary": self._generate_analysis_summary(
                     basic_regression, model_quality, outlier_analysis
                 ),
@@ -92,11 +107,17 @@ class RegressionAnalyzer:
             return self._error_regression_result(str(e))
 
     def _perform_ols_regression(
-        self, x_data: np.ndarray, y_data: np.ndarray
+        self, x_data: np.ndarray, y_data: np.ndarray, feature_names: List[str] = None
     ) -> Dict[str, Any]:
-        """기본 OLS 회귀분석 수행"""
+        """기본 OLS 회귀분석 수행 (다중회귀 지원)"""
 
         n = len(x_data)
+
+        # x_data가 1D면 2D로 변환
+        if len(x_data.shape) == 1:
+            x_data = x_data.reshape(-1, 1)
+
+        n_features = x_data.shape[1]
 
         # 설계 행렬 생성 (절편 포함)
         X = np.column_stack([np.ones(n), x_data])
@@ -110,7 +131,8 @@ class RegressionAnalyzer:
             # 특이행렬인 경우 최소제곱법 사용
             beta, _, _, _ = np.linalg.lstsq(X, y_data, rcond=None)
 
-        intercept, slope = beta[0], beta[1]
+        intercept = beta[0]
+        coefficients = beta[1:]  # 각 특성의 계수
 
         # 예측값 및 잔차 계산
         y_pred = X @ beta
@@ -122,44 +144,70 @@ class RegressionAnalyzer:
         ss_regression = ss_total - ss_residual
 
         r2 = ss_regression / ss_total if ss_total > 0 else 0
+
+        # 자유도: n - (p + 1), where p is number of features
+        df = n - (n_features + 1)
         adjusted_r2 = (
-            1 - (ss_residual / (n - 2)) / (ss_total / (n - 1)) if n > 2 else r2
+            1 - (ss_residual / df) / (ss_total / (n - 1)) if df > 0 and n > 1 else r2
         )
 
         # 표준오차 계산
-        mse = ss_residual / (n - 2) if n > 2 else 0
-        se_slope = np.sqrt(mse * XTX_inv[1, 1]) if mse > 0 else 0
-        se_intercept = np.sqrt(mse * XTX_inv[0, 0]) if mse > 0 else 0
+        mse = ss_residual / df if df > 0 else 0
 
-        # t-통계량 및 p-값
-        t_slope = slope / se_slope if se_slope > 0 else 0
-        t_intercept = intercept / se_intercept if se_intercept > 0 else 0
+        # 각 계수의 표준오차
+        se_coefficients = []
+        t_statistics = []
+        p_values = []
 
-        df = n - 2
-        p_slope = 2 * (1 - stats.t.cdf(abs(t_slope), df)) if df > 0 else 0.5
-        p_intercept = 2 * (1 - stats.t.cdf(abs(t_intercept), df)) if df > 0 else 0.5
+        for i in range(len(beta)):
+            se = np.sqrt(mse * XTX_inv[i, i]) if mse > 0 else 0
+            t_stat = beta[i] / se if se > 0 else 0
+            p_val = 2 * (1 - stats.t.cdf(abs(t_stat), df)) if df > 0 else 0.5
 
-        # F-통계량
+            se_coefficients.append(float(se))
+            t_statistics.append(float(t_stat))
+            p_values.append(float(p_val))
+
+        # F-통계량 (전체 모델 유의성)
         f_statistic = (
-            (ss_regression / 1) / (ss_residual / df)
+            (ss_regression / n_features) / (ss_residual / df)
             if df > 0 and ss_residual > 0
             else 0
         )
-        f_p_value = 1 - stats.f.cdf(f_statistic, 1, df) if df > 0 else 0.5
+        f_p_value = 1 - stats.f.cdf(f_statistic, n_features, df) if df > 0 else 0.5
+
+        # 회귀식 생성
+        if feature_names is None:
+            feature_names = [f'X{i+1}' for i in range(n_features)]
+
+        equation_parts = [f"{intercept:.4f}"]
+        for i, (coef, name) in enumerate(zip(coefficients, feature_names)):
+            sign = "+" if coef >= 0 else "-"
+            equation_parts.append(f"{sign} {abs(coef):.4f}*{name}")
+        equation = f"RT = {' '.join(equation_parts)}"
+
+        # 계수 상세 정보
+        coefficient_details = {}
+        for i, name in enumerate(feature_names):
+            coefficient_details[name] = {
+                "coefficient": float(coefficients[i]),
+                "std_error": se_coefficients[i+1],  # +1 for intercept
+                "t_statistic": t_statistics[i+1],
+                "p_value": p_values[i+1],
+                "significant": p_values[i+1] < 0.05
+            }
 
         return {
-            "slope": float(slope),
             "intercept": float(intercept),
+            "coefficients": coefficients.tolist(),
+            "coefficient_details": coefficient_details,
             "r2": float(r2),
             "adjusted_r2": float(adjusted_r2),
             "mse": float(mse),
             "rmse": float(np.sqrt(mse)),
-            "se_slope": float(se_slope),
-            "se_intercept": float(se_intercept),
-            "t_slope": float(t_slope),
-            "t_intercept": float(t_intercept),
-            "p_slope": float(p_slope),
-            "p_intercept": float(p_intercept),
+            "se_intercept": se_coefficients[0],
+            "t_intercept": t_statistics[0],
+            "p_intercept": p_values[0],
             "f_statistic": float(f_statistic),
             "f_p_value": float(f_p_value),
             "predicted_values": y_pred.tolist(),
@@ -168,8 +216,14 @@ class RegressionAnalyzer:
             if np.std(residuals) > 0
             else residuals.tolist(),
             "n_observations": n,
+            "n_features": n_features,
             "degrees_freedom": df,
-            "equation": f"RT = {slope:.4f} * Log_P + {intercept:.4f}",
+            "equation": equation,
+            # Legacy fields for backward compatibility
+            "slope": float(coefficients[0]) if n_features == 1 else float(coefficients[0]),
+            "se_slope": se_coefficients[1] if n_features >= 1 else 0,
+            "t_slope": t_statistics[1] if n_features >= 1 else 0,
+            "p_slope": p_values[1] if n_features >= 1 else 0,
         }
 
     def _comprehensive_residual_analysis(
@@ -300,7 +354,13 @@ class RegressionAnalyzer:
         """영향력 진단 (Cook's Distance, Leverage, DFFITS)"""
 
         n = len(x_data)
-        p = 2  # 파라미터 개수 (절편 + 기울기)
+
+        # x_data가 1D면 2D로 변환
+        if len(x_data.shape) == 1:
+            x_data = x_data.reshape(-1, 1)
+
+        n_features = x_data.shape[1]
+        p = n_features + 1  # 파라미터 개수 (절편 + 특성들)
 
         # 설계 행렬
         X = np.column_stack([np.ones(n), x_data])
@@ -513,13 +573,19 @@ class RegressionAnalyzer:
         if n < 3:
             return {"confidence_intervals": [], "prediction_intervals": []}
 
-        slope = regression_result["slope"]
+        # x_data가 1D면 2D로 변환
+        if len(x_data.shape) == 1:
+            x_data = x_data.reshape(-1, 1)
+
+        n_features = x_data.shape[1]
         intercept = regression_result["intercept"]
+        coefficients = regression_result.get("coefficients", [regression_result.get("slope", 0)])
         mse = regression_result["mse"]
+        df = regression_result["degrees_freedom"]
 
         # t 임계값
         alpha = 1 - self.confidence_level
-        t_critical = stats.t.ppf(1 - alpha / 2, n - 2)
+        t_critical = stats.t.ppf(1 - alpha / 2, df) if df > 0 else 1.96
 
         # 설계 행렬
         X = np.column_stack([np.ones(n), x_data])
@@ -530,12 +596,16 @@ class RegressionAnalyzer:
             confidence_intervals = []
             prediction_intervals = []
 
-            for i, x_val in enumerate(x_data):
-                # 예측값
-                y_pred = slope * x_val + intercept
+            for i in range(n):
+                # 예측값 계산 (다중 특성 지원)
+                x_row = x_data[i]
+                if n_features == 1:
+                    y_pred = intercept + coefficients[0] * x_row[0]
+                else:
+                    y_pred = intercept + np.sum(np.array(coefficients) * x_row)
 
                 # 표준오차
-                x_vector = np.array([1, x_val])
+                x_vector = np.concatenate([[1], x_row])
                 se_pred = np.sqrt(mse * x_vector.T @ XTX_inv @ x_vector)
                 se_forecast = np.sqrt(mse * (1 + x_vector.T @ XTX_inv @ x_vector))
 
@@ -549,7 +619,7 @@ class RegressionAnalyzer:
 
                 confidence_intervals.append(
                     {
-                        "x": float(x_val),
+                        "index": i,
                         "predicted": float(y_pred),
                         "lower": float(ci_lower),
                         "upper": float(ci_upper),
@@ -558,7 +628,7 @@ class RegressionAnalyzer:
 
                 prediction_intervals.append(
                     {
-                        "x": float(x_val),
+                        "index": i,
                         "predicted": float(y_pred),
                         "lower": float(pi_lower),
                         "upper": float(pi_upper),
@@ -716,14 +786,14 @@ class RegressionAnalyzer:
         }
 
     def _minimal_regression_result(
-        self, x_data: np.ndarray, y_data: np.ndarray
+        self, x_data: np.ndarray, y_data: np.ndarray, feature_names: List[str] = None
     ) -> Dict[str, Any]:
         """최소 데이터를 위한 간단한 회귀 결과"""
 
         if len(x_data) == 0:
             return self._empty_regression_result()
 
-        basic_regression = self._perform_ols_regression(x_data, y_data)
+        basic_regression = self._perform_ols_regression(x_data, y_data, feature_names)
 
         return {
             "basic_regression": basic_regression,

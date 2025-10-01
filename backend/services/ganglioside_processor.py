@@ -108,7 +108,7 @@ class GangliosideProcessor:
         return final_results
 
     def _preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """데이터 전처리: 접두사, 접미사 분리 및 검증"""
+        """데이터 전처리: 접두사, 접미사 분리 및 다중회귀용 특성 추출"""
 
         # Name 컬럼에서 접두사와 접미사 분리
         df["prefix"] = df["Name"].str.extract(r"^([^(]+)")[0]
@@ -118,13 +118,33 @@ class GangliosideProcessor:
         suffix_parts = df["suffix"].str.extract(r"(\d+):(\d+);(\w+)")
         df["a_component"] = pd.to_numeric(suffix_parts[0], errors="coerce")  # 탄소수
         df["b_component"] = pd.to_numeric(suffix_parts[1], errors="coerce")  # 불포화도
-        df["c_component"] = suffix_parts[2]  # 산소수
+        df["c_component"] = suffix_parts[2]  # 산소수 문자열
+
+        # 산소수를 숫자로 변환 (O2 -> 2, O3 -> 3)
+        df["oxygen_count"] = df["c_component"].str.extract(r"O(\d+)")[0]
+        df["oxygen_count"] = pd.to_numeric(df["oxygen_count"], errors="coerce").fillna(0)
+
+        # 당 개수 계산 (회귀 특성으로 사용)
+        df["sugar_count"] = df["prefix"].apply(lambda x: self._calculate_sugar_count(x)["total"] if pd.notna(x) else 0)
+
+        # Sialic acid 개수 (e component - M=1, D=2, T=3, Q=4, P=5)
+        df["sialic_acid_count"] = df["prefix"].apply(lambda x: self._calculate_sugar_count(x)["e"] if pd.notna(x) else 0)
+
+        # 수식 그룹 이진 특성 추출
+        df["has_OAc"] = df["prefix"].str.contains(r"\+OAc", na=False).astype(int)
+        df["has_2OAc"] = df["prefix"].str.contains(r"\+2OAc", na=False).astype(int)
+        df["has_dHex"] = df["prefix"].str.contains(r"\+dHex", na=False).astype(int)
+        df["has_HexNAc"] = df["prefix"].str.contains(r"\+HexNAc", na=False).astype(int)
+        df["has_NeuAc"] = df["prefix"].str.contains(r"\+NeuAc", na=False).astype(int)
+        df["has_NeuGc"] = df["prefix"].str.contains(r"\+NeuGc", na=False).astype(int)
 
         # 데이터 품질 검증
         invalid_rows = df[df["prefix"].isna() | df["suffix"].isna()].index
         if len(invalid_rows) > 0:
             print(f"⚠️ 형식이 잘못된 {len(invalid_rows)}개 행 발견")
             df = df.drop(invalid_rows)
+
+        print(f"📊 추출된 회귀 특성: Log P, Carbon({df['a_component'].mean():.1f}), Unsaturation({df['b_component'].mean():.1f}), Sugar({df['sugar_count'].mean():.1f}), Modifications({(df['has_OAc'] + df['has_dHex'] + df['has_HexNAc']).sum()})")
 
         return df
 
@@ -160,8 +180,24 @@ class GangliosideProcessor:
 
             if len(anchor_compounds) >= 2:
                 try:
-                    # 회귀분석 수행
-                    X = anchor_compounds[["Log P"]].values
+                    # 다중회귀 특성 선택
+                    feature_cols = [
+                        "Log P",
+                        "a_component",
+                        "b_component",
+                        "oxygen_count",
+                        "sugar_count",
+                        "sialic_acid_count",
+                        "has_OAc",
+                        "has_dHex",
+                        "has_HexNAc"
+                    ]
+
+                    # 실제 존재하는 컬럼만 선택
+                    available_features = [col for col in feature_cols if col in anchor_compounds.columns]
+
+                    # 회귀분석 수행 (다중회귀)
+                    X = anchor_compounds[available_features].values
                     y = anchor_compounds["RT"].values
 
                     model = LinearRegression()
@@ -171,10 +207,12 @@ class GangliosideProcessor:
                     y_pred = model.predict(X)
                     r2 = r2_score(y, y_pred)
 
+                    print(f"      ✅ {prefix} 그룹: R²={r2:.4f}, 특성={len(available_features)}개 ({', '.join(available_features[:3])}...)")
+
                     # R² 임계값 확인
                     if r2 >= self.r2_threshold:
                         # 전체 그룹에 모델 적용
-                        all_X = prefix_group[["Log P"]].values
+                        all_X = prefix_group[available_features].values
                         all_pred = model.predict(all_X)
                         residuals = prefix_group["RT"].values - all_pred
 
@@ -187,17 +225,33 @@ class GangliosideProcessor:
                         # Durbin-Watson 검정
                         dw_stat = self._durbin_watson_test(residuals)
 
+                        # 회귀식 생성
+                        equation_parts = [f"{model.intercept_:.4f}"]
+                        for coef, feat in zip(model.coef_, available_features):
+                            sign = "+" if coef >= 0 else "-"
+                            equation_parts.append(f"{sign} {abs(coef):.4f}*{feat}")
+                        equation = f"RT = {' '.join(equation_parts)}"
+
+                        # 계수 상세 정보
+                        coefficient_info = {}
+                        for feat, coef in zip(available_features, model.coef_):
+                            coefficient_info[feat] = float(coef)
+
                         # 회귀 결과 저장
                         regression_results[prefix] = {
-                            "slope": float(model.coef_[0]),
                             "intercept": float(model.intercept_),
+                            "coefficients": coefficient_info,
+                            "feature_names": available_features,
+                            "n_features": len(available_features),
                             "r2": float(r2),
                             "n_samples": len(prefix_group),
-                            "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                            "equation": equation,
                             "durbin_watson": dw_stat,
                             "p_value": self._calculate_p_value(
                                 r2, len(anchor_compounds)
                             ),
+                            # Legacy fields for backward compatibility
+                            "slope": float(model.coef_[0]) if len(model.coef_) > 0 else 0,
                         }
 
                         # 이상치 판별 및 화합물 분류
@@ -264,19 +318,35 @@ class GangliosideProcessor:
 
             if len(anchor_compounds) >= 2:
                 try:
+                    # 다중회귀 특성 선택
+                    feature_cols = [
+                        "Log P",
+                        "a_component",
+                        "b_component",
+                        "oxygen_count",
+                        "sugar_count",
+                        "sialic_acid_count",
+                        "has_OAc",
+                        "has_dHex",
+                        "has_HexNAc"
+                    ]
+                    available_features = [col for col in feature_cols if col in anchor_compounds.columns]
+
                     # Overall regression with all anchor compounds
-                    X = anchor_compounds[["Log P"]].values
+                    X = anchor_compounds[available_features].values
                     y = anchor_compounds["RT"].values
 
-                    if len(np.unique(X)) >= 2:  # Need at least 2 different Log P values
+                    if len(np.unique(X[:, 0])) >= 2:  # Need at least 2 different values in first feature
                         model = LinearRegression()
                         model.fit(X, y)
                         y_pred = model.predict(X)
                         r2 = r2_score(y, y_pred)
 
+                        print(f"      Fallback R²={r2:.4f}, 특성={len(available_features)}개")
+
                         if r2 >= self.r2_threshold:
                             # Apply to all compounds
-                            all_X = df[["Log P"]].values
+                            all_X = df[available_features].values
                             all_pred = model.predict(all_X)
                             all_residuals = df["RT"].values - all_pred
 
@@ -285,14 +355,29 @@ class GangliosideProcessor:
 
                             outlier_mask = np.abs(std_residuals) >= self.outlier_threshold
 
+                            # 회귀식 생성
+                            equation_parts = [f"{model.intercept_:.4f}"]
+                            for coef, feat in zip(model.coef_, available_features):
+                                sign = "+" if coef >= 0 else "-"
+                                equation_parts.append(f"{sign} {abs(coef):.4f}*{feat}")
+                            equation = f"RT = {' '.join(equation_parts)}"
+
+                            # 계수 정보
+                            coefficient_info = {}
+                            for feat, coef in zip(available_features, model.coef_):
+                                coefficient_info[feat] = float(coef)
+
                             regression_results["Overall_Fallback"] = {
-                                "slope": float(model.coef_[0]),
                                 "intercept": float(model.intercept_),
+                                "coefficients": coefficient_info,
+                                "feature_names": available_features,
+                                "n_features": len(available_features),
                                 "r2": float(r2),
                                 "n_samples": len(df),
-                                "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                                "equation": equation,
                                 "durbin_watson": self._durbin_watson_test(all_residuals),
-                                "p_value": self._calculate_p_value(r2, len(anchor_compounds))
+                                "p_value": self._calculate_p_value(r2, len(anchor_compounds)),
+                                "slope": float(model.coef_[0]) if len(model.coef_) > 0 else 0,
                             }
 
                             # Classify compounds
@@ -626,26 +711,55 @@ class GangliosideProcessor:
                     from sklearn.metrics import r2_score
                     import numpy as np
 
-                    X = anchor_compounds[["Log P"]].values
+                    # 다중회귀 특성 선택
+                    feature_cols = [
+                        "Log P",
+                        "a_component",
+                        "b_component",
+                        "oxygen_count",
+                        "sugar_count",
+                        "sialic_acid_count",
+                        "has_OAc",
+                        "has_dHex",
+                        "has_HexNAc"
+                    ]
+                    available_features = [col for col in feature_cols if col in anchor_compounds.columns]
+
+                    X = anchor_compounds[available_features].values
                     y = anchor_compounds["RT"].values
 
-                    if len(np.unique(X)) >= 2:
+                    if len(np.unique(X[:, 0])) >= 2:
                         model = LinearRegression()
                         model.fit(X, y)
                         y_pred = model.predict(X)
                         r2 = r2_score(y, y_pred)
 
+                        # 회귀식 생성
+                        equation_parts = [f"{model.intercept_:.4f}"]
+                        for coef, feat in zip(model.coef_, available_features):
+                            sign = "+" if coef >= 0 else "-"
+                            equation_parts.append(f"{sign} {abs(coef):.4f}*{feat}")
+                        equation = f"RT = {' '.join(equation_parts)}"
+
+                        # 계수 정보
+                        coefficient_info = {}
+                        for feat, coef in zip(available_features, model.coef_):
+                            coefficient_info[feat] = float(coef)
+
                         # Add model to results for visualization
                         rule1_results["regression_results"]["Visualization_Model"] = {
                             "r2": float(r2),
-                            "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                            "equation": equation,
                             "n_samples": len(anchor_compounds),
-                            "slope": float(model.coef_[0]),
                             "intercept": float(model.intercept_),
+                            "coefficients": coefficient_info,
+                            "feature_names": available_features,
+                            "n_features": len(available_features),
+                            "slope": float(model.coef_[0]) if len(model.coef_) > 0 else 0,
                             "durbin_watson": 2.0,  # Neutral value
                             "p_value": 0.05 if r2 > 0.5 else 0.1
                         }
-                        print(f"   ✅ Visualization model created: R² = {r2:.3f}")
+                        print(f"   ✅ Visualization model created: R² = {r2:.3f}, features={len(available_features)}")
                 except Exception as e:
                     print(f"   ⚠️ Could not create visualization model: {e}")
 
@@ -740,21 +854,50 @@ class GangliosideProcessor:
                 from sklearn.metrics import r2_score
                 import numpy as np
 
-                X = anchor_compounds[["Log P"]].values
+                # 다중회귀 특성 선택
+                feature_cols = [
+                    "Log P",
+                    "a_component",
+                    "b_component",
+                    "oxygen_count",
+                    "sugar_count",
+                    "sialic_acid_count",
+                    "has_OAc",
+                    "has_dHex",
+                    "has_HexNAc"
+                ]
+                available_features = [col for col in feature_cols if col in anchor_compounds.columns]
+
+                X = anchor_compounds[available_features].values
                 y = anchor_compounds["RT"].values
 
-                if len(np.unique(X)) >= 2:
+                if len(np.unique(X[:, 0])) >= 2:
                     model = LinearRegression()
                     model.fit(X, y)
                     y_pred = model.predict(X)
                     r2 = r2_score(y, y_pred)
 
+                    # 회귀식 생성
+                    equation_parts = [f"{model.intercept_:.4f}"]
+                    for coef, feat in zip(model.coef_, available_features):
+                        sign = "+" if coef >= 0 else "-"
+                        equation_parts.append(f"{sign} {abs(coef):.4f}*{feat}")
+                    equation = f"RT = {' '.join(equation_parts)}"
+
+                    # 계수 정보
+                    coefficient_info = {}
+                    for feat, coef in zip(available_features, model.coef_):
+                        coefficient_info[feat] = float(coef)
+
                     # Directly inject the model
                     rule1_results["regression_results"]["Working_Model"] = {
-                        "slope": float(model.coef_[0]),
                         "intercept": float(model.intercept_),
+                        "coefficients": coefficient_info,
+                        "feature_names": available_features,
+                        "n_features": len(available_features),
+                        "slope": float(model.coef_[0]) if len(model.coef_) > 0 else 0,
                         "r2": float(r2),
-                        "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                        "equation": equation,
                         "n_samples": len(anchor_compounds),
                         "durbin_watson": 2.0,
                         "p_value": 0.01 if r2 > 0.7 else 0.05
@@ -763,12 +906,14 @@ class GangliosideProcessor:
                     # Also update regression_quality
                     regression_quality["Working_Model"] = {
                         "r2": float(r2),
-                        "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                        "equation": equation,
                         "n_samples": len(anchor_compounds),
+                        "n_features": len(available_features),
+                        "feature_names": available_features,
                         "quality_grade": "Excellent" if r2 >= 0.9 else "Good" if r2 >= 0.7 else "Acceptable"
                     }
 
-                    print(f"   ✅ INJECTED: Working model with R² = {r2:.3f}")
+                    print(f"   ✅ INJECTED: Working model with R² = {r2:.3f}, features={len(available_features)}")
 
         return {
             "statistics": statistics,
