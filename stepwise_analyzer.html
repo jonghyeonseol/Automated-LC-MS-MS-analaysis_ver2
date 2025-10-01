@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stepwise Ganglioside Analyzer - Rule-by-Rule Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .upload-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .file-input-label:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .rule-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .rule-button {
+            padding: 15px 25px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rule-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .rule-button.pending {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        .rule-button.ready {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .rule-button.running {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .rule-button.completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .rule-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .results-section {
+            padding: 30px;
+        }
+
+        .rule-result {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+        }
+
+        .rule-result h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rule-result p {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .visualization {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading:after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #f5c6cb;
+            margin: 20px 0;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #c3e6cb;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+        }
+
+        .summary-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .summary-section h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Stepwise Ganglioside Analyzer</h1>
+            <p>Interactive Rule-by-Rule LC-MS/MS Data Analysis</p>
+        </div>
+
+        <div class="controls">
+            <div class="upload-section">
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" accept=".csv" />
+                    <label for="fileInput" class="file-input-label">📁 Upload CSV File</label>
+                </div>
+                <select id="dataType" style="padding: 12px; border-radius: 8px; border: 2px solid #e9ecef;">
+                    <option value="Porcine">Porcine Brain</option>
+                    <option value="Human">Human Brain</option>
+                    <option value="Mouse">Mouse Brain</option>
+                </select>
+                <span id="fileName" style="color: #6c757d; font-style: italic;"></span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+
+            <div class="rule-controls">
+                <button class="rule-button pending" id="btnRule1" onclick="executeRule('rule1')" disabled>
+                    <span class="status-badge" id="badgeRule1">⏸️</span>
+                    <div>Rule 1</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Prefix Regression</div>
+                </button>
+                <button class="rule-button pending" id="btnRule23" onclick="executeRule('rule23')" disabled>
+                    <span class="status-badge" id="badgeRule23">⏸️</span>
+                    <div>Rules 2-3</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Sugar Count & Isomers</div>
+                </button>
+                <button class="rule-button pending" id="btnRule4" onclick="executeRule('rule4')" disabled>
+                    <span class="status-badge" id="badgeRule4">⏸️</span>
+                    <div>Rule 4</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">O-acetylation</div>
+                </button>
+                <button class="rule-button pending" id="btnRule5" onclick="executeRule('rule5')" disabled>
+                    <span class="status-badge" id="badgeRule5">⏸️</span>
+                    <div>Rule 5</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Fragmentation</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div id="preprocessResults"></div>
+            <div id="rule1Results"></div>
+            <div id="rule23Results"></div>
+            <div id="rule4Results"></div>
+            <div id="rule5Results"></div>
+            <div id="summaryResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        const sessionId = 'user_' + Math.random().toString(36).substr(2, 9);
+        let currentStep = 0;
+
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('fileName').textContent = file.name;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const dataType = document.getElementById('dataType').value;
+
+            try {
+                showLoading('preprocessResults', 'Uploading and preprocessing data...');
+
+                const response = await fetch(`${API_BASE}/api/stepwise/upload?session_id=${sessionId}&data_type=${dataType}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    showError('preprocessResults', result.error);
+                    return;
+                }
+
+                displayPreprocessResults(result);
+                enableRule('rule1');
+                updateProgress(20);
+
+            } catch (error) {
+                showError('preprocessResults', error.message);
+            }
+        });
+
+        async function executeRule(ruleName) {
+            const ruleNum = ruleName.replace('rule', '');
+
+            try {
+                setRuleState(ruleName, 'running');
+                showLoading(ruleName + 'Results', `Executing ${ruleName.toUpperCase()}...`);
+
+                const response = await fetch(`${API_BASE}/api/stepwise/${ruleName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ session_id: sessionId })
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    showError(ruleName + 'Results', result.error);
+                    setRuleState(ruleName, 'ready');
+                    return;
+                }
+
+                setRuleState(ruleName, 'completed');
+                displayRuleResults(ruleName, result);
+
+                // Enable next rule
+                if (ruleName === 'rule1') {
+                    enableRule('rule23');
+                    updateProgress(40);
+                } else if (ruleName === 'rule23') {
+                    enableRule('rule4');
+                    updateProgress(60);
+                } else if (ruleName === 'rule4') {
+                    enableRule('rule5');
+                    updateProgress(80);
+                } else if (ruleName === 'rule5') {
+                    updateProgress(100);
+                    loadSummary();
+                }
+
+            } catch (error) {
+                showError(ruleName + 'Results', error.message);
+                setRuleState(ruleName, 'ready');
+            }
+        }
+
+        async function loadSummary() {
+            try {
+                const response = await fetch(`${API_BASE}/api/stepwise/summary?session_id=${sessionId}`);
+                const result = await response.json();
+
+                if (!result.error) {
+                    displaySummary(result);
+                }
+            } catch (error) {
+                console.error('Failed to load summary:', error);
+            }
+        }
+
+        function displayPreprocessResults(data) {
+            const html = `
+                <div class="rule-result">
+                    <h2>📊 Step 0: Data Preprocessing</h2>
+                    <p>Data loaded and features extracted successfully</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="label">Total Compounds</div>
+                            <div class="value">${data.feature_stats.total_compounds}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Avg Log P</div>
+                            <div class="value">${data.feature_stats.features_extracted.log_p.mean.toFixed(2)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Avg Sugar Count</div>
+                            <div class="value">${data.feature_stats.features_extracted.sugar_count.mean.toFixed(1)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Modifications</div>
+                            <div class="value">${data.feature_stats.features_extracted.modifications.has_OAc + data.feature_stats.features_extracted.modifications.has_dHex}</div>
+                        </div>
+                    </div>
+                    <div class="success">✅ Data preprocessing completed. Ready for Rule 1.</div>
+                </div>
+            `;
+            document.getElementById('preprocessResults').innerHTML = html;
+        }
+
+        function displayRuleResults(ruleName, data) {
+            let html = `
+                <div class="rule-result">
+                    <h2>${getRuleIcon(ruleName)} ${data.rule_name}</h2>
+                    <p>${data.description}</p>
+            `;
+
+            if (ruleName === 'rule1') {
+                html += `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="label">Regression Groups</div>
+                            <div class="value">${data.results.regression_groups}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Valid Compounds</div>
+                            <div class="value">${data.results.valid_compounds}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Outliers Detected</div>
+                            <div class="value">${data.results.outliers_detected}</div>
+                        </div>
+                    </div>
+                    <div class="visualization" id="viz_${ruleName}"></div>
+                `;
+
+                setTimeout(() => plotRule1Scatter(data), 100);
+            } else if (ruleName === 'rule23') {
+                html += `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="label">Analyzed</div>
+                            <div class="value">${data.results.total_analyzed}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Isomer Candidates</div>
+                            <div class="value">${data.results.isomer_candidates}</div>
+                        </div>
+                    </div>
+                    <div class="visualization" id="viz_${ruleName}"></div>
+                `;
+
+                setTimeout(() => plotRule23Histogram(data), 100);
+            } else if (ruleName === 'rule4') {
+                html += `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="label">Total OAc Compounds</div>
+                            <div class="value">${data.results.total_oacetyl_compounds}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Valid</div>
+                            <div class="value">${data.results.valid_oacetyl}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Invalid</div>
+                            <div class="value">${data.results.invalid_oacetyl}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Validation Rate</div>
+                            <div class="value">${data.results.validation_rate.toFixed(1)}%</div>
+                        </div>
+                    </div>
+                `;
+            } else if (ruleName === 'rule5') {
+                html += `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="label">Fragments Detected</div>
+                            <div class="value">${data.results.total_fragments_detected}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Final Compounds</div>
+                            <div class="value">${data.results.compounds_after_filtering}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Volume Consolidations</div>
+                            <div class="value">${data.results.volume_consolidations}</div>
+                        </div>
+                    </div>
+                    <div class="visualization" id="viz_${ruleName}"></div>
+                `;
+
+                setTimeout(() => plotRule5Fragmentation(data), 100);
+            }
+
+            html += `
+                    <div class="success">✅ ${data.rule_name} completed successfully</div>
+                </div>
+            `;
+
+            document.getElementById(ruleName + 'Results').innerHTML = html;
+        }
+
+        function displaySummary(data) {
+            const html = `
+                <div class="summary-section">
+                    <h2>📋 Final Analysis Summary</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="label">Input Compounds</div>
+                            <div class="value">${data.overall_statistics.total_input_compounds}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Final Compounds</div>
+                            <div class="value">${data.overall_statistics.after_rule5_fragmentation.final_compounds}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Success Rate</div>
+                            <div class="value">${data.overall_statistics.success_rate.toFixed(1)}%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">Fragments Consolidated</div>
+                            <div class="value">${data.overall_statistics.after_rule5_fragmentation.fragments_detected}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('summaryResults').innerHTML = html;
+        }
+
+        function plotRule1Scatter(data) {
+            if (!data.visualization_data || !data.visualization_data.scatter_data) return;
+
+            const validPoints = data.visualization_data.scatter_data.filter(d => d.status === 'valid');
+            const outlierPoints = data.visualization_data.scatter_data.filter(d => d.status === 'outlier');
+
+            const traces = [
+                {
+                    x: validPoints.map(d => d.log_p),
+                    y: validPoints.map(d => d.rt),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'Valid',
+                    marker: { color: '#28a745', size: 8 }
+                },
+                {
+                    x: outlierPoints.map(d => d.log_p),
+                    y: outlierPoints.map(d => d.rt),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'Outliers',
+                    marker: { color: '#dc3545', size: 8 }
+                }
+            ];
+
+            const layout = {
+                title: 'Regression Analysis Results',
+                xaxis: { title: 'Log P' },
+                yaxis: { title: 'Retention Time (min)' },
+                hovermode: 'closest'
+            };
+
+            Plotly.newPlot('viz_rule1', traces, layout);
+        }
+
+        function plotRule23Histogram(data) {
+            if (!data.visualization_data || !data.visualization_data.sugar_histogram) return;
+
+            const trace = {
+                x: data.visualization_data.sugar_histogram.map(d => d.sugar_count),
+                y: data.visualization_data.sugar_histogram.map(d => d.compound_count),
+                type: 'bar',
+                marker: { color: '#667eea' }
+            };
+
+            const layout = {
+                title: 'Sugar Count Distribution',
+                xaxis: { title: 'Sugar Count' },
+                yaxis: { title: 'Number of Compounds' }
+            };
+
+            Plotly.newPlot('viz_rule23', [trace], layout);
+        }
+
+        function plotRule5Fragmentation(data) {
+            if (!data.visualization_data || !data.visualization_data.fragment_details) return;
+
+            const fragments = data.visualization_data.fragment_details;
+
+            const trace = {
+                x: fragments.map(d => d.fragment),
+                y: fragments.map(d => d.sugar_count),
+                type: 'bar',
+                marker: { color: '#ffc107' },
+                text: fragments.map(d => `Parent: ${d.parent}`),
+                hovertemplate: '%{text}<br>Sugar Count: %{y}<extra></extra>'
+            };
+
+            const layout = {
+                title: 'Fragmentation Products by Sugar Count',
+                xaxis: { title: 'Fragment Compound', tickangle: -45 },
+                yaxis: { title: 'Sugar Count' }
+            };
+
+            Plotly.newPlot('viz_rule5', [trace], layout);
+        }
+
+        function getRuleIcon(ruleName) {
+            const icons = {
+                rule1: '📊',
+                rule23: '🧬',
+                rule4: '⚗️',
+                rule5: '🔍'
+            };
+            return icons[ruleName] || '📋';
+        }
+
+        function enableRule(ruleName) {
+            const btn = document.getElementById('btn' + ruleName.charAt(0).toUpperCase() + ruleName.slice(1));
+            btn.disabled = false;
+            btn.classList.remove('pending');
+            btn.classList.add('ready');
+            document.getElementById('badge' + ruleName.charAt(0).toUpperCase() + ruleName.slice(1)).textContent = '▶️';
+        }
+
+        function setRuleState(ruleName, state) {
+            const btn = document.getElementById('btn' + ruleName.charAt(0).toUpperCase() + ruleName.slice(1));
+            const badge = document.getElementById('badge' + ruleName.charAt(0).toUpperCase() + ruleName.slice(1));
+
+            btn.classList.remove('pending', 'ready', 'running', 'completed');
+            btn.classList.add(state);
+
+            if (state === 'running') {
+                btn.disabled = true;
+                badge.textContent = '⏳';
+            } else if (state === 'completed') {
+                btn.disabled = true;
+                badge.textContent = '✅';
+            }
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        function showLoading(elementId, message) {
+            document.getElementById(elementId).innerHTML = `<div class="loading">${message}</div>`;
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerHTML = `<div class="error">❌ Error: ${message}</div>`;
+        }
+    </script>
+</body>
+</html>

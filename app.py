@@ -19,6 +19,7 @@ try:
     from src.services.ganglioside_processor import GangliosideProcessor
     from src.services.regression_analyzer import RegressionAnalyzer
     from src.services.visualization_service import VisualizationService
+    from backend.services.stepwise_analyzer import StepwiseAnalyzer
 
     print("✅ 실제 분석 모듈 로드 성공")
 except ImportError as e:
@@ -36,6 +37,11 @@ except ImportError as e:
 
         def analyze(self, data):
             return {"message": "더미 회귀분석 결과"}
+
+    # 더미 StepwiseAnalyzer 클래스
+    class StepwiseAnalyzer:
+        def __init__(self):
+            print("🔬 Dummy Stepwise Analyzer 초기화")
 
 
 # Flask 앱 초기화
@@ -137,6 +143,16 @@ def working_analyzer():
             return f.read()
     except FileNotFoundError:
         return "Working analyzer file not found.", 404
+
+
+@app.route("/stepwise")
+def stepwise_analyzer_page():
+    """Stepwise analyzer with rule-by-rule control"""
+    try:
+        with open("stepwise_analyzer.html", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return "Stepwise analyzer file not found.", 404
 
 
 @app.route("/api/health")
@@ -692,6 +708,188 @@ def _get_complex_sample_data():
         "Anchor": ["T", "F", "F", "F", "F", "F", "T", "T", "F", "F", "F", "F"],
     }
 
+
+# ========================================
+# Stepwise Analysis API Routes
+# ========================================
+
+# Global storage for stepwise analyzers (keyed by session_id)
+stepwise_analyzers = {}
+
+
+def get_stepwise_analyzer(session_id: str) -> StepwiseAnalyzer:
+    """Get or create stepwise analyzer for session"""
+    if session_id not in stepwise_analyzers:
+        stepwise_analyzers[session_id] = StepwiseAnalyzer()
+    return stepwise_analyzers[session_id]
+
+
+@app.route('/api/stepwise/upload', methods=['POST'])
+def stepwise_upload():
+    """Step 0: Upload and preprocess data"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'Empty filename'}), 400
+
+        # Read CSV
+        content = file.read().decode('utf-8')
+        df = pd.read_csv(io.StringIO(content))
+
+        session_id = request.args.get('session_id', 'default')
+        data_type = request.args.get('data_type', 'Porcine')
+
+        # Get analyzer and load data
+        analyzer = get_stepwise_analyzer(session_id)
+        analyzer.reset()
+
+        result = analyzer.load_data(df, data_type)
+        result['session_id'] = session_id
+
+        return jsonify(convert_to_serializable(result)), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/rule1', methods=['POST'])
+def stepwise_rule1():
+    """Step 1: Execute Rule 1 - Prefix-based Regression"""
+    try:
+        session_id = request.json.get('session_id', 'default')
+        analyzer = get_stepwise_analyzer(session_id)
+
+        result = analyzer.execute_rule1()
+
+        if 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(convert_to_serializable(result)), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/rule23', methods=['POST'])
+def stepwise_rule23():
+    """Step 2: Execute Rules 2-3 - Sugar Count & Isomer Classification"""
+    try:
+        session_id = request.json.get('session_id', 'default')
+        analyzer = get_stepwise_analyzer(session_id)
+
+        result = analyzer.execute_rule23()
+
+        if 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(convert_to_serializable(result)), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/rule4', methods=['POST'])
+def stepwise_rule4():
+    """Step 3: Execute Rule 4 - O-acetylation Validation"""
+    try:
+        session_id = request.json.get('session_id', 'default')
+        analyzer = get_stepwise_analyzer(session_id)
+
+        result = analyzer.execute_rule4()
+
+        if 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(convert_to_serializable(result)), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/rule5', methods=['POST'])
+def stepwise_rule5():
+    """Step 4: Execute Rule 5 - Fragmentation Detection"""
+    try:
+        session_id = request.json.get('session_id', 'default')
+        analyzer = get_stepwise_analyzer(session_id)
+
+        result = analyzer.execute_rule5()
+
+        if 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(convert_to_serializable(result)), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/summary', methods=['GET'])
+def stepwise_summary():
+    """Get final analysis summary"""
+    try:
+        session_id = request.args.get('session_id', 'default')
+        analyzer = get_stepwise_analyzer(session_id)
+
+        result = analyzer.get_final_summary()
+
+        if 'error' in result:
+            return jsonify(result), 400
+
+        return jsonify(convert_to_serializable(result)), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/reset', methods=['POST'])
+def stepwise_reset():
+    """Reset analysis state"""
+    try:
+        session_id = request.json.get('session_id', 'default')
+
+        if session_id in stepwise_analyzers:
+            stepwise_analyzers[session_id].reset()
+            return jsonify({'status': 'reset', 'session_id': session_id}), 200
+        else:
+            return jsonify({'status': 'no_session', 'session_id': session_id}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/stepwise/status', methods=['GET'])
+def stepwise_status():
+    """Get current analysis status"""
+    try:
+        session_id = request.args.get('session_id', 'default')
+
+        if session_id not in stepwise_analyzers:
+            return jsonify({
+                'status': 'no_session',
+                'session_id': session_id,
+                'analysis_state': 'not_started'
+            }), 200
+
+        analyzer = stepwise_analyzers[session_id]
+
+        return jsonify({
+            'status': 'active',
+            'session_id': session_id,
+            'analysis_state': analyzer.analysis_state,
+            'completed_rules': list(analyzer.rule_results.keys())
+        }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# ========================================
+# Helper Functions
+# ========================================
 
 def _get_challenge_sample_data():
     """도전 데이터"""
