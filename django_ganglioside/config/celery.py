@@ -13,7 +13,14 @@ app = Celery('ganglioside_analysis')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Auto-discover tasks in all installed apps
+# This will look for tasks.py in each app listed in INSTALLED_APPS
 app.autodiscover_tasks()
+
+# Also manually import tasks to ensure they're registered
+try:
+    from apps.analysis import tasks  # noqa: F401
+except ImportError:
+    pass
 
 
 @app.task(bind=True, ignore_result=True)

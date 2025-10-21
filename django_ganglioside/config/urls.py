@@ -20,10 +20,12 @@ urlpatterns = [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
+    # Web UI
+    path('', include('apps.analysis.urls')),  # Main app (includes both web and API)
+    path('visualization/', include('apps.visualization.urls')),
+
     # API Endpoints
     path('api/auth/', include('apps.users.urls')),
-    path('api/analysis/', include('apps.analysis.urls')),
-    path('api/visualization/', include('apps.visualization.urls')),
 
     # Health check
     path('health/', include('apps.core.urls')),

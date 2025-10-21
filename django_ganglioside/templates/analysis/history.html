@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis History{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="bi bi-clock-history"></i> Analysis History</h2>
+        <p class="text-muted">View and manage all your analysis sessions</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="mb-0">All Sessions</h5>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'analysis:upload' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> New Analysis
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if sessions %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>File</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Duration</th>
+                                <th>Compounds</th>
+                                <th>Success Rate</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in sessions %}
+                            <tr>
+                                <td><strong>#{{ session.id }}</strong></td>
+                                <td>{{ session.name|default:"-" }}</td>
+                                <td>
+                                    <small class="text-muted">{{ session.original_filename }}</small><br>
+                                    <small class="text-muted">{{ session.file_size|filesizeformat }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ session.get_data_type_display }}</span>
+                                </td>
+                                <td>
+                                    {% if session.status == 'completed' %}
+                                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Completed</span>
+                                    {% elif session.status == 'processing' %}
+                                        <span class="badge bg-warning"><i class="bi bi-arrow-repeat"></i> Processing</span>
+                                    {% elif session.status == 'failed' %}
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Failed</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary"><i class="bi bi-clock"></i> Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ session.created_at|date:"Y-m-d H:i" }}</td>
+                                <td>
+                                    {% if session.duration %}
+                                        {{ session.duration|floatformat:2 }}s
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if session.result %}
+                                        {{ session.result.total_compounds }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if session.result %}
+                                        <span class="badge bg-success">{{ session.result.success_rate|floatformat:1 }}%</span>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'analysis:session_detail' session.id %}" class="btn btn-outline-primary" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        {% if session.status == 'completed' %}
+                                        <a href="{% url 'analysis:results' session.id %}" class="btn btn-outline-success" title="View Results">
+                                            <i class="bi bi-bar-chart"></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted"></i>
+                    <p class="text-muted mt-3 mb-4">No analysis sessions found</p>
+                    <a href="{% url 'analysis:upload' %}" class="btn btn-primary">
+                        <i class="bi bi-upload"></i> Upload Your First Dataset
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

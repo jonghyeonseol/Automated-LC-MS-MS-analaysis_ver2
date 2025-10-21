@@ -8,15 +8,15 @@ DEBUG = True
 # Allow all hosts in development
 ALLOWED_HOSTS = ['*']
 
-# Development-specific apps
-INSTALLED_APPS += [
-    'debug_toolbar',
-    'django_extensions',
-]
-
-MIDDLEWARE += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+# Development-specific apps (commented out until packages installed)
+# INSTALLED_APPS += [
+#     'debug_toolbar',
+#     'django_extensions',
+# ]
+#
+# MIDDLEWARE += [
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# ]
 
 # Debug toolbar configuration
 INTERNAL_IPS = [

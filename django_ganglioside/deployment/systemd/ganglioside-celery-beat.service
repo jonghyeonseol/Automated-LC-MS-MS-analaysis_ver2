@@ -1,0 +1,25 @@
+[Unit]
+Description=Ganglioside Celery Beat (Scheduler)
+After=network.target postgresql.service redis.service
+Requires=redis.service
+
+[Service]
+Type=simple
+User=ganglioside
+Group=ganglioside
+WorkingDirectory=/var/www/ganglioside
+Environment="PATH=/var/www/ganglioside/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=config.settings.production"
+EnvironmentFile=/var/www/ganglioside/.env.production
+
+ExecStart=/var/www/ganglioside/venv/bin/celery -A config beat \
+    --loglevel=info \
+    --pidfile=/var/run/celery/ganglioside_beat.pid \
+    --logfile=/var/log/celery/ganglioside_beat.log \
+    --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -28,14 +28,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 # Database connection pooling
 DATABASES['default']['CONN_MAX_AGE'] = 600
 
-# Static files serving with WhiteNoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# WhiteNoise configuration
-WHITENOISE_AUTOREFRESH = False
-WHITENOISE_USE_FINDERS = False
-WHITENOISE_MANIFEST_STRICT = True
-WHITENOISE_ALLOW_ALL_ORIGINS = False
+# Static files serving (use WhiteNoise or CDN in production)
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

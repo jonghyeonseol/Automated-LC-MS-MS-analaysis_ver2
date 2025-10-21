@@ -1,0 +1,38 @@
+# Dockerfile for Celery Worker
+# Shares base with Django but runs Celery instead
+
+FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DJANGO_SETTINGS_MODULE=config.settings.production
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app user
+RUN useradd -m -u 1000 ganglioside && \
+    mkdir -p /app && \
+    chown -R ganglioside:ganglioside /app
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install
+COPY requirements/production.txt /tmp/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt
+
+# Copy application code
+COPY --chown=ganglioside:ganglioside . /app/
+
+# Switch to non-root user
+USER ganglioside
+
+# Run Celery worker
+CMD ["celery", "-A", "config", "worker", "--loglevel=info", "--concurrency=4"]

@@ -1,0 +1,40 @@
+# Docker Compose override for local development
+# This file is automatically merged with docker-compose.yml
+
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DEBUG: "True"
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    command: python manage.py runserver 0.0.0.0:8000
+
+  daphne:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DEBUG: "True"
+    volumes:
+      - .:/app
+
+  celery_worker:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DEBUG: "True"
+    volumes:
+      - .:/app
+      - media_volume:/app/media
+
+  celery_beat:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DEBUG: "True"
+    volumes:
+      - .:/app

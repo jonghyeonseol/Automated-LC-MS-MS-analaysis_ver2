@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Visualization Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="bi bi-bar-chart-line"></i> Visualization Dashboard</h2>
+        <p class="text-muted">Interactive charts and analytics for ganglioside analysis</p>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i>
+    <strong>Coming Soon:</strong> This dashboard will display aggregated statistics and visualizations from all your analysis sessions.
+    Features include R² comparisons, category distributions, and validation metrics.
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card card-hover text-center">
+            <div class="card-body">
+                <i class="bi bi-pie-chart fs-1 text-primary"></i>
+                <h5 class="mt-3">Category Analysis</h5>
+                <p class="text-muted">GM/GD/GT/GQ/GP distribution across all sessions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-hover text-center">
+            <div class="card-body">
+                <i class="bi bi-graph-up fs-1 text-success"></i>
+                <h5 class="mt-3">R² Trends</h5>
+                <p class="text-muted">Regression quality over time</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-hover text-center">
+            <div class="card-body">
+                <i class="bi bi-scatter-chart fs-1 text-info"></i>
+                <h5 class="mt-3">Residual Analysis</h5>
+                <p class="text-muted">Prediction accuracy distribution</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <p>Navigate to:</p>
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="{% url 'analysis:home' %}" class="btn btn-primary">
+                        <i class="bi bi-house"></i> Home
+                    </a>
+                    <a href="{% url 'analysis:upload' %}" class="btn btn-success">
+                        <i class="bi bi-upload"></i> Upload Data
+                    </a>
+                    <a href="{% url 'analysis:history' %}" class="btn btn-info">
+                        <i class="bi bi-clock-history"></i> View History
+                    </a>
+                    <a href="/api/docs/" class="btn btn-warning">
+                        <i class="bi bi-book"></i> API Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Data - Ganglioside Analysis{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-cloud-upload"></i> Upload LC-MS/MS Data
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="uploadForm">
+                    {% csrf_token %}
+
+                    <!-- Session Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Session Name (Optional)</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g., Porcine Brain Sample 2025-01">
+                    </div>
+
+                    <!-- Data Type -->
+                    <div class="mb-3">
+                        <label for="data_type" class="form-label">Sample Type <span class="text-danger">*</span></label>
+                        <select class="form-select" id="data_type" name="data_type" required>
+                            <option value="porcine" selected>Porcine</option>
+                            <option value="human">Human</option>
+                            <option value="bovine">Bovine</option>
+                            <option value="mouse">Mouse</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="mb-3">
+                        <label for="uploaded_file" class="form-label">CSV File <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="uploaded_file" name="uploaded_file" accept=".csv" required>
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i> Required columns: Name, RT, Volume, Log P, Anchor
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings -->
+                    <div class="accordion mb-3" id="advancedSettings">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings">
+                                    <i class="bi bi-sliders"></i> Advanced Settings
+                                </button>
+                            </h2>
+                            <div id="collapseSettings" class="accordion-collapse collapse" data-bs-parent="#advancedSettings">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="r2_threshold" class="form-label">R² Threshold</label>
+                                            <input type="number" class="form-control" id="r2_threshold" name="r2_threshold"
+                                                   value="0.75" min="0.5" max="0.99" step="0.01">
+                                            <small class="text-muted">Minimum R² for valid regression</small>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="outlier_threshold" class="form-label">Outlier Threshold (σ)</label>
+                                            <input type="number" class="form-control" id="outlier_threshold" name="outlier_threshold"
+                                                   value="2.5" min="1.0" max="5.0" step="0.1">
+                                            <small class="text-muted">Standardized residual threshold</small>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="rt_tolerance" class="form-label">RT Tolerance (min)</label>
+                                            <input type="number" class="form-control" id="rt_tolerance" name="rt_tolerance"
+                                                   value="0.1" min="0.01" max="0.5" step="0.01">
+                                            <small class="text-muted">Fragmentation detection window</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Format Example -->
+                    <div class="alert alert-info">
+                        <h6><i class="bi bi-file-earmark-text"></i> CSV Format Example:</h6>
+                        <pre class="mb-0" style="font-size: 0.85rem;">Name,RT,Volume,Log P,Anchor
+GD1(36:1;O2),9.572,1000000,1.53,T
+GM1(36:1;O2),10.452,500000,4.00,F
+GD3(36:1;O2),10.126,800000,5.27,T</pre>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-upload"></i> Upload and Analyze
+                        </button>
+                        <a href="{% url 'analysis:home' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- File Validation Info -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6><i class="bi bi-check-circle text-success"></i> File Requirements</h6>
+                <ul class="small mb-0">
+                    <li>Format: CSV (comma-separated values)</li>
+                    <li>Max size: 50 MB</li>
+                    <li>Required columns: Name, RT, Volume, Log P, Anchor</li>
+                    <li>Anchor values: 'T' (training) or 'F' (test)</li>
+                    <li>Compound naming: PREFIX(a:b;c) format (e.g., GD1(36:1;O2))</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// File validation
+document.getElementById('uploaded_file').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Check file size
+        if (file.size > 50 * 1024 * 1024) {
+            alert('File size exceeds 50MB limit!');
+            this.value = '';
+            return;
+        }
+
+        // Check extension
+        if (!file.name.endsWith('.csv')) {
+            alert('Please upload a CSV file!');
+            this.value = '';
+            return;
+        }
+    }
+});
+</script>
+{% endblock %}

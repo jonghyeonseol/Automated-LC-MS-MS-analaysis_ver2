@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block title %}Session #{{ session.id }} - Analysis{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'analysis:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'analysis:history' %}">History</a></li>
+                <li class="breadcrumb-item active">Session #{{ session.id }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>
+            <i class="bi bi-file-earmark-medical"></i>
+            {{ session.name|default:"Session #"|add:session.id|stringformat:"s" }}
+        </h2>
+        <p class="text-muted">{{ session.original_filename }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        {% if session.status == 'completed' %}
+            <a href="{% url 'analysis:results' session.id %}" class="btn btn-success btn-lg">
+                <i class="bi bi-bar-chart-line"></i> View Results
+            </a>
+        {% elif session.status == 'pending' %}
+            <button id="analyzeBtn" class="btn btn-primary btn-lg">
+                <i class="bi bi-play-circle"></i> Start Analysis
+            </button>
+        {% elif session.status == 'processing' %}
+            <button class="btn btn-warning btn-lg" disabled>
+                <span class="loading-spinner"></span> Processing...
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Status Card -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Session Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-sm">
+                            <tr>
+                                <th width="40%">Session ID:</th>
+                                <td>#{{ session.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if session.status == 'completed' %}
+                                        <span class="badge bg-success">Completed</span>
+                                    {% elif session.status == 'processing' %}
+                                        <span class="badge bg-warning">Processing</span>
+                                    {% elif session.status == 'failed' %}
+                                        <span class="badge bg-danger">Failed</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Data Type:</th>
+                                <td><span class="badge bg-info">{{ session.get_data_type_display }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>File Size:</th>
+                                <td>{{ session.file_size|filesizeformat }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-sm">
+                            <tr>
+                                <th width="40%">Created:</th>
+                                <td>{{ session.created_at|date:"Y-m-d H:i:s" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Started:</th>
+                                <td>{{ session.started_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Completed:</th>
+                                <td>{{ session.completed_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Duration:</th>
+                                <td>
+                                    {% if session.duration %}
+                                        {{ session.duration|floatformat:2 }} seconds
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                {% if session.status == 'failed' and session.error_message %}
+                <div class="alert alert-danger mt-3 mb-0">
+                    <strong><i class="bi bi-exclamation-triangle"></i> Error:</strong> {{ session.error_message }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analysis Parameters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-sliders"></i> Analysis Parameters</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>R² Threshold</h6>
+                        <p class="mb-0"><code>{{ session.r2_threshold }}</code></p>
+                        <small class="text-muted">Minimum R² for valid regression</small>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Outlier Threshold</h6>
+                        <p class="mb-0"><code>{{ session.outlier_threshold }} σ</code></p>
+                        <small class="text-muted">Standardized residual threshold</small>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>RT Tolerance</h6>
+                        <p class="mb-0"><code>{{ session.rt_tolerance }} min</code></p>
+                        <small class="text-muted">Fragmentation detection window</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Summary (if completed) -->
+{% if session.status == 'completed' and session.result %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-check-circle"></i> Analysis Complete - Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3 class="text-primary">{{ session.result.total_compounds }}</h3>
+                        <p class="text-muted mb-0">Total Compounds</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-success">{{ session.result.valid_compounds }}</h3>
+                        <p class="text-muted mb-0">Valid Compounds</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-warning">{{ session.result.outlier_count }}</h3>
+                        <p class="text-muted mb-0">Outliers</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-info">{{ session.result.success_rate|floatformat:1 }}%</h3>
+                        <p class="text-muted mb-0">Success Rate</p>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{% url 'analysis:results' session.id %}" class="btn btn-success btn-lg">
+                        <i class="bi bi-bar-chart-line"></i> View Detailed Results
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Progress Indicator (for processing) -->
+{% if session.status == 'processing' %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-hourglass-split"></i> Analysis in Progress</h5>
+            </div>
+            <div class="card-body py-4">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span id="progressMessage" class="text-muted">Initializing analysis...</span>
+                        <span id="progressPercentage" class="badge bg-primary">0%</span>
+                    </div>
+                    <div class="progress" style="height: 30px;">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar"
+                             style="width: 0%;"
+                             aria-valuenow="0"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            <span id="progressText">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="currentStep" class="text-center text-muted small">
+                    <i class="bi bi-gear"></i> <span id="stepName">Waiting for updates...</span>
+                </div>
+                <div id="connectionStatus" class="mt-3 text-center small">
+                    <span class="badge bg-secondary">
+                        <i class="bi bi-wifi"></i> Connecting to real-time updates...
+                    </span>
+                </div>
+                <div id="logMessages" class="mt-3" style="max-height: 200px; overflow-y: auto; display: none;">
+                    <h6 class="text-muted">Analysis Log:</h6>
+                    <div id="logContent" class="small font-monospace"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh for processing sessions
+{% if session.status == 'processing' %}
+setTimeout(function() {
+    location.reload();
+}, 5000); // Refresh every 5 seconds
+{% endif %}
+
+// Analyze button handler
+{% if session.status == 'pending' %}
+document.getElementById('analyzeBtn').addEventListener('click', function() {
+    if (!confirm('Start analysis for this session?')) return;
+
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner"></span> Starting...';
+
+    fetch('{% url "analysis:session_analyze" session.id %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Unknown error'));
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-play-circle"></i> Start Analysis';
+        }
+    })
+    .catch(error => {
+        alert('Network error: ' + error);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-play-circle"></i> Start Analysis';
+    });
+});
+{% endif %}
+</script>
+{% endblock %}
