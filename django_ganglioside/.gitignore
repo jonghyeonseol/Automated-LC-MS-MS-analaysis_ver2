@@ -1,0 +1,44 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Environment
+.env
+.venv
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Media & Static
+/media/
+/staticfiles/
+/static_root/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Uploads (temporary analysis files)
+/uploads/*
+!/uploads/.gitkeep

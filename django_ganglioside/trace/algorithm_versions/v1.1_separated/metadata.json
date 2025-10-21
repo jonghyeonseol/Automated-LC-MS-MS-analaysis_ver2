@@ -1,0 +1,17 @@
+{
+  "version": "v1.1_separated",
+  "timestamp": "2025-10-21T15:45:00Z",
+  "description": "Separate modified vs unmodified compounds with distinct regression models",
+  "strategy": "Detect modifications (+HexNAc, +dHex, +OAc) and use separate models",
+  "target_r2": 0.90,
+  "achieved_r2_loo": 0.9737,
+  "achieved_r2_kfold": 0.9194,
+  "improvement_from_baseline": 0.389,
+  "success": true,
+  "configuration": {
+    "separate_modified": true,
+    "features": ["Log P"],
+    "use_ridge": false,
+    "model_type": "LinearRegression"
+  }
+}

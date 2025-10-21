@@ -1,0 +1,15 @@
+# Minimal requirements for running algorithm validation
+# No database needed for standalone validation script
+# Compatible with Python 3.13
+
+# Core
+Django>=5.0
+djangorestframework>=3.14
+django-environ>=0.11
+
+# Data Processing
+pandas>=2.2.0
+numpy>=1.26
+
+# Machine Learning
+scikit-learn>=1.4
