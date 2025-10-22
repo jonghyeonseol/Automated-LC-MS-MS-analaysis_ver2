@@ -28,25 +28,37 @@ Production-ready Django platform for automated ganglioside identification and va
 
 ## 🚀 Quick Start
 
-### Option 1: Docker (Recommended)
+### Option 1: Docker (Recommended - Production Ready)
 
 ```bash
-# Clone repository
-git clone https://github.com/your-org/ganglioside.git
-cd ganglioside
+# Navigate to project directory
+cd django_ganglioside
 
-# Build and start all services
-make setup
+# Create environment file
+cp .env.example .env
+
+# Build and start all 7 services
+docker-compose build
+docker-compose up -d
+
+# Run database migrations
+docker-compose exec django python manage.py migrate
+
+# Create admin user
+docker-compose exec django python manage.py createsuperuser
 
 # Access the application
 open http://localhost
 ```
 
-**Services started:**
-- Web application: http://localhost
-- Admin panel: http://localhost/admin
-- API docs: http://localhost/api/docs
-- Health check: http://localhost/health
+**All Services Running:**
+- 🌐 Web application: http://localhost (Django + Gunicorn)
+- 👤 Admin panel: http://localhost/admin (username: admin, password: admin123)
+- 📚 API docs: http://localhost/api/schema/swagger-ui/
+- ❤️ Health check: http://localhost/health
+- 🔌 WebSocket: ws://localhost:8001 (Real-time updates)
+- ⚙️ Celery Worker: Background task processing
+- ⏰ Celery Beat: Scheduled tasks
 
 ### Option 2: Local Development
 

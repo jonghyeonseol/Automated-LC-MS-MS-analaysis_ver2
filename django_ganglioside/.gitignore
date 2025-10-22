@@ -42,3 +42,15 @@ celerybeat.pid
 # Uploads (temporary analysis files)
 /uploads/*
 !/uploads/.gitkeep
+
+# Temporary project files
+trace/
+backups/
+WEEK*.md
+*_COMPLETE.md
+*_VALIDATION.md
+*_PREVIEW.md
+*_PLAN.md
+test_*.py
+run_*.py
+validate_standalone.py
