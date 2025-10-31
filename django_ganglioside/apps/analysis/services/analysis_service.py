@@ -13,7 +13,9 @@ from asgiref.sync import async_to_sync
 from datetime import datetime
 
 from ..models import AnalysisSession, AnalysisResult, Compound, RegressionModel
-from .ganglioside_processor import GangliosideProcessor
+from .ganglioside_processor_v2 import GangliosideProcessorV2
+# Legacy import kept for backward compatibility
+# from .ganglioside_processor import GangliosideProcessor
 
 
 def convert_to_json_serializable(obj):
@@ -47,9 +49,23 @@ class AnalysisService:
     Service class for running ganglioside analysis and persisting results
     """
 
-    def __init__(self):
-        self.processor = GangliosideProcessor()
+    def __init__(self, use_v2: bool = True):
+        """
+        Initialize Analysis Service
+
+        Args:
+            use_v2: Use improved V2 processor (default: True, recommended)
+        """
+        # Use improved V2 processor by default to prevent overfitting
+        if use_v2:
+            self.processor = GangliosideProcessorV2()
+        else:
+            # Legacy V1 processor - not recommended, kept for compatibility
+            from .ganglioside_processor import GangliosideProcessor
+            self.processor = GangliosideProcessor()
+
         self.channel_layer = get_channel_layer()
+        self.processor_version = "v2" if use_v2 else "v1"
 
     def _send_progress(self, session_id: int, message: str, percentage: int, current_step: str = ''):
         """

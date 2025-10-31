@@ -276,6 +276,110 @@
         "documentation": {}
     },
     {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Any",
         "importPath": "typing",
         "description": "typing",
@@ -309,6 +413,30 @@
     },
     {
         "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "KFold",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "cross_val_score",
         "importPath": "sklearn.model_selection",
         "description": "sklearn.model_selection",
         "isExtraImport": true,
@@ -373,6 +501,22 @@
     },
     {
         "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_squared_error",
         "importPath": "sklearn.metrics",
         "description": "sklearn.metrics",
         "isExtraImport": true,
@@ -519,6 +663,38 @@
         "description": "sklearn.linear_model",
         "isExtraImport": true,
         "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "RidgeCV",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "LinearRegression",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
         "documentation": {}
     },
     {
@@ -925,6 +1101,14 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "environ",
         "kind": 6,
         "isExtraImport": true,
@@ -1055,6 +1239,22 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
+        "label": "SimpleUploadedFile",
+        "importPath": "django.core.files.uploadedfile",
+        "description": "django.core.files.uploadedfile",
+        "isExtraImport": true,
+        "detail": "django.core.files.uploadedfile",
+        "documentation": {}
+    },
+    {
         "label": "SimpleUploadedFile",
         "importPath": "django.core.files.uploadedfile",
         "description": "django.core.files.uploadedfile",
@@ -1104,6 +1304,22 @@
     },
     {
         "label": "AnalysisSession",
+        "importPath": "apps.analysis.models",
+        "description": "apps.analysis.models",
+        "isExtraImport": true,
+        "detail": "apps.analysis.models",
+        "documentation": {}
+    },
+    {
+        "label": "AnalysisSession",
+        "importPath": "apps.analysis.models",
+        "description": "apps.analysis.models",
+        "isExtraImport": true,
+        "detail": "apps.analysis.models",
+        "documentation": {}
+    },
+    {
+        "label": "AnalysisResult",
         "importPath": "apps.analysis.models",
         "description": "apps.analysis.models",
         "isExtraImport": true,
@@ -1191,6 +1407,30 @@
         "documentation": {}
     },
     {
+        "label": "AnalysisService",
+        "importPath": "apps.analysis.services.analysis_service",
+        "description": "apps.analysis.services.analysis_service",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.analysis_service",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "MagicMock",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
         "label": "patch",
         "importPath": "unittest.mock",
         "description": "unittest.mock",
@@ -1228,6 +1468,38 @@
         "description": "apps.analysis.tasks",
         "isExtraImport": true,
         "detail": "apps.analysis.tasks",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessorV2",
+        "importPath": "apps.analysis.services.ganglioside_processor_v2",
+        "description": "apps.analysis.services.ganglioside_processor_v2",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.ganglioside_processor_v2",
+        "documentation": {}
+    },
+    {
+        "label": "ImprovedRegressionModel",
+        "importPath": "apps.analysis.services.improved_regression",
+        "description": "apps.analysis.services.improved_regression",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.improved_regression",
+        "documentation": {}
+    },
+    {
+        "label": "ImprovedRegressionModel",
+        "importPath": "apps.analysis.services.improved_regression",
+        "description": "apps.analysis.services.improved_regression",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.improved_regression",
+        "documentation": {}
+    },
+    {
+        "label": "ImprovedRegressionModel",
+        "importPath": "apps.analysis.services.improved_regression",
+        "description": "apps.analysis.services.improved_regression",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.improved_regression",
         "documentation": {}
     },
     {
@@ -1549,7 +1821,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.services.analysis_service",
         "description": "django_ganglioside.apps.analysis.services.analysis_service",
-        "peekOfCode": "class AnalysisService:\n    \"\"\"\n    Service class for running ganglioside analysis and persisting results\n    \"\"\"\n    def __init__(self):\n        self.processor = GangliosideProcessor()\n        self.channel_layer = get_channel_layer()\n    def _send_progress(self, session_id: int, message: str, percentage: int, current_step: str = ''):\n        \"\"\"\n        Send progress update via WebSocket",
+        "peekOfCode": "class AnalysisService:\n    \"\"\"\n    Service class for running ganglioside analysis and persisting results\n    \"\"\"\n    def __init__(self, use_v2: bool = True):\n        \"\"\"\n        Initialize Analysis Service\n        Args:\n            use_v2: Use improved V2 processor (default: True, recommended)\n        \"\"\"",
         "detail": "django_ganglioside.apps.analysis.services.analysis_service",
         "documentation": {}
     },
@@ -1596,6 +1868,87 @@
         "description": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        print(\"🧬 Ganglioside Processor 초기화 완료 (Fixed Version with Categorization)\")\n    def update_settings(",
         "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessorV2",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.ganglioside_processor_v2",
+        "description": "django_ganglioside.apps.analysis.services.ganglioside_processor_v2",
+        "peekOfCode": "class GangliosideProcessorV2:\n    \"\"\"\n    Improved Ganglioside Processor with better regression handling and validation.\n    Major improvements:\n    - Uses ImprovedRegressionModel to prevent overfitting\n    - Proper feature selection and cross-validation\n    - Comprehensive data validation\n    - English-only logging and documentation\n    - Better error handling\n    \"\"\"",
+        "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor_v2",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.ganglioside_processor_v2",
+        "description": "django_ganglioside.apps.analysis.services.ganglioside_processor_v2",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass GangliosideProcessorV2:\n    \"\"\"\n    Improved Ganglioside Processor with better regression handling and validation.\n    Major improvements:\n    - Uses ImprovedRegressionModel to prevent overfitting\n    - Proper feature selection and cross-validation\n    - Comprehensive data validation\n    - English-only logging and documentation\n    - Better error handling",
+        "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor_v2",
+        "documentation": {}
+    },
+    {
+        "label": "ImprovedRegressionModel",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.improved_regression",
+        "description": "django_ganglioside.apps.analysis.services.improved_regression",
+        "peekOfCode": "class ImprovedRegressionModel:\n    \"\"\"\n    Improved regression model that addresses overfitting issues:\n    - Uses minimal, meaningful features\n    - Implements cross-validation even for small samples\n    - Uses regularization to prevent overfitting\n    - Provides realistic R² thresholds\n    \"\"\"\n    def __init__(\n        self,",
+        "detail": "django_ganglioside.apps.analysis.services.improved_regression",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.improved_regression",
+        "description": "django_ganglioside.apps.analysis.services.improved_regression",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ImprovedRegressionModel:\n    \"\"\"\n    Improved regression model that addresses overfitting issues:\n    - Uses minimal, meaningful features\n    - Implements cross-validation even for small samples\n    - Uses regularization to prevent overfitting\n    - Provides realistic R² thresholds\n    \"\"\"\n    def __init__(",
+        "detail": "django_ganglioside.apps.analysis.services.improved_regression",
+        "documentation": {}
+    },
+    {
+        "label": "ProcessorMigrationHelper",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "description": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "peekOfCode": "class ProcessorMigrationHelper:\n    \"\"\"Helper class to migrate from V1 to V2 processor\"\"\"\n    @staticmethod\n    def compare_results(v1_results: Dict, v2_results: Dict) -> Dict[str, Any]:\n        \"\"\"\n        Compare results from V1 and V2 processors.\n        Args:\n            v1_results: Results from original processor\n            v2_results: Results from improved processor\n        Returns:",
+        "detail": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "documentation": {}
+    },
+    {
+        "label": "BackwardCompatibleProcessor",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "description": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "peekOfCode": "class BackwardCompatibleProcessor:\n    \"\"\"\n    Wrapper that provides backward compatibility while using V2 internally.\n    Allows gradual migration without breaking existing code.\n    \"\"\"\n    def __init__(self, use_v2: bool = True, log_comparison: bool = False):\n        \"\"\"\n        Initialize backward compatible processor.\n        Args:\n            use_v2: Whether to use V2 processor (True) or V1 (False)",
+        "detail": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "documentation": {}
+    },
+    {
+        "label": "Command",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "description": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "peekOfCode": "class Command:\n    \"\"\"Django management command for migration\"\"\"\n    help = 'Migrate from GangliosideProcessor V1 to V2'\n    def add_arguments(self, parser):\n        parser.add_argument(\n            '--test-file',\n            type=str,\n            help='CSV file to test migration'\n        )\n        parser.add_argument(",
+        "detail": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "documentation": {}
+    },
+    {
+        "label": "run_migration_test",
+        "kind": 2,
+        "importPath": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "description": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "peekOfCode": "def run_migration_test(csv_path: str) -> Dict[str, Any]:\n    \"\"\"\n    Test migration by running both processors and comparing results.\n    Args:\n        csv_path: Path to test CSV file\n    Returns:\n        Comparison results\n    \"\"\"\n    import pandas as pd\n    logger.info(f\"Running migration test on {csv_path}\")",
+        "detail": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "description": "django_ganglioside.apps.analysis.services.migrate_to_v2",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ProcessorMigrationHelper:\n    \"\"\"Helper class to migrate from V1 to V2 processor\"\"\"\n    @staticmethod\n    def compare_results(v1_results: Dict, v2_results: Dict) -> Dict[str, Any]:\n        \"\"\"\n        Compare results from V1 and V2 processors.\n        Args:\n            v1_results: Results from original processor\n            v2_results: Results from improved processor",
+        "detail": "django_ganglioside.apps.analysis.services.migrate_to_v2",
         "documentation": {}
     },
     {
@@ -3012,6 +3365,51 @@
         "documentation": {}
     },
     {
+        "label": "TestV2ProcessorIntegration",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.integration.test_v2_processor",
+        "description": "django_ganglioside.tests.integration.test_v2_processor",
+        "peekOfCode": "class TestV2ProcessorIntegration:\n    \"\"\"Test V2 processor integration with Django\"\"\"\n    def test_v2_processor_prevents_overfitting(self, test_user, sample_csv_file):\n        \"\"\"Test that V2 processor prevents overfitting with small samples\"\"\"\n        # Create session\n        session = AnalysisSession.objects.create(\n            user=test_user,\n            name=\"V2 Overfitting Test\",\n            data_type=\"porcine\",\n            uploaded_file=sample_csv_file,",
+        "detail": "django_ganglioside.tests.integration.test_v2_processor",
+        "documentation": {}
+    },
+    {
+        "label": "TestImprovedRegressionModel",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.integration.test_v2_processor",
+        "description": "django_ganglioside.tests.integration.test_v2_processor",
+        "peekOfCode": "class TestImprovedRegressionModel:\n    \"\"\"Unit tests for improved regression model\"\"\"\n    def test_realistic_r2_threshold(self):\n        \"\"\"Test that default R² threshold is realistic\"\"\"\n        model = ImprovedRegressionModel()\n        assert model.r2_threshold == 0.70, \"Should use realistic R² threshold\"\n        assert model.r2_threshold < 0.90, \"R² threshold too high, risks overfitting\"\n    def test_feature_ratio_limit(self):\n        \"\"\"Test that features are limited by sample size\"\"\"\n        model = ImprovedRegressionModel()",
+        "detail": "django_ganglioside.tests.integration.test_v2_processor",
+        "documentation": {}
+    },
+    {
+        "label": "TestAnalysisServiceV2",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.integration.test_v2_processor",
+        "description": "django_ganglioside.tests.integration.test_v2_processor",
+        "peekOfCode": "class TestAnalysisServiceV2:\n    \"\"\"Test AnalysisService with V2 processor\"\"\"\n    def test_service_uses_v2_by_default(self):\n        \"\"\"Test that service uses V2 by default\"\"\"\n        service = AnalysisService()\n        assert service.processor_version == \"v2\"\n        assert isinstance(service.processor, GangliosideProcessorV2)\n    def test_service_can_use_v1_for_compatibility(self):\n        \"\"\"Test that V1 can still be used if needed\"\"\"\n        service = AnalysisService(use_v2=False)",
+        "detail": "django_ganglioside.tests.integration.test_v2_processor",
+        "documentation": {}
+    },
+    {
+        "label": "sample_csv_content",
+        "kind": 2,
+        "importPath": "django_ganglioside.tests.integration.test_v2_processor",
+        "description": "django_ganglioside.tests.integration.test_v2_processor",
+        "peekOfCode": "def sample_csv_content():\n    \"\"\"Create realistic sample CSV content\"\"\"\n    return \"\"\"Name,RT,Volume,Log P,Anchor\nGD1(36:1;O2),9.572,1000000,1.53,T\nGD1(38:1;O2),10.125,1200000,2.88,T\nGD1(40:1;O2),10.678,1500000,4.23,T\nGD1(42:1;O2),11.231,1800000,5.58,F\nGM1(36:1;O2),10.452,500000,4.00,T\nGM1(38:1;O2),10.987,600000,5.35,T\nGM1(40:1;O2),11.522,700000,6.70,F",
+        "detail": "django_ganglioside.tests.integration.test_v2_processor",
+        "documentation": {}
+    },
+    {
+        "label": "sample_csv_file",
+        "kind": 2,
+        "importPath": "django_ganglioside.tests.integration.test_v2_processor",
+        "description": "django_ganglioside.tests.integration.test_v2_processor",
+        "peekOfCode": "def sample_csv_file(sample_csv_content):\n    \"\"\"Create in-memory CSV file\"\"\"\n    return SimpleUploadedFile(\n        \"test_data.csv\",\n        sample_csv_content.encode('utf-8'),\n        content_type=\"text/csv\"\n    )\n@pytest.mark.integration\nclass TestV2ProcessorIntegration:\n    \"\"\"Test V2 processor integration with Django\"\"\"",
+        "detail": "django_ganglioside.tests.integration.test_v2_processor",
+        "documentation": {}
+    },
+    {
         "label": "TestDatabasePerformance",
         "kind": 6,
         "importPath": "django_ganglioside.tests.performance.test_load",
@@ -3045,6 +3443,24 @@
         "description": "django_ganglioside.tests.performance.test_load",
         "peekOfCode": "class TestMemoryUsage:\n    \"\"\"Test memory-efficient operations\"\"\"\n    def test_iterator_for_large_queryset(self, test_user):\n        \"\"\"Test using iterator for large querysets\"\"\"\n        session = AnalysisSession.objects.create(\n            user=test_user,\n            name=\"Memory Test\",\n            data_type=\"porcine\",\n            status=\"completed\",\n            file_size=1024,",
         "detail": "django_ganglioside.tests.performance.test_load",
+        "documentation": {}
+    },
+    {
+        "label": "TestImprovedRegressionModel",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_improved_regression",
+        "description": "django_ganglioside.tests.unit.test_improved_regression",
+        "peekOfCode": "class TestImprovedRegressionModel:\n    \"\"\"Test suite for ImprovedRegressionModel\"\"\"\n    @pytest.fixture\n    def sample_data(self):\n        \"\"\"Create sample ganglioside data for testing\"\"\"\n        return pd.DataFrame({\n            'Name': [\n                'GT3(34:1;O2)', 'GT3(36:1;O2)', 'GT3(38:1;O2)',\n                'GT3(40:1;O2)', 'GT3(42:1;O2)'\n            ],",
+        "detail": "django_ganglioside.tests.unit.test_improved_regression",
+        "documentation": {}
+    },
+    {
+        "label": "TestRegressionIntegration",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_improved_regression",
+        "description": "django_ganglioside.tests.unit.test_improved_regression",
+        "peekOfCode": "class TestRegressionIntegration:\n    \"\"\"Integration tests for regression model with processor\"\"\"\n    def test_regression_prevents_overfitting(self):\n        \"\"\"Test that the improved regression prevents overfitting\"\"\"\n        # Create dataset that would cause overfitting with old model\n        data = pd.DataFrame({\n            'Name': ['GD1(36:1;O2)', 'GD1(38:1;O2)', 'GD1(40:1;O2)'],\n            'RT': [9.5, 10.2, 10.9],\n            'Volume': [1000000, 1500000, 2000000],\n            'Log P': [2.5, 3.8, 5.1],",
+        "detail": "django_ganglioside.tests.unit.test_improved_regression",
         "documentation": {}
     },
     {
@@ -3342,6 +3758,51 @@
         "description": "django_ganglioside.manage",
         "peekOfCode": "def main():\n    \"\"\"Run administrative tasks.\"\"\"\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and \"\n            \"available on your PYTHONPATH environment variable? Did you \"\n            \"forget to activate a virtual environment?\"",
         "detail": "django_ganglioside.manage",
+        "documentation": {}
+    },
+    {
+        "label": "test_basic_functionality",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_regression_standalone",
+        "description": "django_ganglioside.test_regression_standalone",
+        "peekOfCode": "def test_basic_functionality():\n    \"\"\"Test basic regression model functionality\"\"\"\n    print(\"Testing ImprovedRegressionModel basic functionality...\")\n    # Create model\n    model = ImprovedRegressionModel(\n        min_samples=3,\n        max_features_ratio=0.3,\n        r2_threshold=0.70\n    )\n    print(f\"✓ Model initialized with r2_threshold={model.r2_threshold}\")",
+        "detail": "django_ganglioside.test_regression_standalone",
+        "documentation": {}
+    },
+    {
+        "label": "test_overfitting_prevention",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_regression_standalone",
+        "description": "django_ganglioside.test_regression_standalone",
+        "peekOfCode": "def test_overfitting_prevention():\n    \"\"\"Test that model prevents overfitting\"\"\"\n    print(\"\\nTesting overfitting prevention...\")\n    model = ImprovedRegressionModel()\n    # Create minimal dataset (3 samples)\n    df = pd.DataFrame({\n        'Name': ['GD1(36:1;O2)', 'GD1(38:1;O2)', 'GD1(40:1;O2)'],\n        'RT': [9.5, 10.1, 10.7],\n        'Log P': [1.5, 2.8, 4.1],\n        'a_component': [36, 38, 40],",
+        "detail": "django_ganglioside.test_regression_standalone",
+        "documentation": {}
+    },
+    {
+        "label": "test_multicollinearity_handling",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_regression_standalone",
+        "description": "django_ganglioside.test_regression_standalone",
+        "peekOfCode": "def test_multicollinearity_handling():\n    \"\"\"Test handling of highly correlated features\"\"\"\n    print(\"\\nTesting multicollinearity handling...\")\n    model = ImprovedRegressionModel()\n    # Create data with perfect correlation\n    df = pd.DataFrame({\n        'Name': ['GD1(36:1;O2)', 'GD1(38:1;O2)', 'GD1(40:1;O2)', 'GD1(42:1;O2)'],\n        'RT': [9.5, 10.1, 10.7, 11.3],\n        'Log P': [1.0, 2.0, 3.0, 4.0],\n        'a_component': [36, 38, 40, 42],  # Perfectly correlated with Log P",
+        "detail": "django_ganglioside.test_regression_standalone",
+        "documentation": {}
+    },
+    {
+        "label": "test_realistic_r2_threshold",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_regression_standalone",
+        "description": "django_ganglioside.test_regression_standalone",
+        "peekOfCode": "def test_realistic_r2_threshold():\n    \"\"\"Test that R² threshold is realistic\"\"\"\n    print(\"\\nTesting realistic R² threshold...\")\n    model = ImprovedRegressionModel()\n    assert model.r2_threshold <= 0.85, \"R² threshold should be realistic (<= 0.85)\"\n    assert model.r2_threshold >= 0.60, \"R² threshold should not be too strict (>= 0.60)\"\n    print(f\"✓ R² threshold is realistic: {model.r2_threshold}\")\n    return True\ndef main():\n    \"\"\"Run all standalone tests\"\"\"",
+        "detail": "django_ganglioside.test_regression_standalone",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_regression_standalone",
+        "description": "django_ganglioside.test_regression_standalone",
+        "peekOfCode": "def main():\n    \"\"\"Run all standalone tests\"\"\"\n    print(\"=\" * 60)\n    print(\"STANDALONE REGRESSION MODEL TESTS\")\n    print(\"=\" * 60)\n    tests = [\n        (\"Basic Functionality\", test_basic_functionality),\n        (\"Overfitting Prevention\", test_overfitting_prevention),\n        (\"Multicollinearity Handling\", test_multicollinearity_handling),\n        (\"Realistic R² Threshold\", test_realistic_r2_threshold),",
+        "detail": "django_ganglioside.test_regression_standalone",
         "documentation": {}
     },
     {
