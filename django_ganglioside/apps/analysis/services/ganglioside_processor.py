@@ -3,17 +3,21 @@ Ganglioside Data Processor - 실제 분석 로직 구현
 5가지 규칙 기반 산성 당지질 데이터 자동 분류 시스템
 """
 
+import logging
 import sys
 import os
 from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import r2_score
 
 # Import the categorizer
 from .ganglioside_categorizer import GangliosideCategorizer
+
+# Configure logger
+logger = logging.getLogger(__name__)
 
 
 class GangliosideProcessor:
@@ -26,7 +30,7 @@ class GangliosideProcessor:
         # Initialize categorizer
         self.categorizer = GangliosideCategorizer()
 
-        print("🧬 Ganglioside Processor 초기화 완료 (Fixed Version with Categorization)")
+        logger.info("Ganglioside Processor initialized (Ridge regression with categorization)")
 
     def update_settings(
         self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None
@@ -108,6 +112,14 @@ class GangliosideProcessor:
     def _preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """데이터 전처리: 접두사, 접미사 분리 및 검증"""
 
+        # CSV injection protection: Sanitize string columns
+        # Remove formula-like prefixes (=, +, -, @, \t, \r) from string cells
+        dangerous_prefixes = ('=', '+', '-', '@', '\t', '\r')
+        if 'Name' in df.columns:
+            df['Name'] = df['Name'].apply(
+                lambda x: str(x).lstrip(''.join(dangerous_prefixes)) if isinstance(x, str) else x
+            )
+
         # Name 컬럼에서 접두사와 접미사 분리
         df["prefix"] = df["Name"].str.extract(r"^([^(]+)")[0]
         df["suffix"] = df["Name"].str.extract(r"\(([^)]+)\)")[0]
@@ -158,11 +170,11 @@ class GangliosideProcessor:
 
             if len(anchor_compounds) >= 2:
                 try:
-                    # 회귀분석 수행
+                    # 회귀분석 수행 (Ridge regression for overfitting mitigation)
                     X = anchor_compounds[["Log P"]].values
                     y = anchor_compounds["RT"].values
 
-                    model = LinearRegression()
+                    model = Ridge(alpha=1.0)  # Regularization to prevent overfitting with small sample sizes
                     model.fit(X, y)
 
                     # 예측값 및 결정계수 계산
@@ -262,12 +274,12 @@ class GangliosideProcessor:
 
             if len(anchor_compounds) >= 2:
                 try:
-                    # Overall regression with all anchor compounds
+                    # Overall regression with all anchor compounds (Ridge for regularization)
                     X = anchor_compounds[["Log P"]].values
                     y = anchor_compounds["RT"].values
 
                     if len(np.unique(X)) >= 2:  # Need at least 2 different Log P values
-                        model = LinearRegression()
+                        model = Ridge(alpha=1.0)  # Regularization for fallback regression
                         model.fit(X, y)
                         y_pred = model.predict(X)
                         r2 = r2_score(y, y_pred)

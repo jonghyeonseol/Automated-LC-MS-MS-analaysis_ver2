@@ -674,6 +674,14 @@
         "documentation": {}
     },
     {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
         "label": "RidgeCV",
         "importPath": "sklearn.linear_model",
         "description": "sklearn.linear_model",
@@ -1866,7 +1874,16 @@
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "description": "django_ganglioside.apps.analysis.services.ganglioside_processor",
-        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        print(\"🧬 Ganglioside Processor 초기화 완료 (Fixed Version with Categorization)\")\n    def update_settings(",
+        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        logger.info(\"Ganglioside Processor initialized (Ridge regression with categorization)\")\n    def update_settings(",
+        "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.ganglioside_processor",
+        "description": "django_ganglioside.apps.analysis.services.ganglioside_processor",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        logger.info(\"Ganglioside Processor initialized (Ridge regression with categorization)\")",
         "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "documentation": {}
     },

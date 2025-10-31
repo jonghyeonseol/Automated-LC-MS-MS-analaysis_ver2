@@ -129,13 +129,46 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
         ]
 
     def validate_uploaded_file(self, value):
-        """Validate uploaded file is a CSV"""
-        if not value.name.endswith('.csv'):
+        """Validate uploaded file is a CSV with proper structure"""
+        import csv
+        import io
+
+        # Check file extension
+        if not value.name.lower().endswith('.csv'):
             raise serializers.ValidationError("Only CSV files are allowed.")
 
         # Check file size (max 50MB)
         if value.size > 50 * 1024 * 1024:
             raise serializers.ValidationError("File size cannot exceed 50MB.")
+
+        # Validate CSV structure and required columns
+        try:
+            # Read first 1024 bytes to validate CSV format and check headers
+            value.seek(0)
+            sample = value.read(1024).decode('utf-8')
+            value.seek(0)  # Reset file pointer
+
+            # Check if it looks like CSV (contains commas and newlines)
+            if ',' not in sample or '\n' not in sample:
+                raise serializers.ValidationError("File does not appear to be a valid CSV format.")
+
+            # Parse headers and validate required columns
+            reader = csv.DictReader(io.StringIO(sample))
+            headers = reader.fieldnames
+
+            required_columns = {'Name', 'RT', 'Volume', 'Log P', 'Anchor'}
+            if headers:
+                missing_columns = required_columns - set(headers)
+                if missing_columns:
+                    raise serializers.ValidationError(
+                        f"Missing required columns: {', '.join(sorted(missing_columns))}"
+                    )
+        except UnicodeDecodeError:
+            raise serializers.ValidationError("File must be UTF-8 encoded text.")
+        except csv.Error:
+            raise serializers.ValidationError("Invalid CSV format.")
+        finally:
+            value.seek(0)  # Always reset file pointer
 
         return value
 
