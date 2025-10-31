@@ -3,66 +3,30 @@ Ganglioside Data Processor - 실제 분석 로직 구현
 5가지 규칙 기반 산성 당지질 데이터 자동 분류 시스템
 """
 
-import logging
 import sys
 import os
 from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression, Ridge, BayesianRidge
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
-from sklearn.model_selection import LeaveOneOut
 
 # Import the categorizer
 from .ganglioside_categorizer import GangliosideCategorizer
 
-# Configure logger
-logger = logging.getLogger(__name__)
-
 
 class GangliosideProcessor:
-    # Prefix family definitions for pooled regression
-    # Groups chemically similar prefixes that share RT-LogP relationships
-    PREFIX_FAMILIES = {
-        "GD_family": {
-            "prefixes": ["GD1", "GD1a", "GD1b", "GD1+HexNAc", "GD1+dHex", "GD3"],
-            "description": "Disialo gangliosides (2 sialic acids)"
-        },
-        "GM_family": {
-            "prefixes": ["GM1", "GM1+HexNAc", "GM3", "GM3+OAc"],
-            "description": "Monosialo gangliosides (1 sialic acid)"
-        },
-        "GT_family": {
-            "prefixes": ["GT1", "GT1a", "GT1b", "GT3"],
-            "description": "Trisialo gangliosides (3 sialic acids)"
-        },
-        "GQ_family": {
-            "prefixes": ["GQ1", "GQ1a", "GQ1b", "GQ1c", "GQ1+HexNAc"],
-            "description": "Tetrasialo gangliosides (4 sialic acids)"
-        },
-        "GP_family": {
-            "prefixes": ["GP1", "GP1a"],
-            "description": "Pentasialo gangliosides (5 sialic acids)"
-        }
-    }
-
     def __init__(self):
         # Fixed thresholds for realistic chemical data analysis
-        self.r2_threshold = 0.70  # Lowered to 0.70 to account for LC-MS noise with small samples
+        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value
         self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity
         self.rt_tolerance = 0.1
 
         # Initialize categorizer
         self.categorizer = GangliosideCategorizer()
 
-        # Create reverse mapping: prefix -> family
-        self.prefix_to_family = {}
-        for family_name, family_data in self.PREFIX_FAMILIES.items():
-            for prefix in family_data["prefixes"]:
-                self.prefix_to_family[prefix] = family_name
-
-        logger.info("Ganglioside Processor initialized (Ridge regression with categorization)")
+        print("🧬 Ganglioside Processor 초기화 완료 (Fixed Version with Categorization)")
 
     def update_settings(
         self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None
@@ -144,14 +108,6 @@ class GangliosideProcessor:
     def _preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """데이터 전처리: 접두사, 접미사 분리 및 검증"""
 
-        # CSV injection protection: Sanitize string columns
-        # Remove formula-like prefixes (=, +, -, @, \t, \r) from string cells
-        dangerous_prefixes = ('=', '+', '-', '@', '\t', '\r')
-        if 'Name' in df.columns:
-            df['Name'] = df['Name'].apply(
-                lambda x: str(x).lstrip(''.join(dangerous_prefixes)) if isinstance(x, str) else x
-            )
-
         # Name 컬럼에서 접두사와 접미사 분리
         df["prefix"] = df["Name"].str.extract(r"^([^(]+)")[0]
         df["suffix"] = df["Name"].str.extract(r"\(([^)]+)\)")[0]
@@ -172,155 +128,195 @@ class GangliosideProcessor:
 
     def _apply_rule1_prefix_regression(self, df: pd.DataFrame) -> Dict[str, Any]:
         """
-        Rule 1: Prefix-based multiple regression with multi-level fallback strategy
-
-        Decision tree:
-        1. n ≥ 10: Try prefix-specific (threshold=0.75)
-        2. n ≥ 4: Try prefix-specific (threshold=0.70)
-        3. n = 3: Try family pooling (threshold=0.70)
-        4. Fallback to overall regression (threshold=0.50)
+        규칙 1: 접두사 기반 회귀분석
+        동일 접두사 그룹에서 Log P-RT 선형성 검증 (R² ≥ threshold)
         """
-        print("\n📊 Rule 1: Multi-Level Prefix Regression")
 
+        regression_results = {}
         valid_compounds = []
         outliers = []
-        regression_results = {}
 
-        # Track family models (to avoid recomputation)
-        family_models = {}
-
-        # Track compounds for overall fallback
-        fallback_compounds = []
-
-        # Group by prefix
-        prefixes = df["prefix"].unique()
-
-        for prefix in sorted(prefixes):
+        # 접두사별 그룹화
+        for prefix in df["prefix"].unique():
             if pd.isna(prefix):
                 continue
 
-            print(f"\n🔍 Processing prefix: {prefix}")
+            prefix_group = df[df["prefix"] == prefix].copy()
 
-            prefix_group = df[df["prefix"] == prefix]
+            if len(prefix_group) < 2:
+                # 단일 화합물도 Anchor='T'인 경우 유효로 처리
+                if len(prefix_group) == 1 and prefix_group.iloc[0]["Anchor"] == "T":
+                    compound = prefix_group.iloc[0].to_dict()
+                    compound["predicted_rt"] = compound["RT"]  # 자기 자신이 예측값
+                    compound["residual"] = 0.0
+                    compound["std_residual"] = 0.0
+                    valid_compounds.append(compound)
+                continue
+
+            # Anchor='T'인 화합물을 회귀 기준점으로 설정
             anchor_compounds = prefix_group[prefix_group["Anchor"] == "T"]
-            n_anchors = len(anchor_compounds)
 
-            print(f"   Anchor compounds: {n_anchors}")
-            print(f"   Total compounds: {len(prefix_group)}")
+            if len(anchor_compounds) >= 2:
+                try:
+                    # 회귀분석 수행
+                    X = anchor_compounds[["Log P"]].values
+                    y = anchor_compounds["RT"].values
 
-            # ===== LEVEL 1: Large Sample Prefix-Specific (n ≥ 10) =====
-            if n_anchors >= 10:
-                print(f"   📈 Level 1: Large sample prefix-specific (n={n_anchors})")
+                    model = LinearRegression()
+                    model.fit(X, y)
 
-                result = self._try_prefix_regression(
-                    prefix, prefix_group, anchor_compounds,
-                    threshold=0.75
-                )
+                    # 예측값 및 결정계수 계산
+                    y_pred = model.predict(X)
+                    r2 = r2_score(y, y_pred)
 
-                if result["success"]:
-                    print(f"   ✅ Level 1 SUCCESS: Using prefix-specific model")
-                    regression_results[prefix] = result["model"]
-                    valid_compounds.extend(result["valid"])
-                    outliers.extend(result["outliers"])
-                    continue
-                else:
-                    print(f"   ⚠️  Level 1 FAILED: R² = {result['r2']:.3f} < 0.75")
-                    # Fall through to family pooling
+                    # R² 임계값 확인
+                    if r2 >= self.r2_threshold:
+                        # 전체 그룹에 모델 적용
+                        all_X = prefix_group[["Log P"]].values
+                        all_pred = model.predict(all_X)
+                        residuals = prefix_group["RT"].values - all_pred
 
-            # ===== LEVEL 2: Medium Sample Prefix-Specific (n ≥ 4) =====
-            if n_anchors >= 4:
-                print(f"   📊 Level 2: Medium sample prefix-specific (n={n_anchors})")
+                        # 표준화 잔차 계산
+                        if np.std(residuals) > 0:
+                            std_residuals = residuals / np.std(residuals)
+                        else:
+                            std_residuals = np.zeros_like(residuals)
 
-                result = self._try_prefix_regression(
-                    prefix, prefix_group, anchor_compounds,
-                    threshold=0.70
-                )
+                        # Durbin-Watson 검정
+                        dw_stat = self._durbin_watson_test(residuals)
 
-                if result["success"]:
-                    print(f"   ✅ Level 2 SUCCESS: Using prefix-specific model")
-                    regression_results[prefix] = result["model"]
-                    valid_compounds.extend(result["valid"])
-                    outliers.extend(result["outliers"])
-                    continue
-                else:
-                    print(f"   ⚠️  Level 2 FAILED: R² = {result['r2']:.3f} < 0.70")
-                    # Fall through to family pooling
+                        # 회귀 결과 저장
+                        regression_results[prefix] = {
+                            "slope": float(model.coef_[0]),
+                            "intercept": float(model.intercept_),
+                            "r2": float(r2),
+                            "n_samples": len(prefix_group),
+                            "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                            "durbin_watson": dw_stat,
+                            "p_value": self._calculate_p_value(
+                                r2, len(anchor_compounds)
+                            ),
+                        }
 
-            # ===== LEVEL 3: Family Pooling (n = 3 or prefix-specific failed) =====
-            family_name = self.prefix_to_family.get(prefix)
+                        # 이상치 판별 및 화합물 분류
+                        outlier_mask = np.abs(std_residuals) >= self.outlier_threshold
 
-            if family_name:
-                print(f"   🔬 Level 3: Family pooling ({family_name})")
+                        for idx, (_, row) in enumerate(prefix_group.iterrows()):
+                            row_dict = row.to_dict()
+                            row_dict["predicted_rt"] = float(all_pred[idx])
+                            row_dict["residual"] = float(residuals[idx])
+                            row_dict["std_residual"] = float(std_residuals[idx])
 
-                # Check if we've already computed this family model
-                if family_name not in family_models:
-                    family_prefixes = self.PREFIX_FAMILIES[family_name]["prefixes"]
-                    family_model = self._apply_family_regression(df, family_name, family_prefixes)
-                    family_models[family_name] = family_model
-                else:
-                    family_model = family_models[family_name]
-                    print(f"   ♻️  Reusing cached family model: {family_name}")
+                            if not outlier_mask[idx]:
+                                valid_compounds.append(row_dict)
+                            else:
+                                row_dict[
+                                    "outlier_reason"
+                                ] = f"Rule 1: Standardized residual = {std_residuals[idx]:.3f}"
+                                outliers.append(row_dict)
+                    else:
+                        # R² 미달인 경우 모든 화합물을 이상치로 분류
+                        for _, row in prefix_group.iterrows():
+                            row_dict = row.to_dict()
+                            row_dict[
+                                "outlier_reason"
+                            ] = f"Rule 1: Low R² = {r2:.3f} < {self.r2_threshold}"
+                            outliers.append(row_dict)
 
-                if family_model:
-                    print(f"   ✅ Level 3 SUCCESS: Using family model")
+                except Exception as e:
+                    print(f"   회귀분석 오류 ({prefix}): {str(e)}")
+                    # 오류 발생 시 Anchor='T'인 화합물만 유효로 처리
+                    for _, row in anchor_compounds.iterrows():
+                        compound = row.to_dict()
+                        compound["predicted_rt"] = compound["RT"]
+                        compound["residual"] = 0.0
+                        compound["std_residual"] = 0.0
+                        valid_compounds.append(compound)
+            elif len(anchor_compounds) == 1:
+                # Anchor='T'가 1개인 경우 유효로 처리
+                compound = anchor_compounds.iloc[0].to_dict()
+                compound["predicted_rt"] = compound["RT"]
+                compound["residual"] = 0.0
+                compound["std_residual"] = 0.0
+                valid_compounds.append(compound)
 
-                    # Apply family model to this prefix
-                    prefix_valid, prefix_outliers = self._apply_family_model_to_prefix(
-                        prefix_group, family_model
-                    )
-
-                    valid_compounds.extend(prefix_valid)
-                    outliers.extend(prefix_outliers)
-
-                    # Store family model results (only once per family)
-                    if family_name not in regression_results:
-                        regression_results[family_name] = family_model
-
-                    continue
-                else:
-                    print(f"   ⚠️  Level 3 FAILED: Family model not valid")
-                    # Fall through to overall fallback
+                # 나머지는 검증 불가로 처리
+                non_anchor = prefix_group[prefix_group["Anchor"] != "T"]
+                for _, row in non_anchor.iterrows():
+                    row_dict = row.to_dict()
+                    row_dict[
+                        "outlier_reason"
+                    ] = "Rule 1: Insufficient anchor compounds for regression"
+                    outliers.append(row_dict)
             else:
-                print(f"   ⚠️  No family defined for prefix: {prefix}")
+                # Anchor='T'가 없는 경우 모든 화합물을 이상치로 분류
+                for _, row in prefix_group.iterrows():
+                    row_dict = row.to_dict()
+                    row_dict["outlier_reason"] = "Rule 1: No anchor compounds found"
+                    outliers.append(row_dict)
 
-            # ===== LEVEL 4: Overall Regression Fallback =====
-            print(f"   🔄 Level 4: Routing to overall regression fallback")
-            fallback_compounds.extend(prefix_group.to_dict('records'))
+        # Fallback: If no regression groups were formed, try overall regression
+        if len(regression_results) == 0:
+            print("   📊 Fallback: Attempting overall regression with all anchor compounds...")
+            anchor_compounds = df[df["Anchor"] == "T"]
 
-        # ===== Apply Overall Regression to Fallback Compounds =====
-        if fallback_compounds or len(regression_results) == 0:
-            print(f"\n📊 Overall Regression Fallback")
-            print(f"   Compounds routed to fallback: {len(fallback_compounds)}")
+            if len(anchor_compounds) >= 2:
+                try:
+                    # Overall regression with all anchor compounds
+                    X = anchor_compounds[["Log P"]].values
+                    y = anchor_compounds["RT"].values
 
-            overall_result = self._apply_overall_regression(df, fallback_compounds)
+                    if len(np.unique(X)) >= 2:  # Need at least 2 different Log P values
+                        model = LinearRegression()
+                        model.fit(X, y)
+                        y_pred = model.predict(X)
+                        r2 = r2_score(y, y_pred)
 
-            if overall_result:
-                regression_results["Overall_Fallback"] = overall_result["model"]
-                valid_compounds.extend(overall_result["valid"])
-                outliers.extend(overall_result["outliers"])
-            else:
-                # Even overall regression failed
-                print(f"   ❌ Overall regression FAILED")
-                for compound in fallback_compounds:
-                    compound["outlier_reason"] = "Rule 1: All regression levels failed"
-                    outliers.append(compound)
+                        if r2 >= self.r2_threshold:
+                            # Apply to all compounds
+                            all_X = df[["Log P"]].values
+                            all_pred = model.predict(all_X)
+                            all_residuals = df["RT"].values - all_pred
 
-        # ===== Summary =====
-        print(f"\n📊 Rule 1 Summary:")
-        print(f"   Regression models created: {len(regression_results)}")
-        for model_name, model_data in regression_results.items():
-            model_type = "Prefix" if model_name not in family_models and model_name != "Overall_Fallback" else \
-                         "Family" if model_name in family_models else "Overall"
-            r2 = model_data.get("validation_r2") or model_data.get("r2")
-            print(f"      {model_name} ({model_type}): R² = {r2:.3f}, n = {model_data['n_samples']}")
+                            residual_std = np.std(all_residuals) if np.std(all_residuals) > 0 else 1.0
+                            std_residuals = all_residuals / residual_std
 
-        print(f"   Valid compounds: {len(valid_compounds)}")
-        print(f"   Outliers: {len(outliers)}")
+                            outlier_mask = np.abs(std_residuals) >= self.outlier_threshold
+
+                            regression_results["Overall_Fallback"] = {
+                                "slope": float(model.coef_[0]),
+                                "intercept": float(model.intercept_),
+                                "r2": float(r2),
+                                "n_samples": len(df),
+                                "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
+                                "durbin_watson": self._durbin_watson_test(all_residuals),
+                                "p_value": self._calculate_p_value(r2, len(anchor_compounds))
+                            }
+
+                            # Classify compounds
+                            for idx, (_, row) in enumerate(df.iterrows()):
+                                row_dict = row.to_dict()
+                                row_dict["predicted_rt"] = float(all_pred[idx])
+                                row_dict["residual"] = float(all_residuals[idx])
+                                row_dict["std_residual"] = float(std_residuals[idx])
+
+                                if not outlier_mask[idx]:
+                                    valid_compounds.append(row_dict)
+                                else:
+                                    row_dict["outlier_reason"] = \
+                                        f"Rule 1 (Fallback): Std residual = {std_residuals[idx]:.3f}"
+                                    outliers.append(row_dict)
+
+                            print(f"   ✅ Fallback regression successful: R² = {r2:.3f}")
+                        else:
+                            print(f"   ⚠️ Fallback regression R² too low: {r2:.3f}")
+                except Exception as e:
+                    print(f"   ❌ Fallback regression failed: {e}")
 
         return {
+            "regression_results": regression_results,
             "valid_compounds": valid_compounds,
             "outliers": outliers,
-            "regression_results": regression_results
         }
 
     def _durbin_watson_test(self, residuals):
@@ -338,348 +334,6 @@ class GangliosideProcessor:
             return 0.5
         f_stat = (r2 / (1 - r2)) * (n - 2)
         return float(max(0.001, 1.0 / (1.0 + f_stat)))
-
-    def _cross_validate_regression(self, X, y):
-        """
-        Leave-One-Out Cross-Validation for regression
-        Returns validation R² (realistic performance on held-out data)
-        """
-        if len(X) < 3:
-            # Not enough samples for cross-validation
-            return None
-
-        loo = LeaveOneOut()
-        predictions = []
-        actuals = []
-
-        for train_idx, test_idx in loo.split(X):
-            X_train, X_test = X[train_idx], X[test_idx]
-            y_train, y_test = y[train_idx], y[test_idx]
-
-            # Train model on training fold
-            model = BayesianRidge()
-            model.fit(X_train, y_train)
-
-            # Predict on held-out test sample
-            pred = model.predict(X_test)
-
-            predictions.append(pred[0])
-            actuals.append(y_test[0])
-
-        # Calculate R² on held-out predictions
-        validation_r2 = r2_score(actuals, predictions)
-        return float(validation_r2)
-
-    def _apply_family_regression(self, df, family_name, family_prefixes):
-        """
-        Apply regression to a family of related prefixes (pooled regression)
-
-        Args:
-            df: Full dataframe
-            family_name: Name of family (e.g., "GD_family")
-            family_prefixes: List of prefixes in this family
-
-        Returns:
-            dict: Family regression results or None if failed
-        """
-        print(f"\n   🔬 Attempting family pooling: {family_name}")
-
-        # Get all compounds from this family
-        family_df = df[df["prefix"].isin(family_prefixes)]
-        family_anchors = family_df[family_df["Anchor"] == "T"]
-
-        n_anchors = len(family_anchors)
-        print(f"      Family anchors: {n_anchors}")
-        print(f"      Contributing prefixes: {family_prefixes}")
-
-        if n_anchors < 10:  # Need sufficient samples for family pooling
-            print(f"      ⚠️  Insufficient family anchors (n={n_anchors} < 10)")
-            return None
-
-        try:
-            # Prepare data
-            X = family_anchors[["Log P"]].values
-            y = family_anchors["RT"].values
-
-            # Check for Log P variation
-            if len(np.unique(X)) < 2:
-                print(f"      ⚠️  Insufficient Log P variation")
-                return None
-
-            # Fit Bayesian Ridge regression
-            model = BayesianRidge()
-            model.fit(X, y)
-
-            # Training R²
-            y_pred_train = model.predict(X)
-            training_r2 = r2_score(y, y_pred_train)
-
-            # Cross-validation
-            validation_r2 = self._cross_validate_regression(X, y)
-            r2_for_threshold = validation_r2 if validation_r2 is not None else training_r2
-
-            # Durbin-Watson test
-            residuals = y - y_pred_train
-            dw_stat = self._durbin_watson_test(residuals)
-
-            print(f"      Training R²: {training_r2:.3f}")
-            print(f"      Validation R²: {validation_r2:.3f}" if validation_r2 is not None else "      Validation R²: N/A")
-            print(f"      R² for threshold: {r2_for_threshold:.3f}")
-
-            # Check threshold
-            if r2_for_threshold >= 0.70:  # Family model threshold
-                print(f"      ✅ Family model ACCEPTED (R² = {r2_for_threshold:.3f} ≥ 0.70)")
-
-                return {
-                    "family_name": family_name,
-                    "model": model,
-                    "slope": float(model.coef_[0]),
-                    "intercept": float(model.intercept_),
-                    "training_r2": float(training_r2),
-                    "validation_r2": float(validation_r2) if validation_r2 is not None else None,
-                    "r2_used_for_threshold": float(r2_for_threshold),
-                    "n_samples": n_anchors,
-                    "contributing_prefixes": family_prefixes,
-                    "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
-                    "durbin_watson": dw_stat,
-                    "p_value": self._calculate_p_value(training_r2, n_anchors)
-                }
-            else:
-                print(f"      ❌ Family model REJECTED (R² = {r2_for_threshold:.3f} < 0.70)")
-                return None
-
-        except Exception as e:
-            print(f"      ❌ Family regression error: {str(e)}")
-            return None
-
-    def _apply_family_model_to_prefix(self, prefix_df, family_model):
-        """
-        Apply family regression model to compounds in a specific prefix group
-
-        Args:
-            prefix_df: Dataframe of compounds from one prefix
-            family_model: Family regression results from _apply_family_regression()
-
-        Returns:
-            tuple: (valid_compounds, outliers)
-        """
-        valid = []
-        outliers = []
-
-        model = family_model["model"]
-
-        # Predict for all compounds in prefix
-        X = prefix_df[["Log P"]].values
-        y_pred = model.predict(X)
-        residuals = prefix_df["RT"].values - y_pred
-
-        # Calculate standardized residuals (using family-wide residual std)
-        residual_std = np.std(residuals) if np.std(residuals) > 0 else 1.0
-        std_residuals = residuals / residual_std
-
-        # Classify compounds
-        for idx, (_, row) in enumerate(prefix_df.iterrows()):
-            row_dict = row.to_dict()
-            row_dict["predicted_rt"] = float(y_pred[idx])
-            row_dict["residual"] = float(residuals[idx])
-            row_dict["std_residual"] = float(std_residuals[idx])
-            row_dict["model_used"] = family_model["family_name"]
-
-            if abs(std_residuals[idx]) < self.outlier_threshold:
-                valid.append(row_dict)
-            else:
-                row_dict["outlier_reason"] = \
-                    f"Rule 1 ({family_model['family_name']}): Std residual = {std_residuals[idx]:.3f}"
-                outliers.append(row_dict)
-
-        return valid, outliers
-
-    def _try_prefix_regression(self, prefix, prefix_group, anchor_compounds, threshold):
-        """
-        Attempt prefix-specific regression with given threshold
-
-        Returns:
-            dict: {"success": bool, "model": dict, "valid": list, "outliers": list, "r2": float}
-        """
-        try:
-            X = anchor_compounds[["Log P"]].values
-            y = anchor_compounds["RT"].values
-
-            # Check for Log P variation
-            if len(np.unique(X)) < 2:
-                return {"success": False, "r2": 0.0}
-
-            # Fit model
-            model = BayesianRidge()
-            model.fit(X, y)
-
-            # Training R²
-            y_pred_train = model.predict(X)
-            training_r2 = r2_score(y, y_pred_train)
-
-            # Cross-validation
-            validation_r2 = self._cross_validate_regression(X, y)
-            r2_for_threshold = validation_r2 if validation_r2 is not None else training_r2
-
-            # Check threshold
-            if r2_for_threshold < threshold:
-                return {"success": False, "r2": r2_for_threshold}
-
-            # Apply model to all compounds in prefix
-            X_all = prefix_group[["Log P"]].values
-            y_pred = model.predict(X_all)
-            residuals = prefix_group["RT"].values - y_pred
-
-            # Durbin-Watson test
-            dw_stat = self._durbin_watson_test(residuals)
-
-            # Standardized residuals
-            residual_std = np.std(residuals) if np.std(residuals) > 0 else 1.0
-            std_residuals = residuals / residual_std
-
-            # Classify compounds
-            valid = []
-            outliers_list = []
-
-            for idx, (_, row) in enumerate(prefix_group.iterrows()):
-                row_dict = row.to_dict()
-                row_dict["predicted_rt"] = float(y_pred[idx])
-                row_dict["residual"] = float(residuals[idx])
-                row_dict["std_residual"] = float(std_residuals[idx])
-                row_dict["model_used"] = prefix
-
-                if abs(std_residuals[idx]) < self.outlier_threshold:
-                    valid.append(row_dict)
-                else:
-                    row_dict["outlier_reason"] = f"Rule 1 ({prefix}): Std residual = {std_residuals[idx]:.3f}"
-                    outliers_list.append(row_dict)
-
-            # Model results
-            model_data = {
-                "slope": float(model.coef_[0]),
-                "intercept": float(model.intercept_),
-                "r2": float(training_r2),
-                "training_r2": float(training_r2),
-                "validation_r2": float(validation_r2) if validation_r2 is not None else None,
-                "r2_used_for_threshold": float(r2_for_threshold),
-                "n_samples": len(anchor_compounds),
-                "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
-                "durbin_watson": dw_stat,
-                "p_value": self._calculate_p_value(training_r2, len(anchor_compounds))
-            }
-
-            return {
-                "success": True,
-                "model": model_data,
-                "valid": valid,
-                "outliers": outliers_list,
-                "r2": r2_for_threshold
-            }
-
-        except Exception as e:
-            print(f"      ❌ Regression error: {str(e)}")
-            return {"success": False, "r2": 0.0}
-
-    def _apply_overall_regression(self, df, fallback_compounds):
-        """
-        Apply overall regression using all anchor compounds
-
-        Returns:
-            dict: {"model": dict, "valid": list, "outliers": list} or None
-        """
-        all_anchors = df[df["Anchor"] == "T"]
-
-        if len(all_anchors) < 3:
-            print(f"   ❌ Insufficient total anchors (n={len(all_anchors)})")
-            return None
-
-        try:
-            X = all_anchors[["Log P"]].values
-            y = all_anchors["RT"].values
-
-            if len(np.unique(X)) < 2:
-                print(f"   ❌ Insufficient Log P variation")
-                return None
-
-            # Fit model
-            model = BayesianRidge()
-            model.fit(X, y)
-
-            # Training R²
-            y_pred_train = model.predict(X)
-            training_r2 = r2_score(y, y_pred_train)
-
-            # Cross-validation
-            validation_r2 = self._cross_validate_regression(X, y)
-            r2_for_threshold = validation_r2 if validation_r2 is not None else training_r2
-
-            print(f"   Overall model R²: {r2_for_threshold:.3f} (validation)")
-            print(f"   Using {len(all_anchors)} anchor compounds")
-
-            # Relaxed threshold for overall model
-            if r2_for_threshold < 0.50:
-                print(f"   ❌ Overall R² too low ({r2_for_threshold:.3f} < 0.50)")
-                return None
-
-            # Apply to fallback compounds
-            fallback_df = pd.DataFrame(fallback_compounds)
-            X_fallback = fallback_df[["Log P"]].values
-            y_pred = model.predict(X_fallback)
-            residuals = fallback_df["RT"].values - y_pred
-
-            # Calculate residual std from ALL data
-            all_X = df[["Log P"]].values
-            all_pred = model.predict(all_X)
-            all_residuals = df["RT"].values - all_pred
-            residual_std = np.std(all_residuals) if np.std(all_residuals) > 0 else 1.0
-
-            std_residuals = residuals / residual_std
-
-            # Durbin-Watson
-            dw_stat = self._durbin_watson_test(all_residuals)
-
-            # Classify fallback compounds
-            valid = []
-            outliers_list = []
-
-            for idx, compound in enumerate(fallback_compounds):
-                compound["predicted_rt"] = float(y_pred[idx])
-                compound["residual"] = float(residuals[idx])
-                compound["std_residual"] = float(std_residuals[idx])
-                compound["model_used"] = "Overall_Fallback"
-
-                if abs(std_residuals[idx]) < self.outlier_threshold:
-                    valid.append(compound)
-                else:
-                    compound["outlier_reason"] = f"Rule 1 (Overall): Std residual = {std_residuals[idx]:.3f}"
-                    outliers_list.append(compound)
-
-            # Model data
-            model_data = {
-                "slope": float(model.coef_[0]),
-                "intercept": float(model.intercept_),
-                "r2": float(training_r2),
-                "training_r2": float(training_r2),
-                "validation_r2": float(validation_r2) if validation_r2 is not None else None,
-                "r2_used_for_threshold": float(r2_for_threshold),
-                "n_samples": len(all_anchors),
-                "n_fallback_compounds": len(fallback_compounds),
-                "equation": f"RT = {model.coef_[0]:.4f} * Log P + {model.intercept_:.4f}",
-                "durbin_watson": dw_stat,
-                "p_value": self._calculate_p_value(training_r2, len(all_anchors))
-            }
-
-            print(f"   ✅ Overall regression SUCCESS: {len(valid)} valid, {len(outliers_list)} outliers")
-
-            return {
-                "model": model_data,
-                "valid": valid,
-                "outliers": outliers_list
-            }
-
-        except Exception as e:
-            print(f"   ❌ Overall regression error: {str(e)}")
-            return None
 
     def _apply_rule2_3_sugar_count(
         self, df: pd.DataFrame, data_type: str
@@ -832,20 +486,12 @@ class GangliosideProcessor:
                         "outlier_reason": "Rule 4: O-acetylation should increase RT",
                     }
             else:
-                # 기본 화합물을 찾을 수 없는 경우 검증 불가 - 불이익 주지 않고 유효로 처리
+                # 기본 화합물을 찾을 수 없는 경우 검증 불가
                 row_dict = oacetyl_row.to_dict()
-                row_dict["rule4_status"] = "not_validated_assumed_valid"
-                row_dict["rule4_note"] = "Base compound not found - validation skipped"
-                valid_oacetyl_compounds.append(row_dict)
-
-                oacetylation_results[oacetyl_row["Name"]] = {
-                    "base_rt": None,
-                    "oacetyl_rt": float(oacetyl_row["RT"]),
-                    "rt_increase": None,
-                    "is_valid": None,
-                    "validation_skipped": True,
-                    "reason": "Base compound not found"
-                }
+                row_dict[
+                    "outlier_reason"
+                ] = "Rule 4: Base compound not found for OAc comparison"
+                invalid_oacetyl_compounds.append(row_dict)
 
         return {
             "oacetylation_analysis": oacetylation_results,

@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(done)",
+      "Bash(file:*)",
+      "Bash(find:*)",
+      "Read(//Users/seoljonghyeon/**)",
+      "Bash(chmod:*)",
+      "Bash(python3:*)",
+      "Bash(python -m pytest:*)",
+      "mcp__serena__initial_instructions",
+      "mcp__serena__list_dir",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__activate_project",
+      "mcp__serena__list_memories",
+      "Bash(cloc:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(awk:*)",
+      "mcp__serena__get_symbols_overview"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/hooks/validation.py"
+          }
+        ]
+      }
+    ]
+  }
+}
