@@ -241,32 +241,110 @@ class AnalysisService:
 
     def _load_csv_from_session(self, session: AnalysisSession) -> pd.DataFrame:
         """
-        Load CSV file from AnalysisSession
+        Load CSV file from AnalysisSession with comprehensive validation
 
         Args:
             session: AnalysisSession with uploaded_file
 
         Returns:
-            pd.DataFrame: Loaded data
+            pd.DataFrame: Validated data
 
         Raises:
-            ValueError: If file cannot be read or required columns missing
+            ValueError: If file cannot be read or validation fails
         """
         file_path = session.uploaded_file.path
 
         try:
             df = pd.read_csv(file_path)
         except Exception as e:
+            logger.error(f"Failed to read CSV file {file_path}: {str(e)}")
             raise ValueError(f"Failed to read CSV: {str(e)}")
 
-        # Validate required columns
+        # 1. Validate required columns
         required_columns = ['Name', 'RT', 'Volume', 'Log P', 'Anchor']
         missing_columns = set(required_columns) - set(df.columns)
 
         if missing_columns:
-            raise ValueError(
-                f"CSV missing required columns: {', '.join(missing_columns)}"
+            error_msg = f"CSV missing required columns: {', '.join(missing_columns)}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+
+        # 2. Check for empty DataFrame
+        if len(df) == 0:
+            error_msg = "CSV file is empty (no data rows)"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+
+        # 3. Validate data types and ranges
+        validation_errors = []
+
+        # Check Name column (non-empty strings)
+        if df['Name'].isna().any():
+            null_count = df['Name'].isna().sum()
+            validation_errors.append(f"Name column has {null_count} NULL values")
+
+        # Check RT column (numeric, positive)
+        try:
+            df['RT'] = pd.to_numeric(df['RT'], errors='coerce')
+            if df['RT'].isna().any():
+                null_count = df['RT'].isna().sum()
+                validation_errors.append(f"RT column has {null_count} non-numeric values")
+            elif (df['RT'] < 0).any():
+                negative_count = (df['RT'] < 0).sum()
+                validation_errors.append(f"RT column has {negative_count} negative values")
+        except Exception as e:
+            validation_errors.append(f"RT column validation error: {str(e)}")
+
+        # Check Volume column (numeric, positive)
+        try:
+            df['Volume'] = pd.to_numeric(df['Volume'], errors='coerce')
+            if df['Volume'].isna().any():
+                null_count = df['Volume'].isna().sum()
+                validation_errors.append(f"Volume column has {null_count} non-numeric values")
+            elif (df['Volume'] <= 0).any():
+                invalid_count = (df['Volume'] <= 0).sum()
+                validation_errors.append(f"Volume column has {invalid_count} zero or negative values")
+        except Exception as e:
+            validation_errors.append(f"Volume column validation error: {str(e)}")
+
+        # Check Log P column (numeric)
+        try:
+            df['Log P'] = pd.to_numeric(df['Log P'], errors='coerce')
+            if df['Log P'].isna().any():
+                null_count = df['Log P'].isna().sum()
+                validation_errors.append(f"Log P column has {null_count} non-numeric values")
+        except Exception as e:
+            validation_errors.append(f"Log P column validation error: {str(e)}")
+
+        # Check Anchor column (T or F)
+        if df['Anchor'].isna().any():
+            null_count = df['Anchor'].isna().sum()
+            validation_errors.append(f"Anchor column has {null_count} NULL values")
+        else:
+            valid_anchors = df['Anchor'].isin(['T', 'F', 't', 'f'])
+            if not valid_anchors.all():
+                invalid_count = (~valid_anchors).sum()
+                validation_errors.append(
+                    f"Anchor column has {invalid_count} invalid values (must be 'T' or 'F')"
+                )
+
+        # 4. Check for sufficient anchor compounds
+        anchor_count = df[df['Anchor'].isin(['T', 't'])].shape[0]
+        if anchor_count < 3:
+            validation_errors.append(
+                f"Insufficient anchor compounds: {anchor_count} found, minimum 3 required"
             )
+
+        # 5. If there are validation errors, raise exception
+        if validation_errors:
+            error_msg = "CSV validation failed:\n  - " + "\n  - ".join(validation_errors)
+            logger.error(f"CSV validation errors for session {session.id}:\n{error_msg}")
+            raise ValueError(error_msg)
+
+        logger.info(
+            f"CSV validation passed: {len(df)} compounds, "
+            f"{anchor_count} anchors, session {session.id}"
+        )
 
         return df
 
