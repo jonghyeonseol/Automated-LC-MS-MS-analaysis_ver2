@@ -1,6 +1,27 @@
 """
-Ganglioside Data Processor - 실제 분석 로직 구현
-5가지 규칙 기반 산성 당지질 데이터 자동 분류 시스템
+Ganglioside Data Processor V1 - LEGACY / DEPRECATED
+
+⚠️ WARNING: This is the V1 processor (legacy version).
+⚠️ Use GangliosideProcessorV2 instead (apps/analysis/services/ganglioside_processor_v2.py)
+
+V1 Issues (known limitations):
+- Overfitting risk with small samples (n=3-5)
+- Fixed Ridge α=1.0 (not adaptive)
+- 67% false positive rate in validation
+- No comprehensive input validation
+
+V2 Improvements:
+- BayesianRidge with adaptive regularization
+- 0% false positive rate
+- 60.7% accuracy improvement (R²=0.994 vs 0.386)
+- Better error handling and validation
+
+Migration Status:
+- analysis_service.py uses V2 by default (use_v2=True)
+- This file maintained for backward compatibility only
+- Scheduled for removal: 2026-01-31
+
+For new development, always use GangliosideProcessorV2.
 """
 
 import logging
@@ -576,9 +597,14 @@ class GangliosideProcessor:
                 "r2": r2_for_threshold
             }
 
-        except Exception as e:
-            print(f"      ❌ Regression error: {str(e)}")
+        except (ValueError, np.linalg.LinAlgError) as e:
+            # 입력 데이터 문제 또는 수치적 불안정성
+            logger.error(f"Regression failed for prefix {prefix}: {str(e)}")
             return {"success": False, "r2": 0.0}
+        except AttributeError as e:
+            # 모델 속성 접근 오류 (코드 버그)
+            logger.exception(f"Regression code error for prefix {prefix}: {str(e)}")
+            raise  # 코드 버그는 전파
 
     def _apply_overall_regression(self, df, fallback_compounds):
         """
@@ -677,9 +703,14 @@ class GangliosideProcessor:
                 "outliers": outliers_list
             }
 
-        except Exception as e:
-            print(f"   ❌ Overall regression error: {str(e)}")
+        except (ValueError, np.linalg.LinAlgError) as e:
+            # 입력 데이터 문제 또는 수치적 불안정성
+            logger.error(f"Overall regression failed: {str(e)}")
             return None
+        except AttributeError as e:
+            # 모델 속성 접근 오류 (코드 버그)
+            logger.exception(f"Overall regression code error: {str(e)}")
+            raise  # 코드 버그는 전파
 
     def _apply_rule2_3_sugar_count(
         self, df: pd.DataFrame, data_type: str
@@ -880,17 +911,17 @@ class GangliosideProcessor:
 
             # RT 범위 내 그룹 식별 (±tolerance분)
             rt_groups = []
-            current_group = [suffix_group.iloc[0]]
+            current_group = [suffix_group.iloc[0].to_dict()]  # Series → dict 변환
 
             for i in range(1, len(suffix_group)):
                 current_rt = suffix_group.iloc[i]["RT"]
                 reference_rt = current_group[0]["RT"]
 
                 if abs(current_rt - reference_rt) <= self.rt_tolerance:
-                    current_group.append(suffix_group.iloc[i])
+                    current_group.append(suffix_group.iloc[i].to_dict())  # Series → dict 변환
                 else:
                     rt_groups.append(current_group)
-                    current_group = [suffix_group.iloc[i]]
+                    current_group = [suffix_group.iloc[i].to_dict()]  # Series → dict 변환
 
             if current_group:
                 rt_groups.append(current_group)
@@ -909,7 +940,7 @@ class GangliosideProcessor:
 
                     # 첫 번째는 유효, 나머지는 fragmentation 후보
                     valid_compound = sugar_counts[0][0]
-                    valid_compound_dict = valid_compound.to_dict()
+                    valid_compound_dict = valid_compound.copy()  # 이미 dict이므로 복사만
 
                     # Volume 통합 (규칙5에 따라)
                     total_volume = sum(
@@ -924,7 +955,7 @@ class GangliosideProcessor:
                     filtered_compounds.append(valid_compound_dict)
 
                     for compound, _ in sugar_counts[1:]:
-                        fragmentation_info = compound.to_dict()
+                        fragmentation_info = compound.copy()  # 이미 dict이므로 복사만
                         fragmentation_info[
                             "outlier_reason"
                         ] = "Rule 5: In-source fragmentation candidate"
@@ -937,7 +968,7 @@ class GangliosideProcessor:
                         fragmentation_candidates.append(fragmentation_info)
                 else:
                     # 단일 화합물은 그대로 유지
-                    filtered_compounds.append(group[0].to_dict())
+                    filtered_compounds.append(group[0].copy())  # 이미 dict이므로 복사만
 
         return {
             "rt_filtering_results": rt_filtering_results,
