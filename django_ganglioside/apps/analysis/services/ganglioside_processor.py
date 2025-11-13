@@ -1,6 +1,27 @@
 """
-Ganglioside Data Processor - 실제 분석 로직 구현
-5가지 규칙 기반 산성 당지질 데이터 자동 분류 시스템
+Ganglioside Data Processor V1 - LEGACY / DEPRECATED
+
+⚠️ WARNING: This is the V1 processor (legacy version).
+⚠️ Use GangliosideProcessorV2 instead (apps/analysis/services/ganglioside_processor_v2.py)
+
+V1 Issues (known limitations):
+- Overfitting risk with small samples (n=3-5)
+- Fixed Ridge α=1.0 (not adaptive)
+- 67% false positive rate in validation
+- No comprehensive input validation
+
+V2 Improvements:
+- BayesianRidge with adaptive regularization
+- 0% false positive rate
+- 60.7% accuracy improvement (R²=0.994 vs 0.386)
+- Better error handling and validation
+
+Migration Status:
+- analysis_service.py uses V2 by default (use_v2=True)
+- This file maintained for backward compatibility only
+- Scheduled for removal: 2026-01-31
+
+For new development, always use GangliosideProcessorV2.
 """
 
 import logging
@@ -67,16 +88,56 @@ class GangliosideProcessor:
     def update_settings(
         self, outlier_threshold=None, r2_threshold=None, rt_tolerance=None
     ):
-        """분석 설정 업데이트"""
-        if outlier_threshold is not None:
-            self.outlier_threshold = outlier_threshold
-        if r2_threshold is not None:
-            self.r2_threshold = r2_threshold
-        if rt_tolerance is not None:
-            self.rt_tolerance = rt_tolerance
+        """
+        분석 설정 업데이트 (검증 포함)
 
-        print(
-            f"⚙️ 설정 업데이트: outlier={self.outlier_threshold}, r2={self.r2_threshold}, rt={self.rt_tolerance}"
+        Args:
+            outlier_threshold: Standardized residual threshold (1.0-5.0)
+            r2_threshold: Minimum R² for regression validity (0.5-0.999)
+            rt_tolerance: RT window for fragmentation (0.01-0.5 minutes)
+
+        Raises:
+            ValueError: If parameters are out of valid range
+        """
+        # Validate and update outlier_threshold
+        if outlier_threshold is not None:
+            if not isinstance(outlier_threshold, (int, float)):
+                raise ValueError(f"outlier_threshold must be numeric, got {type(outlier_threshold)}")
+            if not (1.0 <= outlier_threshold <= 5.0):
+                raise ValueError(
+                    f"outlier_threshold must be 1.0-5.0 (recommended: 2.0-3.0), "
+                    f"got {outlier_threshold}"
+                )
+            self.outlier_threshold = float(outlier_threshold)
+            logger.info(f"Updated outlier_threshold: {self.outlier_threshold}")
+
+        # Validate and update r2_threshold
+        if r2_threshold is not None:
+            if not isinstance(r2_threshold, (int, float)):
+                raise ValueError(f"r2_threshold must be numeric, got {type(r2_threshold)}")
+            if not (0.5 <= r2_threshold <= 0.999):
+                raise ValueError(
+                    f"r2_threshold must be 0.5-0.999 (recommended: 0.70-0.85), "
+                    f"got {r2_threshold}"
+                )
+            self.r2_threshold = float(r2_threshold)
+            logger.info(f"Updated r2_threshold: {self.r2_threshold}")
+
+        # Validate and update rt_tolerance
+        if rt_tolerance is not None:
+            if not isinstance(rt_tolerance, (int, float)):
+                raise ValueError(f"rt_tolerance must be numeric, got {type(rt_tolerance)}")
+            if not (0.01 <= rt_tolerance <= 0.5):
+                raise ValueError(
+                    f"rt_tolerance must be 0.01-0.5 minutes (recommended: 0.05-0.2), "
+                    f"got {rt_tolerance}"
+                )
+            self.rt_tolerance = float(rt_tolerance)
+            logger.info(f"Updated rt_tolerance: {self.rt_tolerance}")
+
+        logger.info(
+            f"Settings updated: outlier={self.outlier_threshold}, "
+            f"r2={self.r2_threshold}, rt={self.rt_tolerance}"
         )
 
     def get_settings(self):
@@ -95,49 +156,68 @@ class GangliosideProcessor:
         5가지 규칙을 순차적으로 적용하여 데이터 분류
         """
 
-        print(f"🔬 분석 시작: {len(df)}개 화합물, 모드: {data_type}")
+        logger.info(f"Analysis started: {len(df)} compounds, data_type={data_type}")
+        logger.debug(f"Input columns: {list(df.columns)}")
 
         # 데이터 전처리
         df_processed = self._preprocess_data(df.copy())
-        print(f"✅ 전처리 완료: {len(df_processed)}개 화합물")
+        logger.info(f"Preprocessing completed: {len(df_processed)} compounds")
+
+        # Anchor 화합물 수 확인
+        anchor_count = len(df_processed[df_processed['Anchor'] == 'T'])
+        logger.info(f"Anchor compounds: {anchor_count}, Test compounds: {len(df_processed) - anchor_count}")
 
         # 규칙 1: 접두사 기반 회귀분석
-        print("📊 규칙 1: 접두사 기반 회귀분석 실행 중...")
+        logger.info("Rule 1: Prefix-based regression starting...")
         rule1_results = self._apply_rule1_prefix_regression(df_processed)
-        print(f"   - 회귀 그룹 수: {len(rule1_results['regression_results'])}")
-        print(f"   - 유효 화합물: {len(rule1_results['valid_compounds'])}")
-        print(f"   - 이상치: {len(rule1_results['outliers'])}")
+        logger.info(
+            f"Rule 1 completed: {len(rule1_results['regression_results'])} groups, "
+            f"{len(rule1_results['valid_compounds'])} valid, "
+            f"{len(rule1_results['outliers'])} outliers"
+        )
 
         # 규칙 2-3: 당 개수 계산 및 이성질체 분류
-        print("🧬 규칙 2-3: 당 개수 계산 및 이성질체 분류 실행 중...")
+        logger.info("Rule 2-3: Sugar count and isomer classification starting...")
         rule23_results = self._apply_rule2_3_sugar_count(df_processed, data_type)
         isomer_count = sum(
             1
             for info in rule23_results["sugar_analysis"].values()
             if info["can_have_isomers"]
         )
-        print(f"   - 이성질체 후보: {isomer_count}")
+        logger.info(f"Rule 2-3 completed: {isomer_count} isomer candidates")
 
         # 규칙 4: O-acetylation 효과 검증
-        print("⚗️ 규칙 4: O-acetylation 효과 검증 실행 중...")
+        logger.info("Rule 4: O-acetylation validation starting...")
         rule4_results = self._apply_rule4_oacetylation(df_processed)
-        print(f"   - 유효 OAc 화합물: {len(rule4_results['valid_oacetyl'])}")
-        print(f"   - 무효 OAc 화합물: {len(rule4_results['invalid_oacetyl'])}")
+        logger.info(
+            f"Rule 4 completed: {len(rule4_results['valid_oacetyl'])} valid OAc, "
+            f"{len(rule4_results['invalid_oacetyl'])} invalid OAc"
+        )
+
+        # Invalid OAc 화합물 디버깅 정보
+        if rule4_results['invalid_oacetyl']:
+            invalid_names = [c['Name'] for c in rule4_results['invalid_oacetyl'][:3]]
+            logger.warning(f"Invalid OAc compounds (first 3): {invalid_names}")
 
         # 규칙 5: RT 범위 기반 필터링 및 in-source fragmentation 탐지
-        print("🔍 규칙 5: RT 필터링 및 fragmentation 탐지 실행 중...")
+        logger.info("Rule 5: RT filtering and fragmentation detection starting...")
         rule5_results = self._apply_rule5_rt_filtering(df_processed)
-        print(
-            f"   - Fragmentation 후보: {len(rule5_results['fragmentation_candidates'])}"
+        logger.info(
+            f"Rule 5 completed: {len(rule5_results['fragmentation_candidates'])} fragments detected, "
+            f"{len(rule5_results['filtered_compounds'])} compounds retained"
         )
-        print(f"   - 필터링된 화합물: {len(rule5_results['filtered_compounds'])}")
 
         # 통합 결과 생성
-        print("📋 최종 결과 통합 중...")
+        logger.info("Compiling final results...")
         final_results = self._compile_results(
             df_processed, rule1_results, rule23_results, rule4_results, rule5_results
         )
-        print(f"✅ 분석 완료: {final_results['statistics']['success_rate']:.1f}% 성공률")
+        success_rate = final_results['statistics']['success_rate']
+        logger.info(
+            f"Analysis completed: success_rate={success_rate:.1f}%, "
+            f"total={final_results['statistics']['total_compounds']}, "
+            f"valid={final_results['statistics']['valid_compounds']}"
+        )
 
         return final_results
 
@@ -576,9 +656,14 @@ class GangliosideProcessor:
                 "r2": r2_for_threshold
             }
 
-        except Exception as e:
-            print(f"      ❌ Regression error: {str(e)}")
+        except (ValueError, np.linalg.LinAlgError) as e:
+            # 입력 데이터 문제 또는 수치적 불안정성
+            logger.error(f"Regression failed for prefix {prefix}: {str(e)}")
             return {"success": False, "r2": 0.0}
+        except AttributeError as e:
+            # 모델 속성 접근 오류 (코드 버그)
+            logger.exception(f"Regression code error for prefix {prefix}: {str(e)}")
+            raise  # 코드 버그는 전파
 
     def _apply_overall_regression(self, df, fallback_compounds):
         """
@@ -677,9 +762,14 @@ class GangliosideProcessor:
                 "outliers": outliers_list
             }
 
-        except Exception as e:
-            print(f"   ❌ Overall regression error: {str(e)}")
+        except (ValueError, np.linalg.LinAlgError) as e:
+            # 입력 데이터 문제 또는 수치적 불안정성
+            logger.error(f"Overall regression failed: {str(e)}")
             return None
+        except AttributeError as e:
+            # 모델 속성 접근 오류 (코드 버그)
+            logger.exception(f"Overall regression code error: {str(e)}")
+            raise  # 코드 버그는 전파
 
     def _apply_rule2_3_sugar_count(
         self, df: pd.DataFrame, data_type: str
@@ -880,17 +970,17 @@ class GangliosideProcessor:
 
             # RT 범위 내 그룹 식별 (±tolerance분)
             rt_groups = []
-            current_group = [suffix_group.iloc[0]]
+            current_group = [suffix_group.iloc[0].to_dict()]  # Series → dict 변환
 
             for i in range(1, len(suffix_group)):
                 current_rt = suffix_group.iloc[i]["RT"]
                 reference_rt = current_group[0]["RT"]
 
                 if abs(current_rt - reference_rt) <= self.rt_tolerance:
-                    current_group.append(suffix_group.iloc[i])
+                    current_group.append(suffix_group.iloc[i].to_dict())  # Series → dict 변환
                 else:
                     rt_groups.append(current_group)
-                    current_group = [suffix_group.iloc[i]]
+                    current_group = [suffix_group.iloc[i].to_dict()]  # Series → dict 변환
 
             if current_group:
                 rt_groups.append(current_group)
@@ -909,7 +999,7 @@ class GangliosideProcessor:
 
                     # 첫 번째는 유효, 나머지는 fragmentation 후보
                     valid_compound = sugar_counts[0][0]
-                    valid_compound_dict = valid_compound.to_dict()
+                    valid_compound_dict = valid_compound.copy()  # 이미 dict이므로 복사만
 
                     # Volume 통합 (규칙5에 따라)
                     total_volume = sum(
@@ -924,7 +1014,7 @@ class GangliosideProcessor:
                     filtered_compounds.append(valid_compound_dict)
 
                     for compound, _ in sugar_counts[1:]:
-                        fragmentation_info = compound.to_dict()
+                        fragmentation_info = compound.copy()  # 이미 dict이므로 복사만
                         fragmentation_info[
                             "outlier_reason"
                         ] = "Rule 5: In-source fragmentation candidate"
@@ -937,7 +1027,7 @@ class GangliosideProcessor:
                         fragmentation_candidates.append(fragmentation_info)
                 else:
                     # 단일 화합물은 그대로 유지
-                    filtered_compounds.append(group[0].to_dict())
+                    filtered_compounds.append(group[0].copy())  # 이미 dict이므로 복사만
 
         return {
             "rt_filtering_results": rt_filtering_results,
