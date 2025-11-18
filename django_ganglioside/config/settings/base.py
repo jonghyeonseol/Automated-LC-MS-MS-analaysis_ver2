@@ -20,7 +20,14 @@ if env_file.exists():
     environ.Env.read_env(str(env_file))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='django-insecure-dev-key-change-in-production')
+# SECRET_KEY is required - no default value for security
+try:
+    SECRET_KEY = env('SECRET_KEY')
+except environ.ImproperlyConfigured:
+    raise environ.ImproperlyConfigured(
+        'SECRET_KEY environment variable is required. '
+        'Generate one with: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"'
+    )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
@@ -172,7 +179,8 @@ SPECTACULAR_SETTINGS = {
 }
 
 # CORS Settings
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only in development
+# SECURITY: Never allow all origins, even in DEBUG mode
+CORS_ALLOW_ALL_ORIGINS = False  # Explicitly disabled for security
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
     'http://localhost:3000',
     'http://localhost:8000',
