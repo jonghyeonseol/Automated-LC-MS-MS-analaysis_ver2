@@ -27,12 +27,25 @@ class GangliosideProcessorV2:
     - Better error handling
     """
 
+    # Default thresholds (configurable via __init__)
+    DEFAULT_R2_THRESHOLD = 0.70  # Realistic threshold for LC-MS data
+    DEFAULT_OUTLIER_THRESHOLD = 2.5  # Standard deviations
+    DEFAULT_RT_TOLERANCE = 0.1  # Minutes
+    DEFAULT_MIN_SAMPLES_REGRESSION = 3
+
+    # Sugar composition mapping
+    SIALIC_ACID_MAP = {'M': 1, 'D': 2, 'T': 3, 'Q': 4, 'P': 5, 'A': 0}
+
+    # Isomer detection
+    ISOMER_PREFIXES = ['GD1', 'GT1', 'GQ1']
+    ISOMER_F_VALUE = 1
+
     def __init__(
         self,
-        r2_threshold: float = 0.70,  # Realistic threshold for LC-MS data
-        outlier_threshold: float = 2.5,
-        rt_tolerance: float = 0.1,
-        min_samples_for_regression: int = 3
+        r2_threshold: float = None,
+        outlier_threshold: float = None,
+        rt_tolerance: float = None,
+        min_samples_for_regression: int = None
     ):
         """
         Initialize Ganglioside Processor V2.
@@ -43,10 +56,10 @@ class GangliosideProcessorV2:
             rt_tolerance: RT tolerance for fragmentation detection (minutes)
             min_samples_for_regression: Minimum samples needed for regression
         """
-        self.r2_threshold = r2_threshold
-        self.outlier_threshold = outlier_threshold
-        self.rt_tolerance = rt_tolerance
-        self.min_samples_for_regression = min_samples_for_regression
+        self.r2_threshold = r2_threshold if r2_threshold is not None else self.DEFAULT_R2_THRESHOLD
+        self.outlier_threshold = outlier_threshold if outlier_threshold is not None else self.DEFAULT_OUTLIER_THRESHOLD
+        self.rt_tolerance = rt_tolerance if rt_tolerance is not None else self.DEFAULT_RT_TOLERANCE
+        self.min_samples_for_regression = min_samples_for_regression if min_samples_for_regression is not None else self.DEFAULT_MIN_SAMPLES_REGRESSION
 
         # Initialize components
         self.categorizer = GangliosideCategorizer()
@@ -599,13 +612,10 @@ class GangliosideProcessorV2:
         if not prefix or len(prefix) < 2:
             return {}
 
-        # Map for sialic acid count
-        sialic_map = {'M': 1, 'D': 2, 'T': 3, 'Q': 4, 'P': 5, 'A': 0}
-
         try:
             # Extract e (sialic acid indicator)
             e_value = prefix[1] if len(prefix) > 1 else ''
-            sialic_acids = sialic_map.get(e_value, 0)
+            sialic_acids = self.SIALIC_ACID_MAP.get(e_value, 0)
 
             # Extract f (remaining sugars)
             f_value = int(prefix[2]) if len(prefix) > 2 and prefix[2].isdigit() else 0
@@ -615,7 +625,7 @@ class GangliosideProcessorV2:
 
             # Check for known isomer types
             isomer_type = ""
-            if prefix in ['GD1', 'GT1', 'GQ1'] and f_value == 1:
+            if prefix in self.ISOMER_PREFIXES and f_value == self.ISOMER_F_VALUE:
                 isomer_type = f"{prefix}a/b"
 
             return {
@@ -636,11 +646,8 @@ class GangliosideProcessorV2:
         sugar_info: Dict[str, Any]
     ) -> bool:
         """Check if a compound can have structural isomers."""
-        # Known isomer patterns
-        isomer_prefixes = ['GD1', 'GT1', 'GQ1']
         f_value = sugar_info.get('f_value', 0)
-
-        return prefix in isomer_prefixes and f_value == 1
+        return prefix in self.ISOMER_PREFIXES and f_value == self.ISOMER_F_VALUE
 
     def _compile_results(
         self,

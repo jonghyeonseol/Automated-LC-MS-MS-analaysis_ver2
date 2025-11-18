@@ -120,7 +120,7 @@ class AnalysisService:
                 )
             except Exception as e:
                 # Log error but don't fail analysis
-                print(f"WebSocket progress update failed: {e}")
+                logger.warning(f"WebSocket progress update failed: {e}")
 
     def _send_complete(self, session_id: int, message: str, success: bool = True, results_url: str = ''):
         """
@@ -146,7 +146,7 @@ class AnalysisService:
                     }
                 )
             except Exception as e:
-                print(f"WebSocket completion update failed: {e}")
+                logger.warning(f"WebSocket completion update failed: {e}")
 
     def _send_error(self, session_id: int, message: str, error: str = ''):
         """
@@ -170,7 +170,7 @@ class AnalysisService:
                     }
                 )
             except Exception as e:
-                print(f"WebSocket error update failed: {e}")
+                logger.warning(f"WebSocket error update failed: {e}")
 
     def run_analysis(self, session: AnalysisSession) -> AnalysisResult:
         """

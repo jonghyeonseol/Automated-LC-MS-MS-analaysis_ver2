@@ -24,11 +24,36 @@ class ImprovedRegressionModel:
     - Provides realistic R² thresholds
     """
 
+    # Default configuration
+    DEFAULT_MIN_SAMPLES = 3
+    DEFAULT_MAX_FEATURES_RATIO = 0.3  # Max 30% features relative to samples
+    DEFAULT_R2_THRESHOLD = 0.70  # Realistic threshold for LC-MS data
+    DEFAULT_ALPHA_VALUES = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
+
+    # Feature selection thresholds
+    VARIANCE_THRESHOLD = 0.01  # Minimum variance for meaningful features
+    CORRELATION_THRESHOLD = 0.95  # Maximum correlation to avoid multicollinearity
+    MIN_FEATURES = 1  # Minimum number of features to use
+
+    # Cross-validation configuration
+    CV_THRESHOLD_SMALL = 5  # Use LOO CV if n_samples < this
+    CV_THRESHOLD_MEDIUM = 10  # Use 3-fold CV if n_samples < this
+    CV_FOLDS_SMALL = 3  # Number of folds for small samples
+    CV_FOLDS_STANDARD = 5  # Number of folds for standard samples
+    RANDOM_STATE = 42  # For reproducibility
+
+    # Regularization
+    ALPHA_EXACTLY_DETERMINED = 10.0  # Alpha for exactly determined systems
+
+    # Overfitting detection
+    OVERFITTING_R2_THRESHOLD = 0.98  # R² threshold for overfitting warning
+    OVERFITTING_SAMPLE_THRESHOLD = 10  # Sample size threshold for overfitting check
+
     def __init__(
         self,
-        min_samples: int = 3,
-        max_features_ratio: float = 0.3,  # Max 30% features relative to samples
-        r2_threshold: float = 0.70,  # Realistic threshold for LC-MS data
+        min_samples: int = None,
+        max_features_ratio: float = None,
+        r2_threshold: float = None,
         alpha_values: List[float] = None
     ):
         """
@@ -40,10 +65,10 @@ class ImprovedRegressionModel:
             r2_threshold: Minimum R² for valid regression (0.70-0.85 realistic)
             alpha_values: Ridge regression alpha values for CV
         """
-        self.min_samples = min_samples
-        self.max_features_ratio = max_features_ratio
-        self.r2_threshold = r2_threshold
-        self.alpha_values = alpha_values or [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
+        self.min_samples = min_samples if min_samples is not None else self.DEFAULT_MIN_SAMPLES
+        self.max_features_ratio = max_features_ratio if max_features_ratio is not None else self.DEFAULT_MAX_FEATURES_RATIO
+        self.r2_threshold = r2_threshold if r2_threshold is not None else self.DEFAULT_R2_THRESHOLD
+        self.alpha_values = alpha_values if alpha_values is not None else self.DEFAULT_ALPHA_VALUES
 
     def select_features(
         self,
@@ -77,7 +102,7 @@ class ImprovedRegressionModel:
                 feature_variances[feature] = variance
 
                 # Only include features with meaningful variance
-                if variance > 0.01:  # Threshold for meaningful variance
+                if variance > self.VARIANCE_THRESHOLD:
                     selected_features.append(feature)
 
         # Check for multicollinearity
@@ -88,9 +113,9 @@ class ImprovedRegressionModel:
                 np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
             )
 
-            # Find features with correlation > 0.95
+            # Find features with correlation above threshold
             to_drop = [column for column in upper_tri.columns
-                      if any(upper_tri[column] > 0.95)]
+                      if any(upper_tri[column] > self.CORRELATION_THRESHOLD)]
 
             # Keep Log P if it's being dropped (it's usually more meaningful)
             if 'Log P' in to_drop and 'a_component' in selected_features:
@@ -103,7 +128,7 @@ class ImprovedRegressionModel:
 
         # Limit features based on sample size
         n_samples = len(df)
-        max_features = max(1, int(n_samples * self.max_features_ratio))
+        max_features = max(self.MIN_FEATURES, int(n_samples * self.max_features_ratio))
 
         if len(selected_features) > max_features:
             # Keep only the most important features
@@ -143,13 +168,13 @@ class ImprovedRegressionModel:
         """
         metrics = {}
 
-        if n_samples < 5:
+        if n_samples < self.CV_THRESHOLD_SMALL:
             # Too few samples for cross-validation - use Leave-One-Out
             logger.warning(f"Only {n_samples} samples - using Leave-One-Out CV")
 
             if n_samples == X.shape[1]:
                 # Exactly determined system - use strong regularization
-                model = Ridge(alpha=10.0)
+                model = Ridge(alpha=self.ALPHA_EXACTLY_DETERMINED)
                 model.fit(X, y)
                 y_pred = model.predict(X)
                 metrics['cv_method'] = 'none (exactly determined)'
@@ -171,26 +196,26 @@ class ImprovedRegressionModel:
                 metrics['cv_method'] = 'leave-one-out'
                 metrics['selected_alpha'] = model.alpha_
 
-        elif n_samples < 10:
+        elif n_samples < self.CV_THRESHOLD_MEDIUM:
             # Small sample - use 3-fold CV
-            logger.info(f"{n_samples} samples - using 3-fold CV")
-            cv = KFold(n_splits=3, shuffle=True, random_state=42)
+            logger.info(f"{n_samples} samples - using {self.CV_FOLDS_SMALL}-fold CV")
+            cv = KFold(n_splits=self.CV_FOLDS_SMALL, shuffle=True, random_state=self.RANDOM_STATE)
             model = RidgeCV(alphas=self.alpha_values, cv=cv)
             model.fit(X, y)
             y_pred = model.predict(X)
 
-            metrics['cv_method'] = '3-fold'
+            metrics['cv_method'] = f'{self.CV_FOLDS_SMALL}-fold'
             metrics['selected_alpha'] = model.alpha_
 
         else:
             # Adequate samples - use 5-fold CV
-            logger.info(f"{n_samples} samples - using 5-fold CV")
-            cv = KFold(n_splits=5, shuffle=True, random_state=42)
+            logger.info(f"{n_samples} samples - using {self.CV_FOLDS_STANDARD}-fold CV")
+            cv = KFold(n_splits=self.CV_FOLDS_STANDARD, shuffle=True, random_state=self.RANDOM_STATE)
             model = RidgeCV(alphas=self.alpha_values, cv=cv)
             model.fit(X, y)
             y_pred = model.predict(X)
 
-            metrics['cv_method'] = '5-fold'
+            metrics['cv_method'] = f'{self.CV_FOLDS_STANDARD}-fold'
             metrics['selected_alpha'] = model.alpha_
 
         # Calculate metrics
@@ -207,7 +232,7 @@ class ImprovedRegressionModel:
             metrics['adjusted_r2'] = None
 
         # Warning if R² is suspiciously high
-        if metrics['r2'] > 0.98 and n_samples < 10:
+        if metrics['r2'] > self.OVERFITTING_R2_THRESHOLD and n_samples < self.OVERFITTING_SAMPLE_THRESHOLD:
             metrics['warning'] = f"R²={metrics['r2']:.3f} with only {n_samples} samples suggests overfitting"
             logger.warning(metrics['warning'])
 
