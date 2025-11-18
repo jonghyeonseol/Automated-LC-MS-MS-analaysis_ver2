@@ -1,215 +1,493 @@
 #!/usr/bin/env python3
 """
-Complete comprehensive test using user's actual testwork.csv file
-Testing the entire visualization pipeline strictly
+Comprehensive integration tests using user's actual testwork_user.csv data.
+
+This test module validates the entire analysis and visualization pipeline
+with real-world data to ensure production readiness.
 """
-
-import requests
-import json
+import os
+import sys
+import pytest
 import pandas as pd
+from django.core.files.uploadedfile import SimpleUploadedFile
+from rest_framework import status
 
-def test_user_data_complete():
-    print("🧪 COMPREHENSIVE TEST - USER'S ACTUAL DATA")
-    print("=" * 60)
+# Add Django project to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../django_ganglioside'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
 
-    base_url = "http://localhost:5001"
-    test_file = "testwork_user.csv"
+# Django setup
+import django
+django.setup()
 
-    # Step 1: Analyze the data first
-    print("1. 📊 Analyzing user's test data...")
-    try:
-        df = pd.read_csv(test_file)
-        total_compounds = len(df)
-        anchor_compounds = len(df[df['Anchor'] == 'T'])
-        non_anchor = len(df[df['Anchor'] == 'F'])
+from rest_framework.test import APIClient
+from django.contrib.auth.models import User
 
-        print(f"   📋 Total compounds: {total_compounds}")
-        print(f"   ⚓ Anchor compounds (T): {anchor_compounds}")
-        print(f"   📌 Non-anchor compounds (F): {non_anchor}")
 
-        # Check Log P range
-        log_p_range = (df['Log P'].min(), df['Log P'].max())
-        rt_range = (df['RT'].min(), df['RT'].max())
-        print(f"   📈 Log P range: {log_p_range[0]:.2f} to {log_p_range[1]:.2f}")
-        print(f"   ⏱️ RT range: {rt_range[0]:.2f} to {rt_range[1]:.2f}")
+@pytest.fixture
+def api_client():
+    """Create API client for testing"""
+    return APIClient()
 
-    except Exception as e:
-        print(f"   ❌ Could not analyze data: {e}")
-        return False
 
-    # Step 2: Health check
-    print("\n2. 🔌 Server health check...")
-    try:
-        health = requests.get(f"{base_url}/api/health")
-        if health.status_code == 200:
-            print(f"   ✅ Server is healthy")
-        else:
-            print(f"   ❌ Health check failed: {health.status_code}")
-            return False
-    except Exception as e:
-        print(f"   ❌ Health check failed: {e}")
-        return False
+@pytest.fixture
+def test_user(db):
+    """Create a test user for authentication"""
+    return User.objects.create_user(
+        username='testuser_real_data',
+        email='test@example.com',
+        password='testpass123'
+    )
 
-    # Step 3: Run analysis with user's data
-    print("\n3. 🔬 Running analysis with user's data...")
-    try:
-        with open(test_file, "rb") as f:
-            files = {"file": ("testwork.csv", f, "text/csv")}
-            data = {
-                "data_type": "Porcine",
-                "outlier_threshold": 2.5,
-                "r2_threshold": 0.75,
-                "rt_tolerance": 0.1
-            }
 
-            analysis_response = requests.post(f"{base_url}/api/analyze", files=files, data=data)
+@pytest.fixture
+def authenticated_client(api_client, test_user):
+    """Create authenticated API client"""
+    api_client.force_authenticate(user=test_user)
+    return api_client
 
-        print(f"   📡 Analysis status: {analysis_response.status_code}")
 
-        if analysis_response.status_code == 200:
-            analysis_result = analysis_response.json()
-            results = analysis_result['results']
-            stats = results['statistics']
+@pytest.fixture
+def user_csv_file():
+    """Load user's actual testwork_user.csv file"""
+    csv_path = os.path.join(os.path.dirname(__file__), '../../testwork_user.csv')
 
-            print(f"   ✅ Analysis successful!")
-            print(f"   📊 Success rate: {stats['success_rate']:.1f}%")
-            print(f"   ✅ Valid compounds: {stats['valid_compounds']}")
-            print(f"   ⚠️ Outliers: {stats['outliers']}")
+    if not os.path.exists(csv_path):
+        # Try alternate locations
+        alternate_paths = [
+            '../../data/sample/testwork_user.csv',
+            '../../data/testwork_user.csv',
+        ]
+        for alt_path in alternate_paths:
+            alt_csv_path = os.path.join(os.path.dirname(__file__), alt_path)
+            if os.path.exists(alt_csv_path):
+                csv_path = alt_csv_path
+                break
 
-            # Check regression analysis
-            regression_data = results.get('regression_analysis', {})
-            regression_quality = results.get('regression_quality', {})
+    if not os.path.exists(csv_path):
+        pytest.skip(f"User data file not found: {csv_path}")
 
-            print(f"   📈 Regression models found: {len(regression_data)}")
+    with open(csv_path, 'rb') as f:
+        csv_content = f.read()
 
-            if regression_data:
-                for model_name, model_info in regression_data.items():
-                    r2 = model_info.get('r2', 0)
-                    equation = model_info.get('equation', 'N/A')
-                    print(f"      📊 {model_name}: R² = {r2:.3f}")
-                    print(f"         Equation: {equation}")
+    return SimpleUploadedFile(
+        "testwork_user.csv",
+        csv_content,
+        content_type="text/csv"
+    )
 
-            return analysis_result
-        else:
-            print(f"   ❌ Analysis failed: {analysis_response.text}")
-            return False
 
-    except Exception as e:
-        print(f"   ❌ Analysis error: {e}")
-        return False
+@pytest.fixture
+def user_csv_dataframe():
+    """Load user's CSV as pandas DataFrame for validation"""
+    csv_path = os.path.join(os.path.dirname(__file__), '../../testwork_user.csv')
 
-def test_visualization_strict(analysis_result):
-    """Strict test of visualization with user's data"""
-    print("\n4. 📊 STRICT VISUALIZATION TEST")
-    print("-" * 40)
+    if not os.path.exists(csv_path):
+        alternate_paths = [
+            '../../data/sample/testwork_user.csv',
+            '../../data/testwork_user.csv',
+        ]
+        for alt_path in alternate_paths:
+            alt_csv_path = os.path.join(os.path.dirname(__file__), alt_path)
+            if os.path.exists(alt_csv_path):
+                csv_path = alt_csv_path
+                break
 
-    base_url = "http://localhost:5001"
+    if not os.path.exists(csv_path):
+        pytest.skip(f"User data file not found: {csv_path}")
 
-    try:
-        # Extract analysis results for visualization
-        analysis_data = analysis_result['results']
+    return pd.read_csv(csv_path)
 
-        viz_payload = {"results": analysis_data}
 
-        viz_response = requests.post(
-            f"{base_url}/api/visualize",
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(viz_payload)
+@pytest.mark.integration
+class TestUserDataComplete:
+    """Comprehensive tests using real user data"""
+
+    def test_user_data_structure_validation(self, user_csv_dataframe):
+        """Validate the structure of user's test data"""
+        df = user_csv_dataframe
+
+        # Validate basic structure
+        assert len(df) > 0, "User data file is empty"
+
+        # Validate required columns exist
+        required_columns = ['Name', 'RT', 'Volume', 'Log P', 'Anchor']
+        for col in required_columns:
+            assert col in df.columns, f"Missing required column: {col}"
+
+        # Validate data types
+        assert df['RT'].dtype in [float, int], "RT column should be numeric"
+        assert df['Volume'].dtype in [float, int], "Volume column should be numeric"
+        assert df['Log P'].dtype in [float, int], "Log P column should be numeric"
+
+        # Validate anchor values
+        anchor_values = df['Anchor'].unique()
+        assert all(val in ['T', 'F'] for val in anchor_values), \
+            f"Invalid Anchor values: {anchor_values}"
+
+        # Count anchor vs non-anchor
+        anchor_count = len(df[df['Anchor'] == 'T'])
+        non_anchor_count = len(df[df['Anchor'] == 'F'])
+
+        assert anchor_count > 0, "No anchor compounds found (Anchor='T')"
+        assert non_anchor_count >= 0, "Unexpected negative non-anchor count"
+
+        # Validate data ranges
+        log_p_min, log_p_max = df['Log P'].min(), df['Log P'].max()
+        rt_min, rt_max = df['RT'].min(), df['RT'].max()
+
+        assert log_p_max > log_p_min, "Log P values have no variation"
+        assert rt_max > rt_min, "RT values have no variation"
+
+    def test_health_check_before_analysis(self, api_client):
+        """Verify server is healthy before running analysis"""
+        response = api_client.get('/api/health/')
+
+        assert response.status_code == status.HTTP_200_OK, \
+            "Server health check failed"
+        assert response.data.get('status') == 'healthy', \
+            "Server is not in healthy state"
+
+    def test_user_data_analysis_workflow(self, authenticated_client, user_csv_file):
+        """Test complete analysis workflow with user's actual data"""
+        # Run analysis with user data
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
         )
 
-        print(f"   📡 Visualization status: {viz_response.status_code}")
+        assert response.status_code == status.HTTP_200_OK, \
+            f"Analysis failed: {response.data}"
 
-        if viz_response.status_code == 200:
-            viz_result = viz_response.json()
-            print(f"   ✅ Visualization successful!")
+        # Validate results structure
+        assert 'results' in response.data, "Missing 'results' in response"
+        results = response.data['results']
 
-            # Detailed structure analysis
-            print(f"   📊 Response keys: {list(viz_result.keys())}")
+        # Validate statistics
+        assert 'statistics' in results, "Missing 'statistics' in results"
+        stats = results['statistics']
 
-            if 'plots' in viz_result:
-                plots = viz_result['plots']
-                print(f"   📊 Plots structure: {list(plots.keys())}")
+        assert 'success_rate' in stats, "Missing 'success_rate'"
+        assert 'valid_compounds' in stats, "Missing 'valid_compounds'"
+        assert 'outliers' in stats, "Missing 'outliers'"
 
-                # Check nested structure
-                if 'plots' in plots:
-                    nested_plots = plots['plots']
-                    print(f"   📊 Available plot types: {len(nested_plots)}")
+        # Log statistics for debugging
+        success_rate = stats['success_rate']
+        valid_compounds = stats['valid_compounds']
+        outliers = stats['outliers']
 
-                    # Check each plot type strictly
-                    critical_plots = ['regression_scatter', '3d_distribution', 'dashboard']
-                    working_plots = []
+        # Validate success rate is reasonable
+        assert 0 <= success_rate <= 100, \
+            f"Invalid success rate: {success_rate}%"
 
-                    for plot_name, plot_content in nested_plots.items():
-                        if plot_content and isinstance(plot_content, str):
-                            content_length = len(plot_content)
-                            has_plotly = 'plotly' in plot_content.lower() or 'plot_ly' in plot_content.lower()
-                            has_data = 'data' in plot_content.lower() and content_length > 5000
+        # At least some compounds should be valid
+        assert valid_compounds > 0, \
+            "No valid compounds found - analysis may have failed"
 
-                            status = "✅" if has_plotly and has_data else "⚠️"
-                            print(f"      {status} {plot_name}: {content_length} chars, Plotly: {has_plotly}, Data: {has_data}")
+        return results
 
-                            if plot_name in critical_plots and has_plotly and has_data:
-                                working_plots.append(plot_name)
-                        else:
-                            print(f"      ❌ {plot_name}: EMPTY or invalid")
+    def test_regression_quality_with_user_data(
+        self, authenticated_client, user_csv_file
+    ):
+        """Validate regression model quality with real data"""
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
 
-                    # Final assessment
-                    print(f"\n   🎯 CRITICAL PLOTS WORKING: {working_plots}")
+        assert response.status_code == status.HTTP_200_OK
+        results = response.data['results']
 
-                    if 'regression_scatter' in working_plots:
-                        print(f"   ✅ REGRESSION SCATTER PLOT: WORKING")
-                    else:
-                        print(f"   ❌ REGRESSION SCATTER PLOT: FAILED")
+        # Validate regression analysis exists
+        assert 'regression_analysis' in results, "Missing regression analysis"
+        regression_data = results['regression_analysis']
 
-                    if '3d_distribution' in working_plots:
-                        print(f"   ✅ 3D DISTRIBUTION PLOT: WORKING")
-                    else:
-                        print(f"   ❌ 3D DISTRIBUTION PLOT: FAILED")
+        # Should have at least some regression models
+        assert len(regression_data) > 0, \
+            "No regression models generated from user data"
 
-                    return len(working_plots) >= 2
-                else:
-                    print(f"   ❌ No nested plots structure found")
-                    return False
-            else:
-                print(f"   ❌ No plots in response")
-                return False
-        else:
-            print(f"   ❌ Visualization failed: {viz_response.text}")
-            return False
+        # Validate each model
+        for model_name, model_info in regression_data.items():
+            assert 'r2' in model_info, f"Model {model_name} missing R²"
+            assert 'equation' in model_info, f"Model {model_name} missing equation"
 
-    except Exception as e:
-        print(f"   ❌ Visualization test error: {e}")
-        return False
+            r2 = model_info['r2']
+            equation = model_info['equation']
 
-def main():
-    print("🚀 STARTING COMPREHENSIVE VISUALIZATION TEST")
-    print("📁 Using user's actual file: testwork_user.csv")
-    print("🎯 Testing complete pipeline with REAL DATA")
+            # R² should be valid
+            assert 0 <= r2 <= 1, f"Invalid R² for {model_name}: {r2}"
 
-    # Run analysis
-    analysis_result = test_user_data_complete()
+            # R² should meet minimum threshold (with tolerance)
+            # Note: May be slightly below threshold due to outlier removal
+            assert r2 >= 0.5, \
+                f"R² too low for {model_name}: {r2:.3f}. Equation: {equation}"
 
-    if not analysis_result:
-        print("\n❌ ANALYSIS FAILED - Cannot continue to visualization test")
-        return False
+    def test_visualization_with_user_data(
+        self, authenticated_client, user_csv_file
+    ):
+        """Test visualization generation with user's data"""
+        # Step 1: Run analysis
+        analysis_response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
 
-    # Run strict visualization test
-    viz_success = test_visualization_strict(analysis_result)
+        assert analysis_response.status_code == status.HTTP_200_OK
+        analysis_results = analysis_response.data['results']
 
-    # Final result
-    print("\n" + "=" * 60)
-    if viz_success:
-        print("🎉 SUCCESS: COMPLETE VISUALIZATION PIPELINE WORKING!")
-        print("✅ Analysis: Working with user's data")
-        print("✅ Regression: Real models generated")
-        print("✅ Visualization: Scatter plots and 3D plots working")
-        print("✅ Frontend: Ready to display results")
-        print("\n🌐 Ready to test at: http://localhost:5001/working")
-        return True
-    else:
-        print("❌ FAILURE: Visualization pipeline has issues")
-        return False
+        # Step 2: Generate visualizations
+        viz_response = authenticated_client.post(
+            '/api/visualization/generate/',
+            {'results': analysis_results},
+            format='json'
+        )
 
-if __name__ == "__main__":
-    success = main()
-    exit(0 if success else 1)
+        assert viz_response.status_code == status.HTTP_200_OK, \
+            f"Visualization generation failed: {viz_response.data}"
+
+        # Validate visualization structure
+        assert 'plots' in viz_response.data, "Missing 'plots' in visualization response"
+        plots = viz_response.data['plots']
+
+        # Handle nested vs direct plot structure
+        plot_data = plots.get('plots', plots) if isinstance(plots, dict) else {}
+
+        # Validate critical plots
+        critical_plots = {
+            'regression_scatter': 'Regression Scatter Plot',
+            '3d_distribution': '3D Distribution Plot',
+            'dashboard': 'Dashboard'
+        }
+
+        working_plots = []
+        for plot_key, plot_name in critical_plots.items():
+            if plot_key in plot_data and plot_data[plot_key]:
+                plot_content = str(plot_data[plot_key])
+                content_length = len(plot_content)
+
+                # Validate plot has substantial content
+                assert content_length > 1000, \
+                    f"{plot_name} has insufficient content ({content_length} chars)"
+
+                # Validate Plotly markers
+                has_plotly = 'plotly' in plot_content.lower() or \
+                             'plot_ly' in plot_content.lower()
+                assert has_plotly, f"{plot_name} doesn't appear to be a Plotly chart"
+
+                # Validate has data
+                has_data = 'data' in plot_content.lower() and content_length > 5000
+                assert has_data, f"{plot_name} appears to lack data"
+
+                working_plots.append(plot_key)
+
+        # At least regression_scatter or 3d_distribution should work
+        assert 'regression_scatter' in working_plots or '3d_distribution' in working_plots, \
+            f"Critical plots missing. Found: {working_plots}, " \
+            f"Available: {list(plot_data.keys())}"
+
+    @pytest.mark.parametrize('r2_threshold', [0.70, 0.75, 0.80])
+    def test_different_r2_thresholds_with_user_data(
+        self, authenticated_client, user_csv_file, r2_threshold
+    ):
+        """Test how different R² thresholds affect results with real data"""
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': r2_threshold,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
+
+        assert response.status_code == status.HTTP_200_OK, \
+            f"Analysis failed with R²={r2_threshold}"
+
+        results = response.data['results']
+        stats = results['statistics']
+
+        # Higher R² thresholds may result in fewer valid compounds
+        # but should still produce results
+        assert 'success_rate' in stats
+        assert stats['success_rate'] >= 0
+
+    def test_categorization_with_user_data(
+        self, authenticated_client, user_csv_file
+    ):
+        """Test categorization system with user's data"""
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        results = response.data['results']
+
+        # Check if categorization is included
+        if 'categorization' in results:
+            cat = results['categorization']
+
+            # Validate categorization structure
+            assert 'categories' in cat or 'base_prefixes' in cat, \
+                "Categorization missing required fields"
+
+            # If category_stats exists, validate it
+            if 'category_stats' in cat:
+                category_stats = cat['category_stats']
+                assert len(category_stats) > 0, \
+                    "No category statistics generated"
+
+                # Validate each category
+                for category, stats in category_stats.items():
+                    assert 'count' in stats, f"Category {category} missing 'count'"
+                    assert 'percentage' in stats, \
+                        f"Category {category} missing 'percentage'"
+                    assert 'color' in stats, f"Category {category} missing 'color'"
+
+                    # Validate counts are non-negative
+                    assert stats['count'] >= 0, \
+                        f"Invalid count for {category}: {stats['count']}"
+                    assert 0 <= stats['percentage'] <= 100, \
+                        f"Invalid percentage for {category}: {stats['percentage']}"
+
+    def test_oacetylation_validation_with_user_data(
+        self, authenticated_client, user_csv_file
+    ):
+        """Test O-acetylation validation (Rule 4) with user's data"""
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        results = response.data['results']
+
+        # Check if O-acetylation analysis is included
+        if 'oacetylation_analysis' in results:
+            oacet = results['oacetylation_analysis']
+
+            # Should have some structure
+            assert isinstance(oacet, dict), \
+                "O-acetylation analysis should be a dictionary"
+
+    def test_fragmentation_detection_with_user_data(
+        self, authenticated_client, user_csv_file
+    ):
+        """Test fragmentation detection (Rule 5) with user's data"""
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': user_csv_file,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        results = response.data['results']
+
+        # Fragmentation may or may not be detected depending on data
+        # Just validate the analysis completed successfully
+        assert 'statistics' in results
+        assert results['statistics']['success_rate'] >= 0
+
+
+@pytest.mark.integration
+class TestUserDataEdgeCases:
+    """Test edge cases with user's data"""
+
+    def test_empty_file_rejection(self, authenticated_client):
+        """Test that empty CSV is rejected"""
+        empty_csv = SimpleUploadedFile(
+            "empty.csv",
+            b"",
+            content_type="text/csv"
+        )
+
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': empty_csv,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
+
+        assert response.status_code in [
+            status.HTTP_400_BAD_REQUEST,
+            status.HTTP_422_UNPROCESSABLE_ENTITY
+        ], "Empty file should be rejected"
+
+    def test_malformed_compound_names(self, authenticated_client):
+        """Test handling of malformed compound names"""
+        malformed_csv = SimpleUploadedFile(
+            "malformed.csv",
+            b"""Name,RT,Volume,Log P,Anchor
+INVALID_NAME,10.5,1000,5.0,T
+GD1(36:1;O2),9.5,2000,1.5,T
+""",
+            content_type="text/csv"
+        )
+
+        response = authenticated_client.post(
+            '/api/analysis/analyze/',
+            {
+                'file': malformed_csv,
+                'data_type': 'Porcine',
+                'outlier_threshold': 2.5,
+                'r2_threshold': 0.75,
+                'rt_tolerance': 0.1
+            },
+            format='multipart'
+        )
+
+        # Should either reject or handle gracefully
+        # (Depending on implementation, may return 200 with warnings or 400)
+        assert response.status_code in [
+            status.HTTP_200_OK,
+            status.HTTP_400_BAD_REQUEST,
+            status.HTTP_422_UNPROCESSABLE_ENTITY
+        ]

@@ -528,8 +528,15 @@ class GangliosideProcessor:
                 print(f"      ❌ Family model REJECTED (R² = {r2_for_threshold:.3f} < 0.70)")
                 return None
 
+        except (ValueError, np.linalg.LinAlgError) as e:
+            # Numerical/data errors in regression calculation
+            logger.error(f"Family regression numerical error for {family_name}: {e}")
+            print(f"      ❌ Family regression numerical error: {str(e)}")
+            return None
         except Exception as e:
-            print(f"      ❌ Family regression error: {str(e)}")
+            # Unexpected errors
+            logger.exception(f"Unexpected family regression error for {family_name}: {e}")
+            print(f"      ❌ Unexpected family regression error: {str(e)}")
             return None
 
     def _apply_family_model_to_prefix(self, prefix_df, family_model):
@@ -1088,7 +1095,13 @@ class GangliosideProcessor:
                             "p_value": 0.05 if r2 > 0.5 else 0.1
                         }
                         print(f"   ✅ Visualization model created: R² = {r2:.3f}")
+                except (ValueError, np.linalg.LinAlgError) as e:
+                    # Numerical errors in model creation
+                    logger.warning(f"Numerical error creating visualization model: {e}")
+                    print(f"   ⚠️ Numerical error in visualization model: {e}")
                 except Exception as e:
+                    # Unexpected errors
+                    logger.warning(f"Unexpected error creating visualization model: {e}")
                     print(f"   ⚠️ Could not create visualization model: {e}")
 
         for prefix, results in rule1_results["regression_results"].items():
@@ -1355,8 +1368,10 @@ class GangliosideProcessor:
                 }
             }
 
-        except Exception as e:
-            print(f"   ❌ 카테고리 분석 실패: {e}")
+        except (ValueError, KeyError, TypeError) as e:
+            # Data structure or validation errors during categorization
+            logger.error(f"Categorization validation error: {e}")
+            print(f"   ❌ 카테고리 분석 실패 (데이터 오류): {e}")
             return {
                 'categories': {},
                 'category_stats': {},
@@ -1368,7 +1383,26 @@ class GangliosideProcessor:
                     'total_categories': 0,
                     'total_base_prefixes': 0,
                     'total_modifications': 0,
-                    'error': str(e)
+                    'error': f"Data validation error: {str(e)}"
+                },
+                'grouped_data_summary': {}
+            }
+        except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected categorization error: {e}")
+            print(f"   ❌ 카테고리 분석 실패 (예기치 않은 오류): {e}")
+            return {
+                'categories': {},
+                'category_stats': {},
+                'base_prefixes': {},
+                'modifications': {},
+                'colors': {},
+                'statistics': {
+                    'total_compounds': len(df),
+                    'total_categories': 0,
+                    'total_base_prefixes': 0,
+                    'total_modifications': 0,
+                    'error': f"Unexpected error: {str(e)}"
                 },
                 'grouped_data_summary': {}
             }

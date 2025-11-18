@@ -68,18 +68,39 @@ def run_analysis_async(self, session_id):
         logger.error(f"Session {session_id} not found")
         raise
 
-    except Exception as e:
-        logger.error(f"Analysis failed for session {session_id}: {str(e)}")
+    except (ValueError, KeyError, TypeError) as e:
+        # Data validation or processing errors
+        logger.error(f"Analysis validation error for session {session_id}: {str(e)}")
 
         # Update session status to failed
         try:
             session = AnalysisSession.objects.get(id=session_id)
             session.status = 'failed'
-            session.error_message = str(e)
+            session.error_message = f"Validation error: {str(e)}"
             session.completed_at = timezone.now()
             session.save(update_fields=['status', 'error_message', 'completed_at'])
-        except (AnalysisSession.DoesNotExist, Exception) as db_error:
-            logger.warning(f"Could not update session {session_id} status to failed: {db_error}")
+        except AnalysisSession.DoesNotExist:
+            logger.warning(f"Session {session_id} not found when updating status to failed")
+        except Exception as db_error:
+            logger.exception(f"Database error updating session {session_id} status: {db_error}")
+
+        raise
+
+    except Exception as e:
+        # Unexpected errors
+        logger.exception(f"Unexpected error during analysis for session {session_id}: {str(e)}")
+
+        # Update session status to failed
+        try:
+            session = AnalysisSession.objects.get(id=session_id)
+            session.status = 'failed'
+            session.error_message = f"Unexpected error: {str(e)}"
+            session.completed_at = timezone.now()
+            session.save(update_fields=['status', 'error_message', 'completed_at'])
+        except AnalysisSession.DoesNotExist:
+            logger.warning(f"Session {session_id} not found when updating status to failed")
+        except Exception as db_error:
+            logger.exception(f"Database error updating session {session_id} status: {db_error}")
 
         raise
 
@@ -116,8 +137,12 @@ def cleanup_old_sessions(days=30):
                 try:
                     session.uploaded_file.delete(save=False)
                     logger.debug(f"Deleted file for session {session.id}")
+                except (IOError, OSError) as e:
+                    # File system errors during deletion
+                    logger.warning(f"File system error deleting file for session {session.id}: {e}")
                 except Exception as e:
-                    logger.warning(f"Could not delete file for session {session.id}: {e}")
+                    # Other unexpected errors
+                    logger.exception(f"Unexpected error deleting file for session {session.id}: {e}")
 
         # Delete sessions (cascade will delete related objects)
         deleted_count, _ = old_sessions.delete()
@@ -190,11 +215,17 @@ Ganglioside Analysis Platform
         }
 
     except AnalysisSession.DoesNotExist:
-        logger.error(f"Session {session_id} not found")
+        logger.error(f"Session {session_id} not found for notification")
+        raise
+
+    except (ValueError, KeyError) as e:
+        # Data formatting errors
+        logger.error(f"Invalid notification data for session {session_id}: {e}")
         raise
 
     except Exception as e:
-        logger.error(f"Failed to send notification: {str(e)}")
+        # Unexpected errors (email sending, etc.)
+        logger.exception(f"Unexpected error sending notification for session {session_id}: {e}")
         raise
 
 
@@ -265,11 +296,22 @@ def export_results_async(session_id, export_format='csv'):
         }
 
     except AnalysisSession.DoesNotExist:
-        logger.error(f"Session {session_id} not found")
+        logger.error(f"Session {session_id} not found for export")
+        raise
+
+    except ValueError as e:
+        # Invalid export format or session not completed
+        logger.error(f"Export validation error for session {session_id}: {e}")
+        raise
+
+    except (IOError, OSError) as e:
+        # File system errors during export
+        logger.error(f"File system error during export for session {session_id}: {e}")
         raise
 
     except Exception as e:
-        logger.error(f"Export failed: {str(e)}")
+        # Unexpected errors
+        logger.exception(f"Unexpected export error for session {session_id}: {e}")
         raise
 
 
@@ -309,8 +351,17 @@ def batch_analysis(self, session_ids):
                 'task_id': result.id,
                 'status': 'queued',
             })
+        except ImportError as e:
+            # Celery not available
+            logger.error(f"Celery unavailable for session {session_id}: {e}")
+            results.append({
+                'session_id': session_id,
+                'status': 'failed',
+                'error': 'Background task system unavailable',
+            })
         except Exception as e:
-            logger.error(f"Failed to queue session {session_id}: {e}")
+            # Unexpected errors queuing task
+            logger.exception(f"Failed to queue session {session_id}: {e}")
             results.append({
                 'session_id': session_id,
                 'status': 'failed',

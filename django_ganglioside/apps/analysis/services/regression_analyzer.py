@@ -89,9 +89,16 @@ class RegressionAnalyzer:
                 ),
             }
 
+        except (ValueError, np.linalg.LinAlgError) as e:
+            # Numerical errors in regression calculation
+            logger.error(f"Regression numerical error: {e}")
+            print(f"Regression numerical error: {str(e)}")
+            return self._error_regression_result(f"Numerical error: {str(e)}")
         except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected regression analysis error: {e}")
             print(f"Regression analysis error: {str(e)}")
-            return self._error_regression_result(str(e))
+            return self._error_regression_result(f"Unexpected error: {str(e)}")
 
     def _perform_ols_regression(
         self, x_data: np.ndarray, y_data: np.ndarray
@@ -363,7 +370,14 @@ class RegressionAnalyzer:
                 },
             }
 
+        except (ValueError, np.linalg.LinAlgError, ZeroDivisionError) as e:
+            # Numerical errors in influence diagnostics calculation
+            logger.error(f"Influence diagnostics numerical error: {e}")
+            print(f"Influence diagnostics numerical error: {str(e)}")
+            return self._default_influence_result(n)
         except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected influence diagnostics error: {e}")
             print(f"Influence diagnostics error: {str(e)}")
             return self._default_influence_result(n)
 
@@ -575,7 +589,14 @@ class RegressionAnalyzer:
                 "prediction_intervals": prediction_intervals,
             }
 
+        except (ValueError, np.linalg.LinAlgError, ZeroDivisionError) as e:
+            # Numerical errors in prediction interval calculation
+            logger.error(f"Prediction interval numerical error: {e}")
+            print(f"Prediction interval numerical error: {str(e)}")
+            return {"confidence_intervals": [], "prediction_intervals": []}
         except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected prediction interval error: {e}")
             print(f"Prediction interval calculation error: {str(e)}")
             return {"confidence_intervals": [], "prediction_intervals": []}
 

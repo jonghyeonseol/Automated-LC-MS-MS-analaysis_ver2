@@ -118,9 +118,12 @@ class AnalysisService:
                         'timestamp': datetime.now().isoformat(),
                     }
                 )
+            except (ConnectionError, TimeoutError) as e:
+                # WebSocket connection issues - log but don't fail analysis
+                logger.warning(f"WebSocket connection error during progress update: {e}")
             except Exception as e:
-                # Log error but don't fail analysis
-                logger.warning(f"WebSocket progress update failed: {e}")
+                # Other unexpected errors - log but don't fail analysis
+                logger.warning(f"Unexpected WebSocket progress update error: {e}")
 
     def _send_complete(self, session_id: int, message: str, success: bool = True, results_url: str = ''):
         """
@@ -145,8 +148,12 @@ class AnalysisService:
                         'timestamp': datetime.now().isoformat(),
                     }
                 )
+            except (ConnectionError, TimeoutError) as e:
+                # WebSocket connection issues
+                logger.warning(f"WebSocket connection error during completion update: {e}")
             except Exception as e:
-                logger.warning(f"WebSocket completion update failed: {e}")
+                # Other unexpected errors
+                logger.warning(f"Unexpected WebSocket completion update error: {e}")
 
     def _send_error(self, session_id: int, message: str, error: str = ''):
         """
@@ -169,8 +176,12 @@ class AnalysisService:
                         'timestamp': datetime.now().isoformat(),
                     }
                 )
+            except (ConnectionError, TimeoutError) as e:
+                # WebSocket connection issues
+                logger.warning(f"WebSocket connection error during error notification: {e}")
             except Exception as e:
-                logger.warning(f"WebSocket error update failed: {e}")
+                # Other unexpected errors
+                logger.warning(f"Unexpected WebSocket error update failure: {e}")
 
     def run_analysis(self, session: AnalysisSession) -> AnalysisResult:
         """
@@ -230,11 +241,21 @@ class AnalysisService:
 
             return analysis_result
 
-        except Exception as e:
-            # Send error notification
+        except (ValueError, KeyError, TypeError) as e:
+            # Data validation or processing errors
+            logger.error(f"Analysis validation error for session {session_id}: {e}")
             self._send_error(
                 session_id,
-                "Analysis failed",
+                "Analysis failed: Data validation error",
+                error=str(e)
+            )
+            raise
+        except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected error during analysis for session {session_id}: {e}")
+            self._send_error(
+                session_id,
+                "Analysis failed unexpectedly",
                 error=str(e)
             )
             raise
@@ -256,8 +277,20 @@ class AnalysisService:
 
         try:
             df = pd.read_csv(file_path)
+        except FileNotFoundError as e:
+            logger.error(f"CSV file not found: {file_path}")
+            raise ValueError(f"CSV file not found: {str(e)}")
+        except pd.errors.EmptyDataError as e:
+            logger.error(f"CSV file is empty: {file_path}")
+            raise ValueError(f"CSV file is empty: {str(e)}")
+        except pd.errors.ParserError as e:
+            logger.error(f"CSV parsing error in {file_path}: {str(e)}")
+            raise ValueError(f"Invalid CSV format: {str(e)}")
+        except (IOError, OSError) as e:
+            logger.error(f"File system error reading {file_path}: {str(e)}")
+            raise ValueError(f"Failed to read CSV file: {str(e)}")
         except Exception as e:
-            logger.error(f"Failed to read CSV file {file_path}: {str(e)}")
+            logger.exception(f"Unexpected error reading CSV file {file_path}: {str(e)}")
             raise ValueError(f"Failed to read CSV: {str(e)}")
 
         # 1. Validate required columns
@@ -292,7 +325,10 @@ class AnalysisService:
             elif (df['RT'] < 0).any():
                 negative_count = (df['RT'] < 0).sum()
                 validation_errors.append(f"RT column has {negative_count} negative values")
+        except (ValueError, TypeError) as e:
+            validation_errors.append(f"RT column data type error: {str(e)}")
         except Exception as e:
+            logger.exception(f"Unexpected RT column validation error: {e}")
             validation_errors.append(f"RT column validation error: {str(e)}")
 
         # Check Volume column (numeric, positive)
@@ -304,7 +340,10 @@ class AnalysisService:
             elif (df['Volume'] <= 0).any():
                 invalid_count = (df['Volume'] <= 0).sum()
                 validation_errors.append(f"Volume column has {invalid_count} zero or negative values")
+        except (ValueError, TypeError) as e:
+            validation_errors.append(f"Volume column data type error: {str(e)}")
         except Exception as e:
+            logger.exception(f"Unexpected Volume column validation error: {e}")
             validation_errors.append(f"Volume column validation error: {str(e)}")
 
         # Check Log P column (numeric)
@@ -313,7 +352,10 @@ class AnalysisService:
             if df['Log P'].isna().any():
                 null_count = df['Log P'].isna().sum()
                 validation_errors.append(f"Log P column has {null_count} non-numeric values")
+        except (ValueError, TypeError) as e:
+            validation_errors.append(f"Log P column data type error: {str(e)}")
         except Exception as e:
+            logger.exception(f"Unexpected Log P column validation error: {e}")
             validation_errors.append(f"Log P column validation error: {str(e)}")
 
         # Check Anchor column (T or F)

@@ -1,6 +1,7 @@
 """
 Django REST Framework ViewSets for analysis app
 """
+import logging
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +10,8 @@ from rest_framework.throttling import ScopedRateThrottle
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db import transaction
+
+logger = logging.getLogger(__name__)
 
 from .models import AnalysisSession, Compound, AnalysisResult, RegressionModel
 from .serializers import (
@@ -124,8 +127,9 @@ class AnalysisSessionViewSet(viewsets.ModelViewSet):
                     'async': False,
                 }, status=status.HTTP_200_OK)
 
-            except Exception as e:
-                # Mark as failed
+            except (ValueError, KeyError, TypeError) as e:
+                # Mark as failed - data validation or processing errors
+                logger.error(f"Analysis validation error for session {session.id}: {e}")
                 session.status = 'failed'
                 session.error_message = str(e)
                 session.completed_at = timezone.now()
@@ -133,6 +137,18 @@ class AnalysisSessionViewSet(viewsets.ModelViewSet):
 
                 return Response(
                     {'error': f'Analysis failed: {str(e)}'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            except Exception as e:
+                # Unexpected errors - log with full traceback
+                logger.exception(f"Unexpected error during analysis for session {session.id}: {e}")
+                session.status = 'failed'
+                session.error_message = f"Unexpected error: {str(e)}"
+                session.completed_at = timezone.now()
+                session.save()
+
+                return Response(
+                    {'error': f'Analysis failed unexpectedly: {str(e)}'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
@@ -167,7 +183,16 @@ class AnalysisSessionViewSet(viewsets.ModelViewSet):
                 'monitor_url': f'/api/analysis/sessions/{session.id}/task-status/?task_id={task.id}',
             }, status=status.HTTP_202_ACCEPTED)
 
+        except ImportError as e:
+            # Celery not available
+            logger.error(f"Celery not available: {e}")
+            return Response(
+                {'error': 'Background task system unavailable'},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
         except Exception as e:
+            # Unexpected errors queuing task
+            logger.exception(f"Failed to queue analysis for session {session.id}: {e}")
             return Response(
                 {'error': f'Failed to queue analysis: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -278,9 +303,25 @@ class AnalysisSessionViewSet(viewsets.ModelViewSet):
         try:
             file_response = service.export_session(session, export_format)
             return file_response
-        except Exception as e:
+        except ValueError as e:
+            # Invalid export format or data
+            logger.error(f"Export validation error for session {session.id}: {e}")
             return Response(
-                {'error': f'Export failed: {str(e)}'},
+                {'error': f'Invalid export format or data: {str(e)}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except (IOError, OSError) as e:
+            # File system errors
+            logger.error(f"Export file system error for session {session.id}: {e}")
+            return Response(
+                {'error': f'File system error during export: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected export error for session {session.id}: {e}")
+            return Response(
+                {'error': f'Export failed unexpectedly: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

@@ -227,11 +227,20 @@ class GangliosideProcessorV2:
 
             return final_results
 
-        except Exception as e:
-            logger.error(f"Analysis failed: {str(e)}", exc_info=True)
+        except (ValueError, KeyError, TypeError) as e:
+            # Data validation or structure errors
+            logger.error(f"Analysis validation error: {str(e)}")
             return {
                 "success": False,
-                "error": str(e),
+                "error": f"Validation error: {str(e)}",
+                "statistics": {"total_compounds": len(df)}
+            }
+        except Exception as e:
+            # Unexpected errors
+            logger.exception(f"Unexpected analysis error: {str(e)}")
+            return {
+                "success": False,
+                "error": f"Unexpected error: {str(e)}",
                 "statistics": {"total_compounds": len(df)}
             }
 
@@ -636,8 +645,13 @@ class GangliosideProcessorV2:
                 "f_value": f_value
             }
 
+        except (ValueError, IndexError, KeyError) as e:
+            # Data parsing errors (invalid prefix format, missing characters, etc.)
+            logger.warning(f"Sugar composition parsing error for {prefix}: {e}")
+            return {}
         except Exception as e:
-            logger.warning(f"Failed to parse sugar composition for {prefix}: {e}")
+            # Unexpected errors
+            logger.warning(f"Unexpected error parsing sugar composition for {prefix}: {e}")
             return {}
 
     def _check_isomer_possibility(
