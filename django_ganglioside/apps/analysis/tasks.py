@@ -78,8 +78,8 @@ def run_analysis_async(self, session_id):
             session.error_message = str(e)
             session.completed_at = timezone.now()
             session.save(update_fields=['status', 'error_message', 'completed_at'])
-        except:
-            pass
+        except (AnalysisSession.DoesNotExist, Exception) as db_error:
+            logger.warning(f"Could not update session {session_id} status to failed: {db_error}")
 
         raise
 

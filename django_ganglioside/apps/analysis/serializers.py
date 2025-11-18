@@ -3,6 +3,7 @@ Django REST Framework serializers for analysis app
 """
 from rest_framework import serializers
 from .models import AnalysisSession, Compound, AnalysisResult, RegressionModel
+from .utils import validate_csv_file
 
 
 class RegressionModelSerializer(serializers.ModelSerializer):
@@ -129,46 +130,34 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
         ]
 
     def validate_uploaded_file(self, value):
-        """Validate uploaded file is a CSV with proper structure"""
-        import csv
-        import io
+        """
+        Validate uploaded file using comprehensive validation function
 
-        # Check file extension
-        if not value.name.lower().endswith('.csv'):
-            raise serializers.ValidationError("Only CSV files are allowed.")
+        Performs:
+        1. MIME type check (text/csv, application/csv, text/plain)
+        2. File size limit (50MB)
+        3. CSV injection detection (cells starting with =, +, -, @)
+        4. Required columns check (Name, RT, Volume, Log P, Anchor)
+        5. Data type validation (numeric fields)
+        """
+        # Use comprehensive validation function from utils
+        validation_result = validate_csv_file(value)
 
-        # Check file size (max 50MB)
-        if value.size > 50 * 1024 * 1024:
-            raise serializers.ValidationError("File size cannot exceed 50MB.")
+        # If validation failed, raise error with detailed messages
+        if not validation_result['is_valid']:
+            errors = validation_result['errors']
+            error_message = "File validation failed:\n" + "\n".join(f"- {err}" for err in errors)
+            raise serializers.ValidationError(error_message)
 
-        # Validate CSV structure and required columns
-        try:
-            # Read first 1024 bytes to validate CSV format and check headers
-            value.seek(0)
-            sample = value.read(1024).decode('utf-8')
-            value.seek(0)  # Reset file pointer
+        # Log warnings if any (optional - for debugging)
+        if validation_result['warnings']:
+            import logging
+            logger = logging.getLogger(__name__)
+            for warning in validation_result['warnings']:
+                logger.warning(f"CSV validation warning: {warning}")
 
-            # Check if it looks like CSV (contains commas and newlines)
-            if ',' not in sample or '\n' not in sample:
-                raise serializers.ValidationError("File does not appear to be a valid CSV format.")
-
-            # Parse headers and validate required columns
-            reader = csv.DictReader(io.StringIO(sample))
-            headers = reader.fieldnames
-
-            required_columns = {'Name', 'RT', 'Volume', 'Log P', 'Anchor'}
-            if headers:
-                missing_columns = required_columns - set(headers)
-                if missing_columns:
-                    raise serializers.ValidationError(
-                        f"Missing required columns: {', '.join(sorted(missing_columns))}"
-                    )
-        except UnicodeDecodeError:
-            raise serializers.ValidationError("File must be UTF-8 encoded text.")
-        except csv.Error:
-            raise serializers.ValidationError("Invalid CSV format.")
-        finally:
-            value.seek(0)  # Always reset file pointer
+        # Always reset file pointer after validation
+        value.seek(0)
 
         return value
 

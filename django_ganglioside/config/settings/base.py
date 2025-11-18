@@ -167,6 +167,20 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # Rate Limiting Configuration
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/hour',          # Anonymous users: 100 requests per hour
+        'user': '1000/hour',         # Authenticated users: 1000 requests per hour
+        'analysis': '50/hour',       # Analysis endpoints (heavy operations): 50 per hour
+        'upload': '30/hour',         # File uploads: 30 per hour
+        'compound': '200/hour',      # Compound lookups: 200 per hour
+        'regression': '100/hour',    # Regression model endpoints: 100 per hour
+    }
 }
 
 # API Documentation (drf-spectacular)

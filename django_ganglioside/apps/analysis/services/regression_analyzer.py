@@ -3,6 +3,7 @@ Regression Analyzer - 고급 회귀분석 전용 모듈
 OLS 회귀분석, 잔차분석, Durbin-Watson 테스트, Cook's Distance 등
 """
 
+import logging
 import warnings
 from typing import Any, Dict, List
 
@@ -10,6 +11,7 @@ import numpy as np
 from scipy import stats
 
 warnings.filterwarnings("ignore")
+logger = logging.getLogger(__name__)
 
 
 class RegressionAnalyzer:
@@ -271,7 +273,8 @@ class RegressionAnalyzer:
                 "is_heteroscedastic": is_heteroscedastic,
                 "interpretation": "이분산성 발견" if is_heteroscedastic else "등분산성 가정 만족",
             }
-        except:
+        except (ValueError, RuntimeError, TypeError) as e:
+            logger.warning(f"Breusch-Pagan test failed: {e}")
             return {"is_heteroscedastic": False, "p_value": 0.5, "test_statistic": 0.0}
 
     def _shapiro_wilk_test(self, residuals: np.ndarray) -> Dict[str, Any]:
@@ -291,7 +294,8 @@ class RegressionAnalyzer:
                 "is_normal": is_normal,
                 "interpretation": "정규성 만족" if is_normal else "정규성 위반",
             }
-        except:
+        except (ValueError, RuntimeError, TypeError) as e:
+            logger.warning(f"Shapiro-Wilk test failed: {e}")
             return {"is_normal": True, "p_value": 0.5, "statistic": 1.0}
 
     def _influence_diagnostics(

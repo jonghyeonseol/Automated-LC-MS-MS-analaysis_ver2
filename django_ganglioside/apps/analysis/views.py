@@ -5,6 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import ScopedRateThrottle
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db import transaction
@@ -34,9 +35,16 @@ class AnalysisSessionViewSet(viewsets.ModelViewSet):
     - POST /api/analysis/sessions/{id}/analyze/ - Trigger analysis
     - GET /api/analysis/sessions/{id}/results/ - Get analysis results
     - GET /api/analysis/sessions/{id}/status/ - Get analysis status
+
+    Rate Limiting:
+    - Standard CRUD: 1000/hour (user throttle)
+    - File uploads: 30/hour (upload throttle scope)
+    - Analysis operations: 50/hour (analysis throttle scope)
     """
     queryset = AnalysisSession.objects.all()
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'analysis'
 
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -284,9 +292,14 @@ class CompoundViewSet(viewsets.ReadOnlyModelViewSet):
     Endpoints:
     - GET /api/analysis/compounds/ - List all compounds (filtered by session)
     - GET /api/analysis/compounds/{id}/ - Retrieve compound details
+
+    Rate Limiting:
+    - 200/hour (compound throttle scope)
     """
     queryset = Compound.objects.all()
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'compound'
 
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -328,10 +341,15 @@ class RegressionModelViewSet(viewsets.ReadOnlyModelViewSet):
     Endpoints:
     - GET /api/analysis/regression-models/ - List all models
     - GET /api/analysis/regression-models/{id}/ - Retrieve model details
+
+    Rate Limiting:
+    - 100/hour (regression throttle scope)
     """
     queryset = RegressionModel.objects.all()
     serializer_class = RegressionModelSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'regression'
 
     def get_queryset(self):
         """Filter models by session"""
