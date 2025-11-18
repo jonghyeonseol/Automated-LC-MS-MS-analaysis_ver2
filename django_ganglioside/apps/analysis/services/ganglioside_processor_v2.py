@@ -503,56 +503,75 @@ class GangliosideProcessorV2:
             if pd.isna(suffix):
                 continue
 
-            suffix_group = df[df["suffix"] == suffix].sort_values("RT")
+            suffix_group = df[df["suffix"] == suffix].sort_values("RT").reset_index(drop=True)
 
-            # Check for compounds within RT tolerance
-            for i, row in suffix_group.iterrows():
-                rt = row["RT"]
-                name = row["Name"]
+            # ALGORITHM FIX: Use consecutive linking for RT grouping
+            # Group compounds where each is within tolerance of the PREVIOUS one
+            # This correctly handles: [9.50, 9.55, 9.60, 9.65] -> all in one group
+            # Instead of: [9.50, 9.55, 9.60] and [9.65] (incorrect split)
 
-                # Find other compounds within RT tolerance
-                nearby_compounds = suffix_group[
-                    (abs(suffix_group["RT"] - rt) <= self.rt_tolerance) &
-                    (suffix_group.index != i)
-                ]
+            rt_groups = []
+            current_group = []
 
-                if not nearby_compounds.empty:
-                    # Potential fragmentation detected
-                    # Keep compound with highest sugar count (least fragmented)
-                    all_candidates = pd.concat([
-                        pd.DataFrame([row]),
-                        nearby_compounds
-                    ])
+            for idx, row in suffix_group.iterrows():
+                if not current_group:
+                    # Start first group
+                    current_group.append(idx)
+                else:
+                    # Check if within tolerance of PREVIOUS compound (not first)
+                    prev_rt = suffix_group.loc[current_group[-1], "RT"]
+                    current_rt = row["RT"]
 
-                    # Get sugar counts
-                    sugar_counts = []
-                    for _, cand in all_candidates.iterrows():
-                        sugar_info = self._parse_sugar_composition(cand["base_prefix"])
-                        sugar_counts.append(sugar_info.get("total_sugars", 0))
+                    if abs(current_rt - prev_rt) <= self.rt_tolerance:
+                        # Add to current group
+                        current_group.append(idx)
+                    else:
+                        # Start new group
+                        rt_groups.append(current_group)
+                        current_group = [idx]
 
-                    # Select compound with maximum sugar count
-                    max_sugar_idx = np.argmax(sugar_counts)
-                    selected = all_candidates.iloc[max_sugar_idx]
+            # Don't forget the last group
+            if current_group:
+                rt_groups.append(current_group)
 
-                    # Record fragmentation event
-                    if len(all_candidates) > 1:
-                        fragmentation_candidates.append({
-                            "selected": selected["Name"],
-                            "fragments": all_candidates["Name"].tolist(),
-                            "rt_range": (
-                                all_candidates["RT"].min(),
-                                all_candidates["RT"].max()
-                            ),
-                            "consolidated_volume": all_candidates["Volume"].sum()
-                        })
+            # Process each RT group
+            for group_indices in rt_groups:
+                if len(group_indices) == 1:
+                    # No fragmentation, keep compound as-is
+                    continue
 
-                    # Add to filtered list (avoid duplicates)
-                    if selected["Name"] not in consolidated_compounds:
-                        consolidated_compounds[selected["Name"]] = {
-                            **selected.to_dict(),
-                            "consolidated": True,
-                            "fragment_count": len(all_candidates)
-                        }
+                # Multiple compounds in RT window - potential fragmentation
+                group_data = suffix_group.loc[group_indices]
+
+                # Get sugar counts for all candidates
+                sugar_counts = []
+                for _, cand in group_data.iterrows():
+                    sugar_info = self._parse_sugar_composition(cand["base_prefix"])
+                    sugar_counts.append(sugar_info.get("total_sugars", 0))
+
+                # Select compound with maximum sugar count (least fragmented)
+                max_sugar_idx = np.argmax(sugar_counts)
+                selected = group_data.iloc[max_sugar_idx]
+
+                # Consolidate volumes from all fragments
+                consolidated_volume = group_data["Volume"].sum()
+
+                # Record fragmentation event
+                fragmentation_candidates.append({
+                    "selected": selected["Name"],
+                    "fragments": group_data["Name"].tolist(),
+                    "rt_range": (group_data["RT"].min(), group_data["RT"].max()),
+                    "consolidated_volume": consolidated_volume,
+                    "fragment_count": len(group_data)
+                })
+
+                # Add selected compound to consolidated list
+                consolidated_compounds[selected["Name"]] = {
+                    **selected.to_dict(),
+                    "Volume": consolidated_volume,  # Use consolidated volume
+                    "consolidated": True,
+                    "fragment_count": len(group_data)
+                }
 
         # Add compounds that weren't involved in fragmentation
         for _, row in df.iterrows():
