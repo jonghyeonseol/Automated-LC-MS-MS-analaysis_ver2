@@ -7,6 +7,7 @@ handling CSV upload → analysis → database persistence workflow.
 import logging
 import pandas as pd
 import numpy as np
+from typing import Any, Dict, List, Optional, Union
 from django.db import transaction
 from django.core.files.storage import default_storage
 from channels.layers import get_channel_layer
@@ -21,7 +22,7 @@ from .ganglioside_processor_v2 import GangliosideProcessorV2
 # from .ganglioside_processor import GangliosideProcessor
 
 
-def convert_to_json_serializable(obj):
+def convert_to_json_serializable(obj: Any) -> Any:
     """
     Recursively convert NumPy types to Python native types for JSON serialization
 
@@ -52,7 +53,7 @@ class AnalysisService:
     Service class for running ganglioside analysis and persisting results
     """
 
-    def __init__(self, use_v2: bool = True):
+    def __init__(self, use_v2: bool = True) -> None:
         """
         Initialize Analysis Service
 
@@ -393,7 +394,7 @@ class AnalysisService:
     def _save_results(
         self,
         session: AnalysisSession,
-        results: dict,
+        results: Dict[str, Any],
         original_df: pd.DataFrame
     ) -> AnalysisResult:
         """
@@ -442,9 +443,9 @@ class AnalysisService:
     def _save_compounds(
         self,
         session: AnalysisSession,
-        results: dict,
+        results: Dict[str, Any],
         original_df: pd.DataFrame
-    ):
+    ) -> None:
         """
         Save individual compound data to database
 
@@ -471,7 +472,7 @@ class AnalysisService:
     def _create_compound_from_dict(
         self,
         session: AnalysisSession,
-        data: dict,
+        data: Dict[str, Any],
         compound_status: str
     ) -> Compound:
         """
@@ -547,7 +548,11 @@ class AnalysisService:
 
         return 'UNKNOWN'
 
-    def _save_regression_models(self, session: AnalysisSession, results: dict):
+    def _save_regression_models(
+        self,
+        session: AnalysisSession,
+        results: Dict[str, Any]
+    ) -> None:
         """
         Save regression model details to database
 
@@ -594,7 +599,11 @@ class AnalysisService:
         # Bulk create
         RegressionModel.objects.bulk_create(models_to_create, batch_size=100)
 
-    def _build_equation_string(self, intercept: float, coefficients: dict) -> str:
+    def _build_equation_string(
+        self,
+        intercept: float,
+        coefficients: Dict[str, float]
+    ) -> str:
         """
         Build human-readable regression equation
 

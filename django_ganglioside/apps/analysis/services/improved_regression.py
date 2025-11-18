@@ -5,7 +5,7 @@ Addresses overfitting issues with proper feature selection and validation
 
 import numpy as np
 import pandas as pd
-from typing import Dict, Any, Tuple, Optional, List
+from typing import Dict, Any, Tuple, Optional, List, Union
 from sklearn.linear_model import Ridge, RidgeCV, LinearRegression
 from sklearn.model_selection import LeaveOneOut, KFold, cross_val_score
 from sklearn.metrics import r2_score, mean_squared_error
@@ -51,11 +51,11 @@ class ImprovedRegressionModel:
 
     def __init__(
         self,
-        min_samples: int = None,
-        max_features_ratio: float = None,
-        r2_threshold: float = None,
-        alpha_values: List[float] = None
-    ):
+        min_samples: Optional[int] = None,
+        max_features_ratio: Optional[float] = None,
+        r2_threshold: Optional[float] = None,
+        alpha_values: Optional[List[float]] = None
+    ) -> None:
         """
         Initialize improved regression model.
 
@@ -154,7 +154,7 @@ class ImprovedRegressionModel:
         X: np.ndarray,
         y: np.ndarray,
         n_samples: int
-    ) -> Tuple[Any, Dict[str, float]]:
+    ) -> Tuple[Union[Ridge, RidgeCV], Dict[str, Any]]:
         """
         Fit regression model with appropriate validation strategy.
 

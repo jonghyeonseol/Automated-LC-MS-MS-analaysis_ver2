@@ -5,7 +5,7 @@ OLS 회귀분석, 잔차분석, Durbin-Watson 테스트, Cook's Distance 등
 
 import logging
 import warnings
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 from scipy import stats
@@ -15,15 +15,18 @@ logger = logging.getLogger(__name__)
 
 
 class RegressionAnalyzer:
-    def __init__(self):
-        self.r2_threshold = 0.99
-        self.outlier_threshold = 3.0
-        self.confidence_level = 0.95
+    def __init__(self) -> None:
+        self.r2_threshold: float = 0.99
+        self.outlier_threshold: float = 3.0
+        self.confidence_level: float = 0.95
 
         print("📈 Regression Analyzer 초기화 완료")
 
     def perform_comprehensive_regression(
-        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None
+        self,
+        x_data: np.ndarray,
+        y_data: np.ndarray,
+        compound_names: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
         종합적인 회귀분석 수행
@@ -386,7 +389,7 @@ class RegressionAnalyzer:
         x_data: np.ndarray,
         y_data: np.ndarray,
         regression_result: Dict[str, Any],
-        compound_names: List[str] = None,
+        compound_names: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """고급 이상치 탐지"""
 

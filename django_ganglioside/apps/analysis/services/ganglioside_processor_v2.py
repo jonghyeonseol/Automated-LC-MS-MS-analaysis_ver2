@@ -42,11 +42,11 @@ class GangliosideProcessorV2:
 
     def __init__(
         self,
-        r2_threshold: float = None,
-        outlier_threshold: float = None,
-        rt_tolerance: float = None,
-        min_samples_for_regression: int = None
-    ):
+        r2_threshold: Optional[float] = None,
+        outlier_threshold: Optional[float] = None,
+        rt_tolerance: Optional[float] = None,
+        min_samples_for_regression: Optional[int] = None
+    ) -> None:
         """
         Initialize Ganglioside Processor V2.
 
@@ -659,7 +659,16 @@ class GangliosideProcessorV2:
         prefix: str,
         sugar_info: Dict[str, Any]
     ) -> bool:
-        """Check if a compound can have structural isomers."""
+        """
+        Check if a compound can have structural isomers.
+
+        Args:
+            prefix: Compound prefix
+            sugar_info: Dictionary with sugar composition details
+
+        Returns:
+            bool: True if compound can have isomers
+        """
         f_value = sugar_info.get('f_value', 0)
         return prefix in self.ISOMER_PREFIXES and f_value == self.ISOMER_F_VALUE
 

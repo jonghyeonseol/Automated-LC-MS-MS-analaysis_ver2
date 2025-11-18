@@ -6,7 +6,7 @@ Provides prefix-based categorization for ganglioside data visualization
 import logging
 import re
 import pandas as pd
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any, Tuple, Union
 from collections import defaultdict
 
 logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class GangliosideCategorizer:
     - GM3+OAc(18:1;O2) → Base: GM3, Category: GM (monosialo), Modified: OAc
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Define ganglioside categories based on sialic acid content
         self.ganglioside_categories = {
             'GM': {
@@ -108,7 +108,11 @@ class GangliosideCategorizer:
 
         return base_prefix, category, modifications
 
-    def categorize_compounds(self, df: pd.DataFrame, name_column: str = 'Name') -> Dict[str, Any]:
+    def categorize_compounds(
+        self,
+        df: Union[pd.DataFrame, List[Dict[str, Any]]],
+        name_column: str = 'Name'
+    ) -> Dict[str, Any]:
         """
         Categorize all compounds in the dataframe
 
@@ -275,7 +279,7 @@ class GangliosideCategorizer:
         return summary
 
 
-def test_categorizer():
+def test_categorizer() -> None:
     """Test function for the categorizer"""
     import pandas as pd
 
