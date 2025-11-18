@@ -1,0 +1,218 @@
+# Code Quality & Linting Tools for LC-MS/MS Ganglioside Analysis Platform
+
+# ============================================================
+# CODE FORMATTING
+# ============================================================
+
+# Python code formatter
+black==23.12.1
+
+# Import statement formatter
+isort==5.13.2
+
+# Docstring formatter
+docformatter==1.7.5
+
+# Auto-formatter for Python
+autopep8==2.0.4
+
+# ============================================================
+# LINTING & STATIC ANALYSIS
+# ============================================================
+
+# Style guide enforcement (PEP 8)
+flake8==7.0.0
+
+# Extended flake8 plugins
+flake8-bugbear==23.12.2          # Find likely bugs and design problems
+flake8-comprehensions==3.14.0    # Check for comprehensions
+flake8-docstrings==1.7.0         # Docstring conventions
+flake8-import-order==0.18.2      # Import order checking
+flake8-quotes==3.3.2             # Quote consistency
+flake8-bandit==4.1.1             # Security issues
+flake8-builtins==2.2.0           # Check for shadowing builtins
+flake8-commas==2.1.0             # Trailing comma enforcement
+flake8-eradicate==1.5.0          # Find commented out code
+flake8-simplify==0.21.0          # Simplification suggestions
+flake8-print==5.0.0              # Find print statements
+flake8-annotations==3.0.1        # Type annotation checking
+flake8-return==1.2.0             # Return statement checking
+flake8-variables-names==0.0.6    # Variable naming conventions
+
+# Python linter
+pylint==3.0.3
+
+# Django-specific linting
+pylint-django==2.5.5
+django-lint==3.0.0
+
+# ============================================================
+# TYPE CHECKING
+# ============================================================
+
+# Static type checker
+mypy==1.8.0
+
+# Django stubs for mypy
+django-stubs==4.2.7
+djangorestframework-stubs==3.14.5
+
+# Additional type stubs
+types-requests==2.31.0.20240106
+types-redis==4.6.0.20240106
+types-python-dateutil==2.8.19.20240106
+types-setuptools==69.0.0.20240106
+
+# ============================================================
+# SECURITY LINTING
+# ============================================================
+
+# Security linter
+bandit==1.7.6
+bandit[toml]==1.7.6
+
+# Dependency vulnerability scanner
+safety==3.0.1
+
+# Dependency auditor
+pip-audit==2.6.3
+
+# ============================================================
+# DOCUMENTATION LINTING
+# ============================================================
+
+# Docstring linting
+pydocstyle==6.3.0
+
+# Markdown linting
+mdformat==0.7.17
+mdformat-gfm==0.3.6
+mdformat-black==0.1.1
+
+# reStructuredText linting
+doc8==1.1.1
+rstcheck==6.2.0
+
+# ============================================================
+# CODE COMPLEXITY
+# ============================================================
+
+# Complexity checker
+mccabe==0.7.0
+
+# Maintainability index
+radon==6.0.1
+
+# Code metrics
+prospector==1.10.3
+
+# Dead code detection
+vulture==2.11
+
+# ============================================================
+# IMPORT CHECKING
+# ============================================================
+
+# Import linter
+import-linter==2.0
+
+# Unused import detection
+autoflake==2.2.1
+
+# Import sorting checker (already have isort but this is complementary)
+pycln==2.4.0
+
+# ============================================================
+# DJANGO-SPECIFIC
+# ============================================================
+
+# Django best practices checker
+django-upgrade==1.15.0
+
+# Django template linting
+djlint==1.34.1
+
+# ============================================================
+# PRE-COMMIT INTEGRATION
+# ============================================================
+
+# Pre-commit hooks
+pre-commit==3.6.0
+
+# ============================================================
+# REPORTING & OUTPUT
+# ============================================================
+
+# JSON output for flake8
+flake8-json==23.11.0
+
+# HTML reports
+flake8-html==0.4.3
+
+# ============================================================
+# UTILITIES
+# ============================================================
+
+# Detect encoding issues
+chardet==5.2.0
+
+# Line ending normalization
+normality==2.2.1
+
+# ============================================================
+# EDITORS & IDE SUPPORT
+# ============================================================
+
+# Language server protocol
+python-lsp-server[all]==1.9.0
+pylsp-mypy==0.6.8
+
+# ============================================================
+# ADDITIONAL TOOLS
+# ============================================================
+
+# License checker
+licensecheck==2024.1
+
+# Code duplication detector
+pycodestyle==2.11.1
+
+# String formatting checker
+pyupgrade==3.15.0
+
+# ============================================================
+# CONFIGURATION FILES
+# ============================================================
+# .flake8           - Flake8 configuration
+# pyproject.toml    - Black, isort, mypy, coverage configuration
+# .pylintrc         - Pylint configuration (optional)
+# .bandit           - Bandit configuration (optional)
+# .pre-commit-config.yaml - Pre-commit hooks (optional)
+#
+# ============================================================
+# USAGE EXAMPLES
+# ============================================================
+#
+# Format code:
+#   black apps/ config/ tests/
+#   isort apps/ config/ tests/
+#
+# Run linters:
+#   flake8 apps/ config/ tests/
+#   pylint apps/ config/
+#   mypy apps/ config/
+#
+# Security scanning:
+#   bandit -r apps/ config/
+#   safety check
+#   pip-audit
+#
+# Check complexity:
+#   radon cc apps/ -a
+#   radon mi apps/ -s
+#
+# Find dead code:
+#   vulture apps/ config/
+#
+# All-in-one:
+#   prospector apps/

@@ -18,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 from ..models import AnalysisSession, AnalysisResult, Compound, RegressionModel
 from .ganglioside_processor_v2 import GangliosideProcessorV2
-# Legacy import kept for backward compatibility
-# from .ganglioside_processor import GangliosideProcessor
 
 
 def convert_to_json_serializable(obj: Any) -> Any:
@@ -58,43 +56,32 @@ class AnalysisService:
         Initialize Analysis Service
 
         Args:
-            use_v2: Use improved V2 processor (default: True, STRONGLY RECOMMENDED)
+            use_v2: DEPRECATED - Ignored, always uses V2 processor now
 
-        Processor Version Comparison:
-        ============================
-        V2 (GangliosideProcessorV2) - RECOMMENDED:
+        Processor Information:
+        =====================
+        GangliosideProcessorV2 (Current):
           ✅ BayesianRidge with adaptive regularization
-          ✅ R² = 0.994 (60.7% improvement)
+          ✅ R² = 0.994 (60.7% improvement over V1)
           ✅ 0% false positive rate
           ✅ Better input validation
           ✅ Comprehensive error handling
 
-        V1 (GangliosideProcessor) - DEPRECATED:
-          ❌ Fixed Ridge α=1.0 (overfitting risk)
-          ❌ R² = 0.386 (poor validation)
-          ❌ 67% false positive rate
-          ❌ Limited validation
-          ⚠️  Scheduled for removal: 2026-01-31
-
-        Production Usage:
-        - Always use use_v2=True (default)
-        - Only set use_v2=False for legacy data comparison
+        V1 (GangliosideProcessor) - REMOVED:
+          ⚠️  Deprecated and removed as of 2025-11-18
+          ❌ Had overfitting issues with small samples
+          ❌ Fixed Ridge α=1.0 (poor generalization)
         """
-        # Use improved V2 processor by default to prevent overfitting
-        if use_v2:
-            self.processor = GangliosideProcessorV2()
-        else:
-            # ⚠️ DEPRECATED: Legacy V1 processor
-            # Only used for backward compatibility testing
-            from .ganglioside_processor import GangliosideProcessor
-            self.processor = GangliosideProcessor()
+        if not use_v2:
             logger.warning(
-                "Using deprecated GangliosideProcessor V1. "
-                "Please migrate to V2 for better accuracy."
+                "V1 processor has been removed. Ignoring use_v2=False parameter. "
+                "Using V2 processor for all analyses."
             )
 
+        # Always use V2 processor
+        self.processor = GangliosideProcessorV2()
         self.channel_layer = get_channel_layer()
-        self.processor_version = "v2" if use_v2 else "v1"
+        self.processor_version = "v2"
 
     def _send_progress(self, session_id: int, message: str, percentage: int, current_step: str = ''):
         """

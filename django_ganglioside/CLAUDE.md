@@ -51,7 +51,7 @@ docker-compose exec django pytest
 
 1. **apps/analysis/** - Core analysis engine
    - Models: AnalysisSession, Compound, RegressionResult
-   - Services: GangliosideProcessor (5-rule algorithm)
+   - Services: GangliosideProcessorV2 (5-rule algorithm with BayesianRidge)
    - API: REST endpoints for analysis workflow
 
 2. **apps/visualization/** - Plotly chart generation

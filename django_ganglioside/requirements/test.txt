@@ -1,0 +1,191 @@
+# Testing Dependencies for LC-MS/MS Ganglioside Analysis Platform
+# Include base requirements
+-r base.txt
+
+# ============================================================
+# PYTEST & TESTING FRAMEWORKS
+# ============================================================
+
+# Core testing framework
+pytest==7.4.3
+pytest-django==4.7.0
+pytest-asyncio==0.21.1
+
+# Coverage reporting
+pytest-cov==4.1.0
+coverage[toml]==7.4.0
+
+# Parallel testing
+pytest-xdist==3.5.0
+
+# Test ordering and isolation
+pytest-ordering==0.6
+pytest-randomly==3.15.0
+
+# Performance testing
+pytest-benchmark==4.0.0
+pytest-timeout==2.2.0
+
+# Mock and fixtures
+pytest-mock==3.12.0
+pytest-freezegun==0.4.2
+
+# ============================================================
+# FACTORY & FIXTURES
+# ============================================================
+
+# Test data generation
+factory-boy==3.3.0
+Faker==22.0.0
+
+# Database fixtures
+pytest-factoryboy==2.6.0
+
+# ============================================================
+# API TESTING
+# ============================================================
+
+# REST API testing
+requests==2.31.0
+requests-mock==1.11.0
+
+# HTTP mocking
+responses==0.24.1
+
+# ============================================================
+# BROWSER & E2E TESTING (Optional)
+# ============================================================
+
+# Selenium for browser testing
+selenium==4.16.0
+pytest-selenium==4.0.1
+
+# Playwright (alternative to Selenium)
+# playwright==1.40.0
+# pytest-playwright==0.4.4
+
+# ============================================================
+# PERFORMANCE & LOAD TESTING
+# ============================================================
+
+# Load testing
+locust==2.20.0
+
+# API performance testing
+tavern==2.9.2
+
+# ============================================================
+# DATA VALIDATION TESTING
+# ============================================================
+
+# Schema validation
+jsonschema==4.20.0
+
+# CSV testing
+csvkit==1.5.0
+
+# ============================================================
+# DJANGO-SPECIFIC TESTING
+# ============================================================
+
+# Model factories
+django-factory-boy==0.0.1
+
+# Test utilities
+django-test-plus==2.2.2
+
+# WebTest integration
+django-webtest==1.9.11
+WebTest==3.0.0
+
+# ============================================================
+# DEBUGGING & INSPECTION
+# ============================================================
+
+# Interactive debugging in tests
+ipdb==0.13.13
+pdbpp==0.10.3
+
+# Pretty printing
+rich==13.7.0
+
+# ============================================================
+# SNAPSHOT TESTING
+# ============================================================
+
+# Snapshot testing for complex outputs
+snapshottest==0.6.0
+pytest-snapshot==0.9.0
+
+# ============================================================
+# DATABASE TESTING
+# ============================================================
+
+# In-memory database for faster tests
+# (PostgreSQL is recommended but SQLite can speed up tests)
+# No additional package needed - Django supports SQLite out of box
+
+# Database fixtures
+pytest-django-queries==1.2.0
+
+# ============================================================
+# REPORTING & DOCUMENTATION
+# ============================================================
+
+# HTML reporting
+pytest-html==4.1.1
+
+# JUnit XML for CI/CD
+pytest-junit==1.0.0
+
+# Allure reporting (advanced)
+allure-pytest==2.13.2
+
+# ============================================================
+# CODE QUALITY IN TESTS
+# ============================================================
+
+# Check test quality
+pytest-testmon==2.1.0
+pytest-watch==4.2.0
+
+# ============================================================
+# UTILITIES
+# ============================================================
+
+# Time freezing
+freezegun==1.4.0
+
+# Temp file handling
+pytest-tmpdir==0.1.0
+
+# Environment variables for tests
+python-dotenv==1.0.0
+
+# ============================================================
+# SPECIALIZED TESTING
+# ============================================================
+
+# Scientific computing tests (for regression algorithms)
+hypothesis==6.92.2
+
+# Statistical testing
+scipy==1.11.4  # Already in base.txt but included for clarity
+
+# Plotting validation
+matplotlib-testing==0.1.0
+
+# ============================================================
+# NOTES
+# ============================================================
+# Coverage target: 75%+
+# Minimum threshold: 70%
+#
+# Run tests with:
+#   pytest --cov=apps --cov=config --cov-report=html
+#
+# Run parallel tests:
+#   pytest -n auto
+#
+# Run with coverage check:
+#   pytest --cov=apps --cov-report=term-missing --cov-fail-under=70

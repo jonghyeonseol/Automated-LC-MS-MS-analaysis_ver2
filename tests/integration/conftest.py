@@ -94,6 +94,19 @@ def categorizer():
 
 @pytest.fixture
 def ganglioside_processor():
-    """Create GangliosideProcessor instance."""
-    from services.ganglioside_processor import GangliosideProcessor
-    return GangliosideProcessor()
+    """
+    Create GangliosideProcessorV2 instance.
+
+    Note: V1 processor has been deprecated and removed.
+    This fixture now returns V2 for all tests.
+    """
+    # Note: This imports from the old Flask structure for backward compatibility
+    # In the Django app, use: from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2
+    try:
+        # Try Django import first
+        from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2
+        return GangliosideProcessorV2()
+    except ImportError:
+        # Fall back to Flask structure (legacy tests)
+        from services.ganglioside_processor_v2 import GangliosideProcessorV2
+        return GangliosideProcessorV2()

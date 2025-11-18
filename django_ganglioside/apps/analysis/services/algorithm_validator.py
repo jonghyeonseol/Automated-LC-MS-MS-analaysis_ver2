@@ -14,7 +14,7 @@ from sklearn.metrics import (
 )
 import logging
 
-from .ganglioside_processor import GangliosideProcessor
+from .ganglioside_processor_v2 import GangliosideProcessorV2
 
 logger = logging.getLogger(__name__)
 
@@ -66,8 +66,8 @@ class AlgorithmValidator:
     - Anchor compound learning effectiveness
     """
 
-    def __init__(self, processor: GangliosideProcessor = None):
-        self.processor = processor or GangliosideProcessor()
+    def __init__(self, processor: GangliosideProcessorV2 = None):
+        self.processor = processor or GangliosideProcessorV2()
         self.validation_results = []
 
     def validate_with_kfold(

@@ -1,18 +1,24 @@
 """
-Migration script to transition from original GangliosideProcessor to V2
-Provides backward compatibility and smooth transition
+Migration script - V1 to V2 transition complete
+This file is kept for historical reference only.
+
+⚠️ DEPRECATED: V1 GangliosideProcessor has been removed.
+All code now uses GangliosideProcessorV2 exclusively.
 """
 
 import logging
 from typing import Dict, Any, Optional
-from .ganglioside_processor import GangliosideProcessor
 from .ganglioside_processor_v2 import GangliosideProcessorV2
 
 logger = logging.getLogger(__name__)
 
 
 class ProcessorMigrationHelper:
-    """Helper class to migrate from V1 to V2 processor"""
+    """
+    Helper class for V1 to V2 processor migration
+
+    ⚠️ DEPRECATED: V1 processor has been removed. This class is kept for historical reference.
+    """
 
     @staticmethod
     def compare_results(v1_results: Dict, v2_results: Dict) -> Dict[str, Any]:
@@ -62,18 +68,18 @@ class ProcessorMigrationHelper:
         return comparison
 
     @staticmethod
-    def migrate_settings(v1_processor: GangliosideProcessor) -> Dict[str, float]:
+    def migrate_settings(v1_settings: Dict[str, float]) -> Dict[str, float]:
         """
-        Migrate settings from V1 to V2 processor.
+        Migrate settings to V2 processor format.
+
+        ⚠️ DEPRECATED: V1 processor removed. This method now accepts a settings dict.
 
         Args:
-            v1_processor: Original processor instance
+            v1_settings: Legacy settings dictionary
 
         Returns:
             Settings dictionary for V2
         """
-        v1_settings = v1_processor.get_settings()
-
         # V2 uses more conservative defaults
         v2_settings = {
             'r2_threshold': min(v1_settings.get('r2_threshold', 0.75), 0.75),
@@ -82,79 +88,60 @@ class ProcessorMigrationHelper:
             'min_samples_for_regression': 3
         }
 
-        logger.info(f"Migrated settings from V1 to V2: {v2_settings}")
+        logger.info(f"Migrated settings to V2 format: {v2_settings}")
         return v2_settings
 
 
 class BackwardCompatibleProcessor:
     """
-    Wrapper that provides backward compatibility while using V2 internally.
-    Allows gradual migration without breaking existing code.
+    V2 processor wrapper - V1 has been removed.
+
+    ⚠️ DEPRECATED: This class now only uses V2. The use_v2 parameter is ignored.
+    Kept for backward compatibility with existing code.
     """
 
     def __init__(self, use_v2: bool = True, log_comparison: bool = False):
         """
-        Initialize backward compatible processor.
+        Initialize processor (always uses V2 now).
 
         Args:
-            use_v2: Whether to use V2 processor (True) or V1 (False)
-            log_comparison: Whether to log comparison between V1 and V2
+            use_v2: DEPRECATED - Ignored, always uses V2
+            log_comparison: DEPRECATED - V1 no longer available for comparison
         """
-        self.use_v2 = use_v2
-        self.log_comparison = log_comparison
+        if not use_v2:
+            logger.warning(
+                "V1 processor has been removed. Ignoring use_v2=False and using V2."
+            )
 
-        if use_v2:
-            self.processor = GangliosideProcessorV2()
-            logger.info("Using improved V2 processor with overfitting prevention")
-        else:
-            self.processor = GangliosideProcessor()
-            logger.info("Using original V1 processor")
-
-        # Keep V1 for comparison if needed
         if log_comparison:
-            self.v1_processor = GangliosideProcessor()
+            logger.warning(
+                "V1 processor has been removed. Cannot perform comparison. "
+                "Disabling log_comparison."
+            )
+
+        self.use_v2 = True  # Always True now
+        self.log_comparison = False  # Always False now
+        self.processor = GangliosideProcessorV2()
+        logger.info("Using GangliosideProcessorV2 (V1 has been deprecated and removed)")
 
     def process_data(self, df, data_type="Porcine") -> Dict[str, Any]:
         """
-        Process data with backward compatibility.
+        Process data using V2 processor.
 
         Args:
             df: Input DataFrame
             data_type: Type of data
 
         Returns:
-            Analysis results (V2 format if use_v2=True)
+            Analysis results (V2 format)
         """
-        if self.use_v2:
-            results = self.processor.process_data(df, data_type)
-
-            if self.log_comparison:
-                # Run V1 for comparison
-                v1_results = self.v1_processor.process_data(df, data_type)
-                comparison = ProcessorMigrationHelper.compare_results(
-                    v1_results, results
-                )
-
-                logger.info(f"Comparison - V1 vs V2:")
-                logger.info(f"  Success rate: {comparison['v1_success_rate']:.1f}% vs "
-                          f"{comparison['v2_success_rate']:.1f}%")
-                logger.info(f"  Valid compounds: {comparison['v1_valid_compounds']} vs "
-                          f"{comparison['v2_valid_compounds']}")
-                logger.info(f"  Improvements: {comparison['improvements']}")
-
-                # Add comparison to results
-                results['_migration_comparison'] = comparison
-
-        else:
-            results = self.processor.process_data(df, data_type)
-
+        # Always use V2 now
+        results = self.processor.process_data(df, data_type)
         return results
 
     def update_settings(self, **kwargs):
         """Update processor settings."""
         self.processor.update_settings(**kwargs)
-        if hasattr(self, 'v1_processor'):
-            self.v1_processor.update_settings(**kwargs)
 
     def get_settings(self):
         """Get processor settings."""
@@ -163,28 +150,35 @@ class BackwardCompatibleProcessor:
 
 def run_migration_test(csv_path: str) -> Dict[str, Any]:
     """
-    Test migration by running both processors and comparing results.
+    Test V2 processor on a CSV file.
+
+    ⚠️ DEPRECATED: V1 has been removed. This function now only runs V2.
 
     Args:
         csv_path: Path to test CSV file
 
     Returns:
-        Comparison results
+        V2 processor results
     """
     import pandas as pd
 
-    logger.info(f"Running migration test on {csv_path}")
+    logger.info(f"Running V2 processor test on {csv_path}")
+    logger.warning("V1 processor has been removed - only V2 results available")
 
     # Load data
     df = pd.read_csv(csv_path)
 
-    # Run V1
-    v1_processor = GangliosideProcessor()
-    v1_results = v1_processor.process_data(df)
-
-    # Run V2
+    # Run V2 only
     v2_processor = GangliosideProcessorV2()
     v2_results = v2_processor.process_data(df)
+
+    # Create mock V1 results for compatibility
+    v1_results = {
+        'statistics': {'success_rate': 0},
+        'valid_compounds': [],
+        'outliers': [],
+        'regression_analysis': {}
+    }
 
     # Compare
     comparison = ProcessorMigrationHelper.compare_results(v1_results, v2_results)

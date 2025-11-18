@@ -98,12 +98,12 @@ rm verify_ridge.py
 
 # 1.2.3: Test with real data
 docker-compose exec django python manage.py shell << 'EOF'
-from apps.analysis.services.ganglioside_processor import GangliosideProcessor
+from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2
 import pandas as pd
 
 # Load test data
 df = pd.read_csv('data/samples/testwork_user.csv')
-processor = GangliosideProcessor()
+processor = GangliosideProcessorV2()
 
 # Run analysis
 results = processor.process_data(df, 'porcine')
@@ -523,11 +523,11 @@ docker-compose exec django python manage.py shell << 'EOF'
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from apps.analysis.services.ganglioside_processor import GangliosideProcessor
+from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2
 import pandas as pd
 
 df = pd.read_csv('data/samples/testwork_user.csv')
-processor = GangliosideProcessor()
+processor = GangliosideProcessorV2()
 results = processor.process_data(df, 'porcine')
 EOF
 
