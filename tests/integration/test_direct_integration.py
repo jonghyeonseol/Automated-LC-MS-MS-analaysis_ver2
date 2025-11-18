@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """
 Direct test of categorization integration
+
+NOTE: This test file is Flask-specific and should be migrated to Django.
+The Flask infrastructure has been removed. See django_ganglioside/tests/ for Django tests.
 """
 
 import sys
 import pandas as pd
-
-# Import from new structure
-import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
-from src.services.ganglioside_processor import GangliosideProcessor
+
+# Add Django project to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../django_ganglioside'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
+
+# Import from new Django structure
+from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2 as GangliosideProcessor
 
 
 def test_direct_integration():

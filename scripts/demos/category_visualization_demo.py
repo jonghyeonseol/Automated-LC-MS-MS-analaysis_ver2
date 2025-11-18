@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
 """
 Demo script showing category-based visualization
+
+NOTE: This demo script is Flask-specific and should be migrated to Django.
+The Flask infrastructure has been removed. See django_ganglioside/apps/visualization for Django visualization.
 """
 
 import sys
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
-# Add paths for import
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
-from src.utils.ganglioside_categorizer import GangliosideCategorizer
+
+# Add Django project to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../django_ganglioside'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
+
+# Import from new Django structure
+from apps.analysis.services.ganglioside_categorizer import GangliosideCategorizer
 
 
 def create_category_scatter_plot(df, categorizer):

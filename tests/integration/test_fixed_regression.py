@@ -2,17 +2,22 @@
 """
 Test script for fixed regression analysis
 Directly tests the fixed ganglioside processor to verify improvements
+
+NOTE: This test file is Flask-specific and should be migrated to Django.
+The Flask infrastructure has been removed. See django_ganglioside/tests/ for Django tests.
 """
 
 import sys
 import os
 import pandas as pd
 
-# Add backend to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "backend"))
+# Add Django project to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../django_ganglioside'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')
 
-from backend.services.ganglioside_processor_fixed import GangliosideProcessorFixed
-from backend.core.analysis_service import AnalysisService
+# Import from new Django structure
+from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2 as GangliosideProcessorFixed
+from apps.analysis.services.analysis_service import AnalysisService
 
 
 def test_fixed_processor():
