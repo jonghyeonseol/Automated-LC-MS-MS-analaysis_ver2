@@ -45,7 +45,8 @@ class TestAnalysisSessionModel:
             original_filename="test.csv",
         )
 
-        assert str(session) == "Test Session"
+        # __str__ returns "{name} - {status_display}"
+        assert str(session) == "Test Session - Pending"
 
     def test_session_status_choices(self, test_user):
         """Test valid status choices"""
@@ -97,9 +98,8 @@ class TestAnalysisResultModel:
             session=session,
             total_compounds=100,
             valid_compounds=80,
-            outliers=15,
+            outlier_count=15,  # Fixed: was 'outliers'
             success_rate=80.0,
-            regression_r2=0.85,
         )
 
         assert result.id is not None
@@ -107,6 +107,7 @@ class TestAnalysisResultModel:
         assert result.total_compounds == 100
         assert result.valid_compounds == 80
         assert result.success_rate == 80.0
+        assert result.outlier_count == 15
 
     def test_result_one_to_one_with_session(self, test_user):
         """Test one-to-one relationship with session"""
@@ -142,7 +143,7 @@ class TestAnalysisResultModel:
             original_filename="test.csv",
         )
 
-        regression_data = {
+        regression_analysis = {
             'GD1': {'r2': 0.85, 'coefficients': [1.2, -0.5]},
             'GM3': {'r2': 0.92, 'coefficients': [1.5, -0.3]},
         }
@@ -150,11 +151,11 @@ class TestAnalysisResultModel:
         result = AnalysisResult.objects.create(
             session=session,
             total_compounds=100,
-            regression_data=regression_data,
+            regression_analysis=regression_analysis,  # Fixed: was 'regression_data'
         )
 
-        assert result.regression_data == regression_data
-        assert result.regression_data['GD1']['r2'] == 0.85
+        assert result.regression_analysis == regression_analysis
+        assert result.regression_analysis['GD1']['r2'] == 0.85
 
 
 @pytest.mark.unit
@@ -204,12 +205,14 @@ class TestCompoundModel:
             name="GD1(36:1;O2)",
             rt=9.572,
             volume=1000000.0,
+            log_p=1.53,  # Fixed: log_p is required
         )
 
         compound_id = compound.id
-        session.delete()
+        # Use hard_delete() since AnalysisSession uses SoftDeleteModel
+        session.hard_delete()
 
-        # Compound should be deleted
+        # Compound should be deleted via CASCADE
         assert not Compound.objects.filter(id=compound_id).exists()
 
     def test_compound_ordering(self, test_user):
@@ -223,10 +226,10 @@ class TestCompoundModel:
             original_filename="test.csv",
         )
 
-        # Create compounds in random order
-        Compound.objects.create(session=session, name="C3", rt=10.5, volume=1000)
-        Compound.objects.create(session=session, name="C1", rt=8.5, volume=1000)
-        Compound.objects.create(session=session, name="C2", rt=9.5, volume=1000)
+        # Create compounds in random order (log_p is required)
+        Compound.objects.create(session=session, name="C3", rt=10.5, volume=1000, log_p=3.0)
+        Compound.objects.create(session=session, name="C1", rt=8.5, volume=1000, log_p=1.0)
+        Compound.objects.create(session=session, name="C2", rt=9.5, volume=1000, log_p=2.0)
 
         # Retrieve and check order
         compounds = list(Compound.objects.filter(session=session))
@@ -280,7 +283,8 @@ class TestModelRelationships:
                 session=session,
                 name=f"Compound {i}",
                 rt=float(i),
-                volume=1000.0
+                volume=1000.0,
+                log_p=float(i) * 0.5,  # Fixed: log_p is required
             )
             for i in range(5)
         ]
