@@ -639,8 +639,8 @@ class GangliosideProcessorV2:
         outlier_count = len(rule1_results["outliers"])
         success_rate = (valid_compounds / total_compounds * 100) if total_compounds > 0 else 0
 
-        # Categorize compounds
-        categorization = self.categorizer.categorize_compounds(df.to_dict('records'))
+        # Categorize compounds (ISSUE-002 fix: pass DataFrame, not list)
+        categorization = self.categorizer.categorize_compounds(df)
 
         return {
             "success": True,
