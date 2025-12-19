@@ -185,9 +185,16 @@ class AnalysisService:
         Raises:
             ValueError: If CSV is invalid or analysis fails
         """
+        from django.utils import timezone
+
         session_id = session.id
 
         try:
+            # Update session status to processing
+            session.status = 'processing'
+            session.started_at = timezone.now()
+            session.save(update_fields=['status', 'started_at'])
+
             # Send initial progress
             self._send_progress(session_id, "Loading CSV file...", 5, "Loading")
 
@@ -217,6 +224,11 @@ class AnalysisService:
             with transaction.atomic():
                 analysis_result = self._save_results(session, results, df)
 
+                # Update session status to completed
+                session.status = 'completed'
+                session.completed_at = timezone.now()
+                session.save(update_fields=['status', 'completed_at'])
+
             self._send_progress(session_id, "Results saved successfully.", 95, "Complete")
 
             # Send completion notification
@@ -231,6 +243,13 @@ class AnalysisService:
             return analysis_result
 
         except Exception as e:
+            # Update session status to failed
+            from django.utils import timezone
+            session.status = 'failed'
+            session.error_message = str(e)
+            session.completed_at = timezone.now()
+            session.save(update_fields=['status', 'error_message', 'completed_at'])
+
             # Send error notification
             self._send_error(
                 session_id,

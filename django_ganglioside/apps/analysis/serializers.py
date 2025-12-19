@@ -124,9 +124,10 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnalysisSession
         fields = [
-            'name', 'data_type', 'uploaded_file', 'r2_threshold',
-            'outlier_threshold', 'rt_tolerance'
+            'id', 'name', 'data_type', 'uploaded_file', 'r2_threshold',
+            'outlier_threshold', 'rt_tolerance', 'status'
         ]
+        read_only_fields = ['id', 'status']
 
     def validate_uploaded_file(self, value):
         """Validate uploaded file is a CSV with proper structure"""
