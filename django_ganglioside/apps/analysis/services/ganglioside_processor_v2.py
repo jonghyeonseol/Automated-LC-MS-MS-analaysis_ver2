@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from .improved_regression import ImprovedRegressionModel
 from .ganglioside_categorizer import GangliosideCategorizer
+from .chemical_validation import ChemicalValidator
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -54,6 +55,7 @@ class GangliosideProcessorV2:
             min_samples=min_samples_for_regression,
             r2_threshold=r2_threshold
         )
+        self.chemical_validator = ChemicalValidator()
 
         logger.info(
             "Ganglioside Processor V2 initialized with settings: "
@@ -203,10 +205,17 @@ class GangliosideProcessorV2:
                 f"Filtered compounds: {len(rule5_results['filtered_compounds'])}"
             )
 
+            # Rule 6: Sugar-RT relationship validation (chemical principle)
+            rule6_results = self._apply_rule6_sugar_rt_validation(df_processed)
+
+            # Rule 7: Category ordering validation (chemical principle)
+            rule7_results = self._apply_rule7_category_ordering(df_processed)
+
             # Compile final results
             logger.info("Compiling final results...")
             final_results = self._compile_results(
-                df_processed, rule1_results, rule23_results, rule4_results, rule5_results
+                df_processed, rule1_results, rule23_results, rule4_results, rule5_results,
+                rule6_results, rule7_results
             )
 
             success_rate = final_results['statistics']['success_rate']
@@ -445,6 +454,10 @@ class GangliosideProcessorV2:
         """
         Rule 4: Validate O-acetylation effects on retention time.
 
+        O-acetylation increases hydrophobicity, so:
+        - RT(compound+OAc) > RT(compound_base) [primary validation]
+        - RT shift should be within expected range (magnitude validation)
+
         Args:
             df: Preprocessed DataFrame
 
@@ -453,13 +466,18 @@ class GangliosideProcessorV2:
         """
         valid_oacetyl = []
         invalid_oacetyl = []
+        oacetyl_pairs = []  # For magnitude validation
 
         # Find O-acetylated compounds
         oacetyl_mask = df["prefix"].str.contains(r"\+OAc", na=False)
         oacetyl_compounds = df[oacetyl_mask].copy()
 
         if oacetyl_compounds.empty:
-            return {"valid_oacetyl": [], "invalid_oacetyl": []}
+            return {
+                "valid_oacetyl": [],
+                "invalid_oacetyl": [],
+                "magnitude_validation": {"is_valid": True, "warnings": [], "statistics": {}}
+            }
 
         # Create base compound lookup key
         oacetyl_compounds["base_prefix"] = oacetyl_compounds["prefix"].str.replace("+OAc", "", regex=False)
@@ -496,6 +514,13 @@ class GangliosideProcessorV2:
                     "rt_increase": row["RT"] - row["base_RT"],
                     "valid": True
                 })
+                # Collect pair for magnitude validation
+                oacetyl_pairs.append({
+                    "oacetyl_name": row["Name"],
+                    "base_name": row["base_Name"],
+                    "oacetyl_rt": row["RT"],
+                    "base_rt": row["base_RT"]
+                })
 
             # Invalid OAc compounds (RT didn't increase)
             invalid_df = with_base[~is_valid]
@@ -516,9 +541,13 @@ class GangliosideProcessorV2:
                 "reason": "No matching base compound found"
             })
 
+        # Magnitude validation for valid OAc pairs
+        magnitude_result = self.chemical_validator.validate_oacetylation_magnitude(oacetyl_pairs)
+
         return {
             "valid_oacetyl": valid_oacetyl,
-            "invalid_oacetyl": invalid_oacetyl
+            "invalid_oacetyl": invalid_oacetyl,
+            "magnitude_validation": magnitude_result.to_dict()
         }
 
     def _apply_rule5_rt_filtering(self, df: pd.DataFrame) -> Dict[str, Any]:
@@ -680,13 +709,101 @@ class GangliosideProcessorV2:
 
         return prefix in isomer_prefixes and f_value == 1
 
+
+    def _apply_rule6_sugar_rt_validation(
+        self,
+        df: pd.DataFrame
+    ) -> Dict[str, Any]:
+        """
+        Rule 6: Validate sugar count inversely correlates with RT.
+
+        Chromatography principle:
+        - More sugars → more hydrophilic → lower RT
+
+        For compounds with the SAME lipid composition (suffix),
+        higher sugar count should correlate with lower RT.
+
+        Args:
+            df: DataFrame with compound data including 'sugar_count' column
+
+        Returns:
+            Dictionary with validation results and any warnings
+        """
+        logger.info("Rule 6: Validating sugar-RT relationship...")
+
+        # Ensure sugar_count column exists
+        if 'sugar_count' not in df.columns:
+            # Add sugar count from sugar analysis
+            df = df.copy()
+            df['sugar_count'] = df['base_prefix'].apply(
+                lambda x: self._parse_sugar_composition(x).get('total_sugars', 0)
+            )
+
+        # Also ensure category column exists
+        if 'category' not in df.columns:
+            df = df.copy()
+            df['category'] = df['base_prefix'].str[:2]
+
+        result = self.chemical_validator.validate_sugar_rt_relationship(
+            df,
+            sugar_count_column='sugar_count',
+            rt_column='RT',
+            suffix_column='suffix'
+        )
+
+        logger.info(
+            f"  - Valid groups: {result.statistics.get('valid_groups', 0)}, "
+            f"Violations: {result.statistics.get('violation_groups', 0)}"
+        )
+
+        return result.to_dict()
+
+    def _apply_rule7_category_ordering(
+        self,
+        df: pd.DataFrame
+    ) -> Dict[str, Any]:
+        """
+        Rule 7: Validate RT ordering across categories.
+
+        Chromatography principle:
+        - More sugars → more hydrophilic → lower RT
+
+        Expected average RT ordering (ascending):
+        GP (9 sugars) < GQ (8) < GT (7) < GD (6) < GM (5)
+
+        Args:
+            df: DataFrame with compound data
+
+        Returns:
+            Dictionary with validation results and any warnings
+        """
+        logger.info("Rule 7: Validating category RT ordering...")
+
+        # Ensure category column exists
+        if 'category' not in df.columns:
+            df = df.copy()
+            df['category'] = df['base_prefix'].str[:2]
+
+        result = self.chemical_validator.validate_category_ordering(
+            df,
+            category_column='category',
+            rt_column='RT'
+        )
+
+        n_violations = len(result.statistics.get('order_violations', []))
+        logger.info(f"  - Order violations: {n_violations}")
+
+        return result.to_dict()
+
     def _compile_results(
         self,
         df: pd.DataFrame,
         rule1_results: Dict[str, Any],
         rule23_results: Dict[str, Any],
         rule4_results: Dict[str, Any],
-        rule5_results: Dict[str, Any]
+        rule5_results: Dict[str, Any],
+        rule6_results: Optional[Dict[str, Any]] = None,
+        rule7_results: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """Compile all rule results into final output."""
         # Calculate statistics
@@ -698,6 +815,23 @@ class GangliosideProcessorV2:
 
         # Categorize compounds (ISSUE-002 fix: pass DataFrame, not list)
         categorization = self.categorizer.categorize_compounds(df)
+
+        # Compile chemical validation results
+        chemical_validation = {}
+        if rule6_results:
+            chemical_validation['sugar_rt_validation'] = rule6_results
+        if rule7_results:
+            chemical_validation['category_ordering'] = rule7_results
+
+        # Collect all warnings from chemical validation
+        chemical_warnings = []
+        for validation_name, validation_result in chemical_validation.items():
+            if validation_result and 'warnings' in validation_result:
+                for warning in validation_result['warnings']:
+                    chemical_warnings.append({
+                        'validation': validation_name,
+                        **warning
+                    })
 
         return {
             "success": True,
@@ -721,5 +855,7 @@ class GangliosideProcessorV2:
                 "fragmentation_events": rule5_results["fragmentation_candidates"],
                 "filtered_compounds": rule5_results["filtered_compounds"]
             },
-            "categorization": categorization
+            "categorization": categorization,
+            "chemical_validation": chemical_validation,
+            "chemical_warnings": chemical_warnings
         }
