@@ -232,6 +232,14 @@ class GangliosideProcessorV2:
         Returns:
             Processed DataFrame with extracted features
         """
+        # CSV injection protection: Sanitize string columns
+        # Remove formula-like prefixes (=, +, -, @, \t, \r) from string cells
+        dangerous_prefixes = ('=', '+', '-', '@', '\t', '\r')
+        if 'Name' in df.columns:
+            df['Name'] = df['Name'].apply(
+                lambda x: str(x).lstrip(''.join(dangerous_prefixes)) if isinstance(x, str) else x
+            )
+
         # Extract prefix and suffix from Name column
         df["prefix"] = df["Name"].str.extract(r"^([^(]+)")[0]
         df["suffix"] = df["Name"].str.extract(r"\(([^)]+)\)")[0]

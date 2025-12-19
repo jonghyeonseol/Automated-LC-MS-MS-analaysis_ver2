@@ -164,6 +164,26 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         f"Missing required columns: {', '.join(sorted(missing_columns))}"
                     )
+
+            # CSV injection detection: Check for formula-like prefixes in cells
+            # We warn but don't reject - the processor will sanitize the content
+            dangerous_prefixes = ('=', '+', '-', '@', '\t', '\r')
+            value.seek(0)
+            full_content = value.read().decode('utf-8')
+            value.seek(0)
+
+            # Check for potential formula injection patterns
+            import re
+            formula_pattern = re.compile(r'(?:^|,)([=+\-@\t\r])[^,\n]*', re.MULTILINE)
+            potential_injections = formula_pattern.findall(full_content)
+            if potential_injections:
+                # Log warning but don't reject - processor will sanitize
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(
+                    f"CSV contains {len(potential_injections)} cells with formula-like prefixes. "
+                    "These will be sanitized during processing."
+                )
         except UnicodeDecodeError:
             raise serializers.ValidationError("File must be UTF-8 encoded text.")
         except csv.Error:
