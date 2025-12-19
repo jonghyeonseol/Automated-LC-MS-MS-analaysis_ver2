@@ -3,10 +3,13 @@ Ganglioside Categorization Module
 Provides prefix-based categorization for ganglioside data visualization
 """
 
+import logging
 import re
 import pandas as pd
 from typing import Dict, List, Any, Tuple
 from collections import defaultdict
+
+logger = logging.getLogger(__name__)
 
 
 class GangliosideCategorizer:
@@ -64,7 +67,7 @@ class GangliosideCategorizer:
             'NeuGc': 'N-glycolylneuraminic acid'
         }
 
-        print("📊 Ganglioside Categorizer 초기화 완료")
+        logger.info("Ganglioside Categorizer initialized")
 
     def extract_base_prefix(self, compound_name: str) -> Tuple[str, str, List[str]]:
         """

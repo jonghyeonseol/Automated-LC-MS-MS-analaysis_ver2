@@ -1,14 +1,16 @@
 """
-Regression Analyzer - 고급 회귀분석 전용 모듈
-OLS 회귀분석, 잔차분석, Durbin-Watson 테스트, Cook's Distance 등
+Regression Analyzer - Advanced regression analysis module
+OLS regression, residual analysis, Durbin-Watson test, Cook's Distance, etc.
 """
 
+import logging
 import warnings
 from typing import Any, Dict, List
 
 import numpy as np
 from scipy import stats
 
+logger = logging.getLogger(__name__)
 warnings.filterwarnings("ignore")
 
 
@@ -18,7 +20,7 @@ class RegressionAnalyzer:
         self.outlier_threshold = 3.0
         self.confidence_level = 0.95
 
-        print("📈 Regression Analyzer 초기화 완료")
+        logger.info("Regression Analyzer initialized")
 
     def perform_comprehensive_regression(
         self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None
@@ -88,7 +90,7 @@ class RegressionAnalyzer:
             }
 
         except Exception as e:
-            print(f"Regression analysis error: {str(e)}")
+            logger.error(f"Regression analysis error: {str(e)}")
             return self._error_regression_result(str(e))
 
     def _perform_ols_regression(
@@ -360,7 +362,7 @@ class RegressionAnalyzer:
             }
 
         except Exception as e:
-            print(f"Influence diagnostics error: {str(e)}")
+            logger.error(f"Influence diagnostics error: {str(e)}")
             return self._default_influence_result(n)
 
     def _advanced_outlier_detection(
@@ -572,7 +574,7 @@ class RegressionAnalyzer:
             }
 
         except Exception as e:
-            print(f"Prediction interval calculation error: {str(e)}")
+            logger.error(f"Prediction interval calculation error: {str(e)}")
             return {"confidence_intervals": [], "prediction_intervals": []}
 
     def _evaluate_model_quality(
