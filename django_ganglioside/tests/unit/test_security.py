@@ -1,12 +1,15 @@
 """
 Unit tests for security features including CSV injection protection
+and file upload validation
 """
 import pytest
 import pandas as pd
-from io import StringIO
+from io import StringIO, BytesIO
+from unittest.mock import Mock, MagicMock
 
 from apps.analysis.services.ganglioside_processor import GangliosideProcessor
 from apps.analysis.services.ganglioside_processor_v2 import GangliosideProcessorV2
+from apps.analysis.serializers import AnalysisSessionCreateSerializer
 
 
 class TestCSVInjectionProtection:
@@ -228,3 +231,115 @@ class TestCSVInjectionPatterns:
         assert len(processed_df) == 1, "Valid compound should be preserved after sanitization"
         assert processed_df['Name'].iloc[0] == 'GD1(36:1;O2)', "Dangerous prefixes should be stripped"
         assert processed_df['prefix'].iloc[0] == 'GD1', "Prefix should be correctly extracted"
+
+
+class TestFileUploadValidation:
+    """Test file upload validation features"""
+
+    def _create_mock_file(self, content: bytes, filename: str = 'test.csv', size: int = None):
+        """Create a mock file object for testing"""
+        file = MagicMock()
+        file.name = filename
+        file.size = size if size is not None else len(content)
+
+        # Create a BytesIO that supports seek and read
+        buffer = BytesIO(content)
+        file.read = buffer.read
+        file.seek = buffer.seek
+
+        return file
+
+    def test_valid_csv_passes_validation(self):
+        """Test that valid CSV files pass validation"""
+        csv_content = b"Name,RT,Volume,Log P,Anchor\nGD1(36:1;O2),9.572,1000000,1.53,T\n"
+        mock_file = self._create_mock_file(csv_content)
+
+        serializer = AnalysisSessionCreateSerializer()
+        # Should not raise exception
+        result = serializer.validate_uploaded_file(mock_file)
+        assert result is not None
+
+    def test_non_csv_extension_rejected(self):
+        """Test that non-CSV file extensions are rejected"""
+        csv_content = b"Name,RT,Volume,Log P,Anchor\nGD1(36:1;O2),9.572,1000000,1.53,T\n"
+        mock_file = self._create_mock_file(csv_content, filename='test.xlsx')
+
+        serializer = AnalysisSessionCreateSerializer()
+        from rest_framework.exceptions import ValidationError
+        with pytest.raises(ValidationError) as exc_info:
+            serializer.validate_uploaded_file(mock_file)
+        assert "Only CSV files are allowed" in str(exc_info.value)
+
+    def test_oversized_file_rejected(self):
+        """Test that files exceeding 50MB are rejected"""
+        csv_content = b"Name,RT,Volume,Log P,Anchor\nGD1(36:1;O2),9.572,1000000,1.53,T\n"
+        # Simulate a 51MB file
+        mock_file = self._create_mock_file(csv_content, size=51 * 1024 * 1024)
+
+        serializer = AnalysisSessionCreateSerializer()
+        from rest_framework.exceptions import ValidationError
+        with pytest.raises(ValidationError) as exc_info:
+            serializer.validate_uploaded_file(mock_file)
+        assert "exceed 50MB" in str(exc_info.value)
+
+    def test_binary_content_rejected(self):
+        """Test that binary content is rejected"""
+        # PNG file header (magic bytes)
+        binary_content = b'\x89PNG\r\n\x1a\n' + b'\x00' * 100
+        mock_file = self._create_mock_file(binary_content, filename='malicious.csv')
+
+        serializer = AnalysisSessionCreateSerializer()
+        from rest_framework.exceptions import ValidationError
+        with pytest.raises(ValidationError) as exc_info:
+            serializer.validate_uploaded_file(mock_file)
+        assert "binary" in str(exc_info.value).lower() or "UTF-8" in str(exc_info.value)
+
+    def test_missing_required_columns_rejected(self):
+        """Test that CSVs missing required columns are rejected"""
+        # Missing 'Volume' and 'Log P' columns
+        csv_content = b"Name,RT,Anchor\nGD1(36:1;O2),9.572,T\n"
+        mock_file = self._create_mock_file(csv_content)
+
+        serializer = AnalysisSessionCreateSerializer()
+        from rest_framework.exceptions import ValidationError
+        with pytest.raises(ValidationError) as exc_info:
+            serializer.validate_uploaded_file(mock_file)
+        assert "Missing required columns" in str(exc_info.value)
+
+    def test_too_many_rows_rejected(self):
+        """Test that files with too many rows are rejected"""
+        # Create content with more rows than allowed
+        header = b"Name,RT,Volume,Log P,Anchor\n"
+        row = b"GD1(36:1;O2),9.572,1000000,1.53,T\n"
+        max_rows = AnalysisSessionCreateSerializer.MAX_ROW_COUNT
+
+        # Create content with max_rows + 100 rows
+        csv_content = header + row * (max_rows + 100)
+        mock_file = self._create_mock_file(csv_content)
+
+        serializer = AnalysisSessionCreateSerializer()
+        from rest_framework.exceptions import ValidationError
+        with pytest.raises(ValidationError) as exc_info:
+            serializer.validate_uploaded_file(mock_file)
+        assert "too many rows" in str(exc_info.value)
+
+    def test_max_row_limit_is_reasonable(self):
+        """Test that MAX_ROW_COUNT is set to a reasonable value"""
+        max_rows = AnalysisSessionCreateSerializer.MAX_ROW_COUNT
+        assert max_rows >= 1000, "MAX_ROW_COUNT should allow at least 1000 rows"
+        assert max_rows <= 100000, "MAX_ROW_COUNT should not exceed 100000 rows"
+
+    def test_file_at_row_limit_passes(self):
+        """Test that files exactly at the row limit pass validation"""
+        header = b"Name,RT,Volume,Log P,Anchor\n"
+        row = b"GD1(36:1;O2),9.572,1000000,1.53,T\n"
+        max_rows = AnalysisSessionCreateSerializer.MAX_ROW_COUNT
+
+        # Create content with exactly max_rows
+        csv_content = header + row * max_rows
+        mock_file = self._create_mock_file(csv_content)
+
+        serializer = AnalysisSessionCreateSerializer()
+        # Should not raise exception
+        result = serializer.validate_uploaded_file(mock_file)
+        assert result is not None

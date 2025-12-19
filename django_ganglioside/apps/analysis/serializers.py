@@ -129,6 +129,9 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'status']
 
+    # Maximum number of data rows allowed (excluding header)
+    MAX_ROW_COUNT = 10000
+
     def validate_uploaded_file(self, value):
         """Validate uploaded file is a CSV with proper structure"""
         import csv
@@ -141,6 +144,29 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
         # Check file size (max 50MB)
         if value.size > 50 * 1024 * 1024:
             raise serializers.ValidationError("File size cannot exceed 50MB.")
+
+        # MIME type validation: Check actual file content type
+        # Read first bytes to detect file type via magic bytes
+        value.seek(0)
+        first_bytes = value.read(512)
+        value.seek(0)
+
+        # CSV files should start with printable ASCII (text)
+        # Check if content is valid text (no binary control characters except newlines/tabs)
+        try:
+            text_sample = first_bytes.decode('utf-8')
+            # Check for binary content (non-text characters)
+            import string
+            allowed_chars = set(string.printable)
+            for char in text_sample[:256]:
+                if char not in allowed_chars:
+                    raise serializers.ValidationError(
+                        "File appears to contain binary content. Only text CSV files are allowed."
+                    )
+        except UnicodeDecodeError:
+            raise serializers.ValidationError(
+                "File must be UTF-8 encoded text. Binary files are not allowed."
+            )
 
         # Validate CSV structure and required columns
         try:
@@ -183,6 +209,14 @@ class AnalysisSessionCreateSerializer(serializers.ModelSerializer):
                 logger.warning(
                     f"CSV contains {len(potential_injections)} cells with formula-like prefixes. "
                     "These will be sanitized during processing."
+                )
+
+            # Row count validation: Limit maximum rows to prevent DoS
+            row_count = full_content.count('\n')
+            if row_count > self.MAX_ROW_COUNT + 1:  # +1 for header row
+                raise serializers.ValidationError(
+                    f"File contains too many rows ({row_count:,}). "
+                    f"Maximum allowed is {self.MAX_ROW_COUNT:,} data rows."
                 )
         except UnicodeDecodeError:
             raise serializers.ValidationError("File must be UTF-8 encoded text.")
