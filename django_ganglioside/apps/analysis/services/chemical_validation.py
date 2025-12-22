@@ -12,7 +12,7 @@ Validates analysis results against fundamental chromatography principles:
 
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Any, Tuple, Optional
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from scipy import stats
 import logging
