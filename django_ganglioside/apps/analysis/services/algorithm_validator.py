@@ -305,35 +305,43 @@ class AlgorithmValidator:
         else:
             r2_train = rmse_train = mae_train = 0.0
 
-        # Test metrics - predict on held-out test set
+        # Test metrics - predict on held-out test set (vectorized)
         test_actuals = []
         test_predictions = []
 
-        for _, test_row in test_df.iterrows():
-            test_rt = test_row['RT']
-            test_log_p = test_row['Log P']
-            prefix = self.processor._preprocess_data(
-                pd.DataFrame([test_row])
-            ).iloc[0]['prefix']
+        if not test_df.empty:
+            # Preprocess all test data at once
+            test_df_processed = self.processor._preprocess_data(test_df.copy())
+            regression_analysis = train_results.get('regression_analysis', {})
 
-            if prefix in train_results.get('regression_analysis', {}):
-                model_info = train_results['regression_analysis'][prefix]
+            # Vectorized prediction function
+            def predict_rt(row):
+                prefix = row.get('prefix')
+                if prefix in regression_analysis:
+                    model_info = regression_analysis[prefix]
+                    test_log_p = row['Log P']
 
-                # Get coefficients
-                if 'coefficients' in model_info:
-                    # Multiple regression
-                    intercept = model_info.get('intercept', 0)
-                    # For now, use simple Log P prediction
-                    slope = model_info.get('slope', model_info['coefficients'].get('Log P', 0))
-                    predicted_rt = slope * test_log_p + intercept
-                else:
-                    # Simple regression
-                    slope = model_info.get('slope', 0)
-                    intercept = model_info.get('intercept', 0)
-                    predicted_rt = slope * test_log_p + intercept
+                    # Get coefficients
+                    if 'coefficients' in model_info:
+                        # Multiple regression
+                        intercept = model_info.get('intercept', 0)
+                        slope = model_info.get('slope', model_info['coefficients'].get('Log P', 0))
+                    else:
+                        # Simple regression
+                        slope = model_info.get('slope', 0)
+                        intercept = model_info.get('intercept', 0)
 
-                test_actuals.append(test_rt)
-                test_predictions.append(predicted_rt)
+                    return slope * test_log_p + intercept
+                return None
+
+            # Apply prediction to all rows
+            predictions = test_df_processed.apply(predict_rt, axis=1)
+
+            # Collect valid predictions
+            for idx, pred in enumerate(predictions):
+                if pred is not None:
+                    test_actuals.append(test_df_processed.iloc[idx]['RT'])
+                    test_predictions.append(pred)
 
         if test_actuals:
             r2_test = r2_score(test_actuals, test_predictions)

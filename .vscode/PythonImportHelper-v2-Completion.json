@@ -1,5 +1,498 @@
 [
     {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "BayesianRidge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "BayesianRidge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "BayesianRidge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "BayesianRidge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "LinearRegression",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "BayesianRidge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "RidgeCV",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "LinearRegression",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "Ridge",
+        "importPath": "sklearn.linear_model",
+        "description": "sklearn.linear_model",
+        "isExtraImport": true,
+        "detail": "sklearn.linear_model",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_absolute_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_squared_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_absolute_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_squared_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_absolute_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "accuracy_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "precision_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "recall_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "f1_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_squared_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "KFold",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "KFold",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "cross_val_score",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "LeaveOneOut",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
+        "documentation": {}
+    },
+    {
+        "label": "warnings",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "warnings",
+        "description": "warnings",
+        "detail": "warnings",
+        "documentation": {}
+    },
+    {
+        "label": "product",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
         "label": "settings",
         "importPath": "django.conf",
         "description": "django.conf",
@@ -146,21 +639,35 @@
         "documentation": {}
     },
     {
-        "label": "pandas",
-        "kind": 6,
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
+        "detail": "typing",
         "documentation": {}
     },
     {
-        "label": "numpy",
-        "kind": 6,
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "importPath": "numpy",
-        "description": "numpy",
-        "detail": "numpy",
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -189,6 +696,14 @@
     },
     {
         "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -404,123 +919,19 @@
         "documentation": {}
     },
     {
-        "label": "KFold",
-        "importPath": "sklearn.model_selection",
-        "description": "sklearn.model_selection",
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
         "isExtraImport": true,
-        "detail": "sklearn.model_selection",
+        "detail": "dataclasses",
         "documentation": {}
     },
     {
-        "label": "LeaveOneOut",
-        "importPath": "sklearn.model_selection",
-        "description": "sklearn.model_selection",
+        "label": "field",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
         "isExtraImport": true,
-        "detail": "sklearn.model_selection",
-        "documentation": {}
-    },
-    {
-        "label": "LeaveOneOut",
-        "importPath": "sklearn.model_selection",
-        "description": "sklearn.model_selection",
-        "isExtraImport": true,
-        "detail": "sklearn.model_selection",
-        "documentation": {}
-    },
-    {
-        "label": "KFold",
-        "importPath": "sklearn.model_selection",
-        "description": "sklearn.model_selection",
-        "isExtraImport": true,
-        "detail": "sklearn.model_selection",
-        "documentation": {}
-    },
-    {
-        "label": "cross_val_score",
-        "importPath": "sklearn.model_selection",
-        "description": "sklearn.model_selection",
-        "isExtraImport": true,
-        "detail": "sklearn.model_selection",
-        "documentation": {}
-    },
-    {
-        "label": "r2_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "mean_squared_error",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "mean_absolute_error",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "accuracy_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "precision_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "recall_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "f1_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "r2_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "r2_score",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
-        "documentation": {}
-    },
-    {
-        "label": "mean_squared_error",
-        "importPath": "sklearn.metrics",
-        "description": "sklearn.metrics",
-        "isExtraImport": true,
-        "detail": "sklearn.metrics",
+        "detail": "dataclasses",
         "documentation": {}
     },
     {
@@ -533,11 +944,43 @@
         "documentation": {}
     },
     {
-        "label": "default_storage",
-        "importPath": "django.core.files.storage",
-        "description": "django.core.files.storage",
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
         "isExtraImport": true,
-        "detail": "django.core.files.storage",
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
         "documentation": {}
     },
     {
@@ -557,27 +1000,19 @@
         "documentation": {}
     },
     {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
+        "label": "stats",
+        "importPath": "scipy",
+        "description": "scipy",
         "isExtraImport": true,
-        "detail": "datetime",
+        "detail": "scipy",
         "documentation": {}
     },
     {
-        "label": "timedelta",
-        "importPath": "datetime",
-        "description": "datetime",
+        "label": "stats",
+        "importPath": "scipy",
+        "description": "scipy",
         "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
+        "detail": "scipy",
         "documentation": {}
     },
     {
@@ -595,6 +1030,22 @@
         "isExtraImport": true,
         "importPath": "io",
         "description": "io",
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "StringIO",
+        "importPath": "io",
+        "description": "io",
+        "isExtraImport": true,
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "BytesIO",
+        "importPath": "io",
+        "description": "io",
+        "isExtraImport": true,
         "detail": "io",
         "documentation": {}
     },
@@ -637,89 +1088,6 @@
         "description": "collections",
         "isExtraImport": true,
         "detail": "collections",
-        "documentation": {}
-    },
-    {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "LinearRegression",
-        "importPath": "sklearn.linear_model",
-        "description": "sklearn.linear_model",
-        "isExtraImport": true,
-        "detail": "sklearn.linear_model",
-        "documentation": {}
-    },
-    {
-        "label": "Ridge",
-        "importPath": "sklearn.linear_model",
-        "description": "sklearn.linear_model",
-        "isExtraImport": true,
-        "detail": "sklearn.linear_model",
-        "documentation": {}
-    },
-    {
-        "label": "Ridge",
-        "importPath": "sklearn.linear_model",
-        "description": "sklearn.linear_model",
-        "isExtraImport": true,
-        "detail": "sklearn.linear_model",
-        "documentation": {}
-    },
-    {
-        "label": "RidgeCV",
-        "importPath": "sklearn.linear_model",
-        "description": "sklearn.linear_model",
-        "isExtraImport": true,
-        "detail": "sklearn.linear_model",
-        "documentation": {}
-    },
-    {
-        "label": "LinearRegression",
-        "importPath": "sklearn.linear_model",
-        "description": "sklearn.linear_model",
-        "isExtraImport": true,
-        "detail": "sklearn.linear_model",
-        "documentation": {}
-    },
-    {
-        "label": "StandardScaler",
-        "importPath": "sklearn.preprocessing",
-        "description": "sklearn.preprocessing",
-        "isExtraImport": true,
-        "detail": "sklearn.preprocessing",
-        "documentation": {}
-    },
-    {
-        "label": "warnings",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "warnings",
-        "description": "warnings",
-        "detail": "warnings",
-        "documentation": {}
-    },
-    {
-        "label": "stats",
-        "importPath": "scipy",
-        "description": "scipy",
-        "isExtraImport": true,
-        "detail": "scipy",
         "documentation": {}
     },
     {
@@ -972,35 +1340,19 @@
         "documentation": {}
     },
     {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
         "isExtraImport": true,
-        "detail": "django.utils",
+        "detail": "datetime",
         "documentation": {}
     },
     {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
         "isExtraImport": true,
-        "detail": "django.utils",
-        "documentation": {}
-    },
-    {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
-        "isExtraImport": true,
-        "detail": "django.utils",
-        "documentation": {}
-    },
-    {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
-        "isExtraImport": true,
-        "detail": "django.utils",
+        "detail": "datetime",
         "documentation": {}
     },
     {
@@ -1092,12 +1444,29 @@
         "documentation": {}
     },
     {
+        "label": "PageNumberPagination",
+        "importPath": "rest_framework.pagination",
+        "description": "rest_framework.pagination",
+        "isExtraImport": true,
+        "detail": "rest_framework.pagination",
+        "documentation": {}
+    },
+    {
         "label": "redis",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "redis",
         "description": "redis",
         "detail": "redis",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
         "documentation": {}
     },
     {
@@ -1212,6 +1581,14 @@
         "importPath": "pytest",
         "description": "pytest",
         "detail": "pytest",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
         "documentation": {}
     },
     {
@@ -1455,6 +1832,22 @@
         "documentation": {}
     },
     {
+        "label": "Mock",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
+        "label": "MagicMock",
+        "importPath": "unittest.mock",
+        "description": "unittest.mock",
+        "isExtraImport": true,
+        "detail": "unittest.mock",
+        "documentation": {}
+    },
+    {
         "label": "run_analysis_async",
         "importPath": "apps.analysis.tasks",
         "description": "apps.analysis.tasks",
@@ -1471,11 +1864,27 @@
         "documentation": {}
     },
     {
-        "label": "send_analysis_complete_notification",
+        "label": "send_analysis_notification",
         "importPath": "apps.analysis.tasks",
         "description": "apps.analysis.tasks",
         "isExtraImport": true,
         "detail": "apps.analysis.tasks",
+        "documentation": {}
+    },
+    {
+        "label": "# Fixed: was 'send_analysis_complete_notification'",
+        "importPath": "apps.analysis.tasks",
+        "description": "apps.analysis.tasks",
+        "isExtraImport": true,
+        "detail": "apps.analysis.tasks",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessorV2",
+        "importPath": "apps.analysis.services.ganglioside_processor_v2",
+        "description": "apps.analysis.services.ganglioside_processor_v2",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.ganglioside_processor_v2",
         "documentation": {}
     },
     {
@@ -1520,6 +1929,62 @@
         "documentation": {}
     },
     {
+        "label": "ChemicalValidator",
+        "importPath": "apps.analysis.services.chemical_validation",
+        "description": "apps.analysis.services.chemical_validation",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationResult",
+        "importPath": "apps.analysis.services.chemical_validation",
+        "description": "apps.analysis.services.chemical_validation",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationWarning",
+        "importPath": "apps.analysis.services.chemical_validation",
+        "description": "apps.analysis.services.chemical_validation",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessor",
+        "importPath": "apps.analysis.services.ganglioside_processor",
+        "description": "apps.analysis.services.ganglioside_processor",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessor",
+        "importPath": "apps.analysis.services.ganglioside_processor",
+        "description": "apps.analysis.services.ganglioside_processor",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
+        "label": "GangliosideProcessor",
+        "importPath": "apps.analysis.services.ganglioside_processor",
+        "description": "apps.analysis.services.ganglioside_processor",
+        "isExtraImport": true,
+        "detail": "apps.analysis.services.ganglioside_processor",
+        "documentation": {}
+    },
+    {
+        "label": "AnalysisSessionCreateSerializer",
+        "importPath": "apps.analysis.serializers",
+        "description": "apps.analysis.serializers",
+        "isExtraImport": true,
+        "detail": "apps.analysis.serializers",
+        "documentation": {}
+    },
+    {
         "label": "APIClient",
         "importPath": "rest_framework.test",
         "description": "rest_framework.test",
@@ -1534,6 +1999,15 @@
         "importPath": "multiprocessing",
         "description": "multiprocessing",
         "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -1789,6 +2263,285 @@
         "documentation": {}
     },
     {
+        "label": "cross_validate_regression",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "peekOfCode": "def cross_validate_regression(X, y):\n    \"\"\"Leave-One-Out Cross-Validation\"\"\"\n    if len(X) < 3:\n        return None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]\n        y_train, y_test = y[train_idx], y[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "documentation": {}
+    },
+    {
+        "label": "old_algorithm",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "peekOfCode": "def old_algorithm(df):\n    \"\"\"\n    OLD algorithm: Use training R² with threshold=0.75\n    This was causing 67% false positive rate for n=3 groups\n    \"\"\"\n    print(\"\\n🔴 Running OLD Algorithm...\")\n    print(\"   - Uses training R² (optimistic)\")\n    print(\"   - Threshold: 0.75\")\n    print(\"   - No cross-validation\")\n    print()",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "documentation": {}
+    },
+    {
+        "label": "new_algorithm",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "peekOfCode": "def new_algorithm(df):\n    \"\"\"\n    NEW algorithm: Hybrid multi-level with validation R²\n    This should correctly handle n=3 groups\n    \"\"\"\n    print(\"\\n🟢 Running NEW Algorithm...\")\n    print(\"   - Uses validation R² (realistic)\")\n    print(\"   - Multi-level thresholds: 0.75/0.70/0.70/0.50\")\n    print(\"   - Cross-validation enabled\")\n    print()",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "documentation": {}
+    },
+    {
+        "label": "compare_results",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "peekOfCode": "def compare_results(old_results, new_results, df):\n    \"\"\"Compare OLD vs NEW algorithm results\"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"COMPARISON: OLD vs NEW Algorithm\")\n    print(\"=\" * 80)\n    print()\n    # Acceptance rates\n    old_accept = len(old_results['accepted_groups'])\n    old_reject = len(old_results['rejected_groups'])\n    new_accept = len(new_results['accepted_groups'])",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "peekOfCode": "def main():\n    print(\"=\" * 80)\n    print(\"FINAL VALIDATION: OLD vs NEW Algorithm\")\n    print(\"=\" * 80)\n    print()\n    # Load data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)\n    except FileNotFoundError:",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_regression",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "peekOfCode": "def cross_validate_regression(X, y, use_bayesian=False):\n    \"\"\"Leave-One-Out Cross-Validation with Ridge or Bayesian Ridge\"\"\"\n    if len(X) < 3:\n        return None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]\n        y_train, y_test = y[train_idx], y[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "documentation": {}
+    },
+    {
+        "label": "old_algorithm",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "peekOfCode": "def old_algorithm(df):\n    \"\"\"\n    OLD algorithm: Use training R² with threshold=0.75\n    This was causing 67% false positive rate for n=3 groups\n    \"\"\"\n    print(\"\\n🔴 Running OLD Algorithm...\")\n    print(\"   - Uses training R² (optimistic)\")\n    print(\"   - Threshold: 0.75\")\n    print(\"   - No cross-validation\")\n    print()",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "documentation": {}
+    },
+    {
+        "label": "new_algorithm",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "peekOfCode": "def new_algorithm(df):\n    \"\"\"\n    NEW algorithm: Bayesian Ridge with hybrid multi-level and validation R²\n    This should correctly handle n=3 groups with automatic regularization\n    \"\"\"\n    print(\"\\n🟢 Running NEW Algorithm (Bayesian Ridge)...\")\n    print(\"   - Uses Bayesian Ridge with automatic regularization\")\n    print(\"   - Uses validation R² (realistic)\")\n    print(\"   - Multi-level thresholds: 0.75/0.70/0.70/0.50\")\n    print(\"   - Cross-validation enabled\")",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "documentation": {}
+    },
+    {
+        "label": "compare_results",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "peekOfCode": "def compare_results(old_results, new_results, df):\n    \"\"\"Compare OLD vs NEW algorithm results\"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"COMPARISON: OLD vs NEW Algorithm\")\n    print(\"=\" * 80)\n    print()\n    # Acceptance rates\n    old_accept = len(old_results['accepted_groups'])\n    old_reject = len(old_results['rejected_groups'])\n    new_accept = len(new_results['accepted_groups'])",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "description": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "peekOfCode": "def main():\n    print(\"=\" * 80)\n    print(\"FINAL VALIDATION: OLD vs NEW Algorithm\")\n    print(\"=\" * 80)\n    print()\n    # Load data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)\n    except FileNotFoundError:",
+        "detail": "analysis.optimization_nov2025.scripts.FINAL_VALIDATION_BAYESIAN",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_regression",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "description": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "peekOfCode": "def cross_validate_regression(X, y):\n    \"\"\"Leave-One-Out Cross-Validation\"\"\"\n    if len(X) < 3:\n        return None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]\n        y_train, y_test = y[train_idx], y[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "documentation": {}
+    },
+    {
+        "label": "analyze_family",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "description": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "peekOfCode": "def analyze_family(df, family_name, family_prefixes):\n    \"\"\"Analyze a single family's pooling performance\"\"\"\n    print(f\"\\n{'='*80}\")\n    print(f\"📊 {family_name}\")\n    print(f\"{'='*80}\")\n    # Get family data\n    family_df = df[df['prefix'].isin(family_prefixes)]\n    family_anchors = family_df[family_df['Anchor'] == 'T']\n    print(f\"\\n📋 Family Composition:\")\n    for prefix in family_prefixes:",
+        "detail": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_families",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "description": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "peekOfCode": "def visualize_families(df):\n    \"\"\"Create visualization comparing all families\"\"\"\n    fig, axes = plt.subplots(2, 3, figsize=(18, 12))\n    axes = axes.flatten()\n    for idx, (family_name, family_prefixes) in enumerate(PREFIX_FAMILIES.items()):\n        ax = axes[idx]\n        family_df = df[df['prefix'].isin(family_prefixes)]\n        family_anchors = family_df[family_df['Anchor'] == 'T']\n        if len(family_anchors) < 3:\n            ax.text(0.5, 0.5, f'{family_name}\\nInsufficient data',",
+        "detail": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "description": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "peekOfCode": "def main():\n    print(\"=\"*80)\n    print(\"FAMILY MODEL PERFORMANCE ANALYSIS\")\n    print(\"=\"*80)\n    # Load data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)\n    except FileNotFoundError:\n        print(f\"❌ Data file not found: {data_path}\")",
+        "detail": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "documentation": {}
+    },
+    {
+        "label": "PREFIX_FAMILIES",
+        "kind": 5,
+        "importPath": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "description": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "peekOfCode": "PREFIX_FAMILIES = {\n    \"GD_family\": [\"GD1\", \"GD1a\", \"GD1b\", \"GD1+HexNAc\", \"GD1+dHex\", \"GD3\"],\n    \"GM_family\": [\"GM1\", \"GM1+HexNAc\", \"GM3\", \"GM3+OAc\"],\n    \"GT_family\": [\"GT1\", \"GT1a\", \"GT1b\", \"GT3\"],\n    \"GQ_family\": [\"GQ1\", \"GQ1a\", \"GQ1b\", \"GQ1c\", \"GQ1+HexNAc\"],\n    \"GP_family\": [\"GP1\", \"GP1a\"]\n}\ndef cross_validate_regression(X, y):\n    \"\"\"Leave-One-Out Cross-Validation\"\"\"\n    if len(X) < 3:",
+        "detail": "analysis.optimization_nov2025.scripts.analyze_family_performance",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_model",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "description": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "peekOfCode": "def cross_validate_model(X, y, model_class, **model_params):\n    \"\"\"Leave-One-Out Cross-Validation with specified model\"\"\"\n    if len(X) < 3:\n        return None, None, None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    std_predictions = []  # For Bayesian Ridge uncertainty\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "documentation": {}
+    },
+    {
+        "label": "compare_models_for_prefix",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "description": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "peekOfCode": "def compare_models_for_prefix(df, prefix):\n    \"\"\"Compare Ridge vs Bayesian Ridge for a single prefix group\"\"\"\n    prefix_group = df[df['prefix'] == prefix]\n    anchor_compounds = prefix_group[prefix_group['Anchor'] == 'T']\n    n_anchors = len(anchor_compounds)\n    if n_anchors < 3:\n        return None\n    X = anchor_compounds[['Log P']].values\n    y = anchor_compounds['RT'].values\n    if len(np.unique(X)) < 2:",
+        "detail": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_comparison",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "description": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "peekOfCode": "def visualize_comparison(results_df):\n    \"\"\"Create visualizations comparing Ridge vs Bayesian Ridge\"\"\"\n    fig, axes = plt.subplots(2, 2, figsize=(14, 10))\n    # Plot 1: Validation R² comparison\n    ax = axes[0, 0]\n    x = np.arange(len(results_df))\n    width = 0.35\n    ax.bar(x - width/2, results_df['ridge_val_r2'], width, label='Ridge', alpha=0.8, color='steelblue')\n    ax.bar(x + width/2, results_df['bayes_val_r2'], width, label='Bayesian Ridge', alpha=0.8, color='coral')\n    ax.set_xlabel('Prefix Group', fontsize=10)",
+        "detail": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "description": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "peekOfCode": "def main():\n    print(\"=\"*80)\n    print(\"BAYESIAN RIDGE vs RIDGE REGRESSION COMPARISON\")\n    print(\"=\"*80)\n    # Load data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)\n    except FileNotFoundError:\n        print(f\"❌ Data file not found: {data_path}\")",
+        "detail": "analysis.optimization_nov2025.scripts.compare_bayesian_ridge",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_regression",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "description": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "peekOfCode": "def cross_validate_regression(X, y, use_bayesian=False):\n    \"\"\"Leave-One-Out Cross-Validation\"\"\"\n    if len(X) < 3:\n        return None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]\n        y_train, y_test = y[train_idx], y[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "documentation": {}
+    },
+    {
+        "label": "simulate_algorithm",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "description": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "peekOfCode": "def simulate_algorithm(df, threshold_config, use_bayesian=False):\n    \"\"\"\n    Simulate multi-level algorithm with given thresholds\n    threshold_config = {\n        'level1': 0.75,  # n≥10\n        'level2': 0.70,  # n≥4\n        'level3': 0.70,  # family\n        'level4': 0.50   # overall\n    }\n    \"\"\"",
+        "detail": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "documentation": {}
+    },
+    {
+        "label": "grid_search_thresholds",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "description": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "peekOfCode": "def grid_search_thresholds(df, use_bayesian=False):\n    \"\"\"Grid search over threshold combinations\"\"\"\n    print(\"\\n🔍 Grid Search for Optimal Thresholds...\")\n    print(\"   Testing threshold combinations...\\n\")\n    # Define search grid\n    level1_range = np.arange(0.60, 0.86, 0.05)  # 0.60 to 0.85\n    level2_range = np.arange(0.55, 0.81, 0.05)  # 0.55 to 0.80\n    level3_range = np.arange(0.50, 0.76, 0.05)  # 0.50 to 0.75\n    level4_range = np.arange(0.40, 0.61, 0.05)  # 0.40 to 0.60\n    print(f\"   Search space: {len(level1_range)} × {len(level2_range)} × {len(level3_range)} × {len(level4_range)}\")",
+        "detail": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_threshold_sensitivity",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "description": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "peekOfCode": "def visualize_threshold_sensitivity(all_results):\n    \"\"\"Visualize how thresholds affect performance\"\"\"\n    results_df = pd.DataFrame(all_results)\n    fig, axes = plt.subplots(2, 2, figsize=(14, 10))\n    # Plot 1: Acceptance rate vs Level 1 threshold\n    ax = axes[0, 0]\n    sns.boxplot(data=results_df, x='threshold_config', y='acceptance_rate', ax=ax)\n    ax.set_xlabel('Threshold Configuration', fontsize=10)\n    ax.set_ylabel('Acceptance Rate', fontsize=10)\n    ax.set_title('Acceptance Rate Sensitivity', fontsize=12, fontweight='bold')",
+        "detail": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "description": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "peekOfCode": "def main():\n    print(\"=\"*80)\n    print(\"THRESHOLD OPTIMIZATION VIA GRID SEARCH\")\n    print(\"=\"*80)\n    # Load data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)\n    except FileNotFoundError:\n        print(f\"❌ Data file not found: {data_path}\")",
+        "detail": "analysis.optimization_nov2025.scripts.optimize_thresholds",
+        "documentation": {}
+    },
+    {
+        "label": "extract_features",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "description": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "peekOfCode": "def extract_features(df):\n    \"\"\"Extract features from compound names\"\"\"\n    # Parse compound name: PREFIX(a:b;c)\n    df['a_component'] = df['Name'].str.extract(r'\\((\\d+):')[0].astype(float)  # Carbon length\n    df['b_component'] = df['Name'].str.extract(r':(\\d+);')[0].astype(float)  # Unsaturation\n    df['c_component'] = df['Name'].str.extract(r';O(\\d+)\\)')[0].astype(float)  # Oxygen\n    # Modifications\n    df['has_OAc'] = df['Name'].str.contains(r'\\+OAc', regex=True).astype(int)\n    df['has_dHex'] = df['Name'].str.contains(r'\\+dHex', regex=True).astype(int)\n    df['has_HexNAc'] = df['Name'].str.contains(r'\\+HexNAc', regex=True).astype(int)",
+        "detail": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_model",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "description": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "peekOfCode": "def cross_validate_model(X, y, use_bayesian=False, standardize=False):\n    \"\"\"Leave-One-Out Cross-Validation\"\"\"\n    if len(X) < 3:\n        return None, None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]\n        y_train, y_test = y[train_idx], y[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "documentation": {}
+    },
+    {
+        "label": "test_feature_combinations",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "description": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "peekOfCode": "def test_feature_combinations(df, prefix):\n    \"\"\"Test different feature combinations for a prefix group\"\"\"\n    prefix_group = df[df['prefix'] == prefix]\n    anchor_compounds = prefix_group[prefix_group['Anchor'] == 'T']\n    n_anchors = len(anchor_compounds)\n    if n_anchors < 3:\n        return None\n    y = anchor_compounds['RT'].values\n    # Feature combination 1: Log P only (current)\n    X1 = anchor_compounds[['Log P']].values",
+        "detail": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "documentation": {}
+    },
+    {
+        "label": "visualize_feature_comparison",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "description": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "peekOfCode": "def visualize_feature_comparison(results_df):\n    \"\"\"Visualize feature expansion results\"\"\"\n    fig, axes = plt.subplots(2, 2, figsize=(14, 10))\n    # Plot 1: Ridge - R² by feature count\n    ax = axes[0, 0]\n    feature_cols = ['ridge_1feat_r2', 'ridge_2feat_r2', 'ridge_3feat_r2', 'ridge_allfeat_r2']\n    feature_labels = ['Log P\\nonly', 'Log P +\\nCarbon', 'Log P + Carbon\\n+ Unsat', 'All\\nFeatures']\n    for idx, prefix in enumerate(results_df['prefix']):\n        values = [results_df.loc[idx, col] for col in feature_cols if col in results_df.columns]\n        x_vals = list(range(len(values)))",
+        "detail": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "description": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "peekOfCode": "def main():\n    print(\"=\"*80)\n    print(\"FEATURE EXPANSION ANALYSIS\")\n    print(\"=\"*80)\n    # Load data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)\n    except FileNotFoundError:\n        print(f\"❌ Data file not found: {data_path}\")",
+        "detail": "analysis.optimization_nov2025.scripts.test_feature_expansion",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_regression",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_hybrid_standalone",
+        "description": "analysis.optimization_nov2025.scripts.test_hybrid_standalone",
+        "peekOfCode": "def cross_validate_regression(X, y):\n    \"\"\"Leave-One-Out Cross-Validation\"\"\"\n    if len(X) < 3:\n        return None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []\n    for train_idx, test_idx in loo.split(X):\n        X_train, X_test = X[train_idx], X[test_idx]\n        y_train, y_test = y[train_idx], y[test_idx]",
+        "detail": "analysis.optimization_nov2025.scripts.test_hybrid_standalone",
+        "documentation": {}
+    },
+    {
+        "label": "test_hybrid_multilevel",
+        "kind": 2,
+        "importPath": "analysis.optimization_nov2025.scripts.test_hybrid_standalone",
+        "description": "analysis.optimization_nov2025.scripts.test_hybrid_standalone",
+        "peekOfCode": "def test_hybrid_multilevel():\n    \"\"\"Test hybrid multi-level strategy with real data\"\"\"\n    print(\"=\" * 80)\n    print(\"HYBRID MULTI-LEVEL STRATEGY TEST (Standalone)\")\n    print(\"=\" * 80)\n    print()\n    # Load test data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)",
+        "detail": "analysis.optimization_nov2025.scripts.test_hybrid_standalone",
+        "documentation": {}
+    },
+    {
         "label": "Migration",
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.migrations.0001_initial",
@@ -1829,7 +2582,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.services.analysis_service",
         "description": "django_ganglioside.apps.analysis.services.analysis_service",
-        "peekOfCode": "class AnalysisService:\n    \"\"\"\n    Service class for running ganglioside analysis and persisting results\n    \"\"\"\n    def __init__(self, use_v2: bool = True):\n        \"\"\"\n        Initialize Analysis Service\n        Args:\n            use_v2: Use improved V2 processor (default: True, recommended)\n        \"\"\"",
+        "peekOfCode": "class AnalysisService:\n    \"\"\"\n    Service class for running ganglioside analysis and persisting results\n    \"\"\"\n    def __init__(self, use_v2: bool = True):\n        \"\"\"\n        Initialize Analysis Service\n        Args:\n            use_v2: Use improved V2 processor (default: True, STRONGLY RECOMMENDED)\n        Processor Version Comparison:",
         "detail": "django_ganglioside.apps.analysis.services.analysis_service",
         "documentation": {}
     },
@@ -1840,6 +2593,51 @@
         "description": "django_ganglioside.apps.analysis.services.analysis_service",
         "peekOfCode": "def convert_to_json_serializable(obj):\n    \"\"\"\n    Recursively convert NumPy types to Python native types for JSON serialization\n    Args:\n        obj: Object to convert (dict, list, or value)\n    Returns:\n        JSON-serializable object\n    \"\"\"\n    if isinstance(obj, dict):\n        return {k: convert_to_json_serializable(v) for k, v in obj.items()}",
         "detail": "django_ganglioside.apps.analysis.services.analysis_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.analysis_service",
+        "description": "django_ganglioside.apps.analysis.services.analysis_service",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom ..models import AnalysisSession, AnalysisResult, Compound, RegressionModel\nfrom .ganglioside_processor_v2 import GangliosideProcessorV2\ndef convert_to_json_serializable(obj):\n    \"\"\"\n    Recursively convert NumPy types to Python native types for JSON serialization\n    Args:\n        obj: Object to convert (dict, list, or value)\n    Returns:\n        JSON-serializable object",
+        "detail": "django_ganglioside.apps.analysis.services.analysis_service",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationWarning",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "description": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "peekOfCode": "class ValidationWarning:\n    \"\"\"Container for a single validation warning\"\"\"\n    rule: str\n    severity: str  # 'info', 'warning', 'error'\n    message: str\n    details: Dict[str, Any] = field(default_factory=dict)\n@dataclass\nclass ValidationResult:\n    \"\"\"Container for validation results\"\"\"\n    is_valid: bool",
+        "detail": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "ValidationResult",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "description": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "peekOfCode": "class ValidationResult:\n    \"\"\"Container for validation results\"\"\"\n    is_valid: bool\n    warnings: List[ValidationWarning] = field(default_factory=list)\n    statistics: Dict[str, Any] = field(default_factory=dict)\n    def to_dict(self) -> Dict[str, Any]:\n        \"\"\"Convert to dictionary for JSON serialization\"\"\"\n        return {\n            'is_valid': self.is_valid,\n            'warnings': [",
+        "detail": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "ChemicalValidator",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "description": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "peekOfCode": "class ChemicalValidator:\n    \"\"\"\n    Validates analysis results against chromatography principles.\n    Chromatography Principles (Reverse-Phase):\n    - Higher hydrophobicity -> Higher retention time (RT)\n    Hydrophobicity Factors:\n    - More carbons (a_component): +hydrophobicity -> +RT\n    - More double bonds (b_component): -hydrophobicity -> -RT\n    - More sugars/glycans: -hydrophobicity -> -RT\n    - O-acetylation (+OAc): +hydrophobicity -> +RT",
+        "detail": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "description": "django_ganglioside.apps.analysis.services.chemical_validation",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass\nclass ValidationWarning:\n    \"\"\"Container for a single validation warning\"\"\"\n    rule: str\n    severity: str  # 'info', 'warning', 'error'\n    message: str\n    details: Dict[str, Any] = field(default_factory=dict)\n@dataclass\nclass ValidationResult:",
+        "detail": "django_ganglioside.apps.analysis.services.chemical_validation",
         "documentation": {}
     },
     {
@@ -1870,11 +2668,20 @@
         "documentation": {}
     },
     {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.ganglioside_categorizer",
+        "description": "django_ganglioside.apps.analysis.services.ganglioside_categorizer",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass GangliosideCategorizer:\n    \"\"\"\n    Categorizes gangliosides based on their prefix patterns for better visualization grouping.\n    Examples:\n    - GD1(34:1;O2) → Base: GD1, Category: GD (disialo)\n    - GD1+dHex(36:1;O2) → Base: GD1, Category: GD (disialo), Modified: dHex\n    - GM3+OAc(18:1;O2) → Base: GM3, Category: GM (monosialo), Modified: OAc\n    \"\"\"\n    def __init__(self):",
+        "detail": "django_ganglioside.apps.analysis.services.ganglioside_categorizer",
+        "documentation": {}
+    },
+    {
         "label": "GangliosideProcessor",
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "description": "django_ganglioside.apps.analysis.services.ganglioside_processor",
-        "peekOfCode": "class GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        logger.info(\"Ganglioside Processor initialized (Ridge regression with categorization)\")\n    def update_settings(",
+        "peekOfCode": "class GangliosideProcessor:\n    # Prefix family definitions for pooled regression\n    # Groups chemically similar prefixes that share RT-LogP relationships\n    PREFIX_FAMILIES = {\n        \"GD_family\": {\n            \"prefixes\": [\"GD1\", \"GD1a\", \"GD1b\", \"GD1+HexNAc\", \"GD1+dHex\", \"GD3\"],\n            \"description\": \"Disialo gangliosides (2 sialic acids)\"\n        },\n        \"GM_family\": {\n            \"prefixes\": [\"GM1\", \"GM1+HexNAc\", \"GM3\", \"GM3+OAc\"],",
         "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "documentation": {}
     },
@@ -1883,7 +2690,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "description": "django_ganglioside.apps.analysis.services.ganglioside_processor",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass GangliosideProcessor:\n    def __init__(self):\n        # Fixed thresholds for realistic chemical data analysis\n        self.r2_threshold = 0.75  # Lowered from 0.99 to realistic value\n        self.outlier_threshold = 2.5  # Lowered from 3.0 for better sensitivity\n        self.rt_tolerance = 0.1\n        # Initialize categorizer\n        self.categorizer = GangliosideCategorizer()\n        logger.info(\"Ganglioside Processor initialized (Ridge regression with categorization)\")",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass GangliosideProcessor:\n    # Prefix family definitions for pooled regression\n    # Groups chemically similar prefixes that share RT-LogP relationships\n    PREFIX_FAMILIES = {\n        \"GD_family\": {\n            \"prefixes\": [\"GD1\", \"GD1a\", \"GD1b\", \"GD1+HexNAc\", \"GD1+dHex\", \"GD3\"],\n            \"description\": \"Disialo gangliosides (2 sialic acids)\"\n        },\n        \"GM_family\": {",
         "detail": "django_ganglioside.apps.analysis.services.ganglioside_processor",
         "documentation": {}
     },
@@ -1973,7 +2780,16 @@
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.services.regression_analyzer",
         "description": "django_ganglioside.apps.analysis.services.regression_analyzer",
-        "peekOfCode": "class RegressionAnalyzer:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.confidence_level = 0.95\n        print(\"📈 Regression Analyzer 초기화 완료\")\n    def perform_comprehensive_regression(\n        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None\n    ) -> Dict[str, Any]:\n        \"\"\"",
+        "peekOfCode": "class RegressionAnalyzer:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.confidence_level = 0.95\n        logger.info(\"Regression Analyzer initialized\")\n    def perform_comprehensive_regression(\n        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None\n    ) -> Dict[str, Any]:\n        \"\"\"",
+        "detail": "django_ganglioside.apps.analysis.services.regression_analyzer",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "django_ganglioside.apps.analysis.services.regression_analyzer",
+        "description": "django_ganglioside.apps.analysis.services.regression_analyzer",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nwarnings.filterwarnings(\"ignore\")\nclass RegressionAnalyzer:\n    def __init__(self):\n        self.r2_threshold = 0.99\n        self.outlier_threshold = 3.0\n        self.confidence_level = 0.95\n        logger.info(\"Regression Analyzer initialized\")\n    def perform_comprehensive_regression(\n        self, x_data: np.ndarray, y_data: np.ndarray, compound_names: List[str] = None",
         "detail": "django_ganglioside.apps.analysis.services.regression_analyzer",
         "documentation": {}
     },
@@ -2144,7 +2960,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.apps.analysis.serializers",
         "description": "django_ganglioside.apps.analysis.serializers",
-        "peekOfCode": "class AnalysisSessionCreateSerializer(serializers.ModelSerializer):\n    \"\"\"Serializer for creating a new AnalysisSession\"\"\"\n    uploaded_file = serializers.FileField()\n    class Meta:\n        model = AnalysisSession\n        fields = [\n            'name', 'data_type', 'uploaded_file', 'r2_threshold',\n            'outlier_threshold', 'rt_tolerance'\n        ]\n    def validate_uploaded_file(self, value):",
+        "peekOfCode": "class AnalysisSessionCreateSerializer(serializers.ModelSerializer):\n    \"\"\"Serializer for creating a new AnalysisSession\"\"\"\n    uploaded_file = serializers.FileField()\n    class Meta:\n        model = AnalysisSession\n        fields = [\n            'id', 'name', 'data_type', 'uploaded_file', 'r2_threshold',\n            'outlier_threshold', 'rt_tolerance', 'status'\n        ]\n        read_only_fields = ['id', 'status']",
         "detail": "django_ganglioside.apps.analysis.serializers",
         "documentation": {}
     },
@@ -2335,6 +3151,15 @@
         "description": "django_ganglioside.apps.core.models",
         "peekOfCode": "class SoftDeleteModel(models.Model):\n    \"\"\"\n    Abstract base class with soft delete functionality\n    \"\"\"\n    deleted_at = models.DateTimeField(null=True, blank=True)\n    is_deleted = models.BooleanField(default=False)\n    class Meta:\n        abstract = True\n    def delete(self, using=None, keep_parents=False):\n        \"\"\"Soft delete - mark as deleted instead of removing from database\"\"\"",
         "detail": "django_ganglioside.apps.core.models",
+        "documentation": {}
+    },
+    {
+        "label": "StandardResultsPagination",
+        "kind": 6,
+        "importPath": "django_ganglioside.apps.core.pagination",
+        "description": "django_ganglioside.apps.core.pagination",
+        "peekOfCode": "class StandardResultsPagination(PageNumberPagination):\n    \"\"\"\n    Standard pagination class with configurable page size.\n    Allows clients to specify page size via 'page_size' query parameter.\n    \"\"\"\n    page_size = 100\n    page_size_query_param = 'page_size'\n    max_page_size = 1000",
+        "detail": "django_ganglioside.apps.core.pagination",
         "documentation": {}
     },
     {
@@ -2765,7 +3590,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "CELERY_TASK_SERIALIZER = 'json'\nCELERY_RESULT_SERIALIZER = 'json'\nCELERY_TIMEZONE = TIME_ZONE\nCELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults",
+        "peekOfCode": "CELERY_TASK_SERIALIZER = 'json'\nCELERY_RESULT_SERIALIZER = 'json'\nCELERY_TIMEZONE = TIME_ZONE\nCELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2774,7 +3599,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "CELERY_RESULT_SERIALIZER = 'json'\nCELERY_TIMEZONE = TIME_ZONE\nCELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {",
+        "peekOfCode": "CELERY_RESULT_SERIALIZER = 'json'\nCELERY_TIMEZONE = TIME_ZONE\nCELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2783,7 +3608,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "CELERY_TIMEZONE = TIME_ZONE\nCELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),",
+        "peekOfCode": "CELERY_TIMEZONE = TIME_ZONE\nCELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2792,7 +3617,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "CELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),",
+        "peekOfCode": "CELERY_TASK_TRACK_STARTED = True\nCELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2801,7 +3626,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),",
+        "peekOfCode": "CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task\nCELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2810,7 +3635,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "CELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),\n}",
+        "peekOfCode": "CELERY_RESULT_BACKEND_DB = 'django-celery-results'\n# File Upload Settings\nDATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2819,7 +3644,7 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "DATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),\n}\n# Logging\nLOGGING = {",
+        "peekOfCode": "DATA_UPLOAD_MAX_MEMORY_SIZE = env.int('MAX_UPLOAD_SIZE', default=52428800)  # 50MB\nFILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),\n}",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -2828,7 +3653,16 @@
         "kind": 5,
         "importPath": "django_ganglioside.config.settings.base",
         "description": "django_ganglioside.config.settings.base",
-        "peekOfCode": "FILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),\n}\n# Logging\nLOGGING = {\n    'version': 1,",
+        "peekOfCode": "FILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE\n# Base URL for links in emails and notifications\nBASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),\n}\n# Logging",
+        "detail": "django_ganglioside.config.settings.base",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_URL",
+        "kind": 5,
+        "importPath": "django_ganglioside.config.settings.base",
+        "description": "django_ganglioside.config.settings.base",
+        "peekOfCode": "BASE_URL = env('BASE_URL', default='http://localhost:8000')\n# Analysis Configuration Defaults\nANALYSIS_DEFAULTS = {\n    'R2_THRESHOLD': env.float('DEFAULT_R2_THRESHOLD', default=0.75),\n    'OUTLIER_THRESHOLD': env.float('DEFAULT_OUTLIER_THRESHOLD', default=2.5),\n    'RT_TOLERANCE': env.float('DEFAULT_RT_TOLERANCE', default=0.1),\n}\n# Logging\nLOGGING = {\n    'version': 1,",
         "detail": "django_ganglioside.config.settings.base",
         "documentation": {}
     },
@@ -3305,7 +4139,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.tests.integration.test_api_endpoints",
         "description": "django_ganglioside.tests.integration.test_api_endpoints",
-        "peekOfCode": "class TestAnalysisAPIEndpoints:\n    \"\"\"Test Analysis API endpoints\"\"\"\n    def test_create_analysis_session_unauthorized(self, api_client, sample_csv_file):\n        \"\"\"Test creating session without authentication fails\"\"\"\n        url = reverse('analysis:session-list')\n        data = {\n            'name': 'Test Analysis',\n            'data_type': 'porcine',\n            'uploaded_file': sample_csv_file,\n        }",
+        "peekOfCode": "class TestAnalysisAPIEndpoints:\n    \"\"\"Test Analysis API endpoints\"\"\"\n    def test_create_analysis_session_unauthorized(self, api_client, sample_csv_file):\n        \"\"\"Test creating session without authentication fails\"\"\"\n        url = reverse('analysis:api-session-list')\n        data = {\n            'name': 'Test Analysis',\n            'data_type': 'porcine',\n            'uploaded_file': sample_csv_file,\n        }",
         "detail": "django_ganglioside.tests.integration.test_api_endpoints",
         "documentation": {}
     },
@@ -3314,7 +4148,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.tests.integration.test_api_endpoints",
         "description": "django_ganglioside.tests.integration.test_api_endpoints",
-        "peekOfCode": "class TestHealthCheckEndpoint:\n    \"\"\"Test health check endpoint\"\"\"\n    def test_health_check_endpoint(self, api_client):\n        \"\"\"Test health check returns OK\"\"\"\n        url = reverse('health-check')\n        response = api_client.get(url)\n        assert response.status_code == status.HTTP_200_OK\n        assert response.data == {'status': 'ok'}\n@pytest.mark.integration\nclass TestAPIValidation:",
+        "peekOfCode": "class TestHealthCheckEndpoint:\n    \"\"\"Test health check endpoint\"\"\"\n    def test_health_check_endpoint(self, api_client):\n        \"\"\"Test health check returns healthy status\"\"\"\n        url = reverse('core:health-check')\n        response = api_client.get(url)\n        assert response.status_code == status.HTTP_200_OK\n        # Health check returns JsonResponse, use .json() instead of .data\n        data = response.json()\n        assert data['status'] in ['healthy', 'degraded']  # Redis might be unavailable",
         "detail": "django_ganglioside.tests.integration.test_api_endpoints",
         "documentation": {}
     },
@@ -3323,7 +4157,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.tests.integration.test_api_endpoints",
         "description": "django_ganglioside.tests.integration.test_api_endpoints",
-        "peekOfCode": "class TestAPIValidation:\n    \"\"\"Test API input validation\"\"\"\n    def test_invalid_data_type(self, authenticated_client, sample_csv_file):\n        \"\"\"Test invalid data_type is rejected\"\"\"\n        url = reverse('analysis:session-list')\n        data = {\n            'name': 'Test',\n            'data_type': 'invalid_type',  # Invalid\n            'uploaded_file': sample_csv_file,\n        }",
+        "peekOfCode": "class TestAPIValidation:\n    \"\"\"Test API input validation\"\"\"\n    def test_invalid_data_type(self, authenticated_client, sample_csv_file):\n        \"\"\"Test invalid data_type is rejected\"\"\"\n        url = reverse('analysis:api-session-list')\n        data = {\n            'name': 'Test',\n            'data_type': 'invalid_type',  # Invalid\n            'uploaded_file': sample_csv_file,\n        }",
         "detail": "django_ganglioside.tests.integration.test_api_endpoints",
         "documentation": {}
     },
@@ -3359,7 +4193,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.tests.integration.test_celery_tasks",
         "description": "django_ganglioside.tests.integration.test_celery_tasks",
-        "peekOfCode": "class TestNotificationTasks:\n    \"\"\"Test notification tasks\"\"\"\n    @patch('apps.analysis.tasks.send_email')\n    def test_send_completion_notification(self, mock_send_email, test_user, celery_eager_mode):\n        \"\"\"Test sending completion notification\"\"\"\n        session = AnalysisSession.objects.create(\n            user=test_user,\n            name=\"Notification Test\",\n            data_type=\"porcine\",\n            status=\"completed\",",
+        "peekOfCode": "class TestNotificationTasks:\n    \"\"\"Test notification tasks\"\"\"\n    def test_send_completion_notification(self, test_user, celery_eager_mode):\n        \"\"\"Test sending completion notification\"\"\"\n        session = AnalysisSession.objects.create(\n            user=test_user,\n            name=\"Notification Test\",\n            data_type=\"porcine\",\n            status=\"completed\",\n            file_size=1024,",
         "detail": "django_ganglioside.tests.integration.test_celery_tasks",
         "documentation": {}
     },
@@ -3449,7 +4283,7 @@
         "kind": 6,
         "importPath": "django_ganglioside.tests.performance.test_load",
         "description": "django_ganglioside.tests.performance.test_load",
-        "peekOfCode": "class TestConcurrencyPerformance:\n    \"\"\"Test concurrent operations\"\"\"\n    def test_concurrent_session_creation(self, test_user):\n        \"\"\"Test creating multiple sessions concurrently\"\"\"\n        from django.db import transaction\n        import concurrent.futures\n        def create_session(index):\n            with transaction.atomic():\n                return AnalysisSession.objects.create(\n                    user=test_user,",
+        "peekOfCode": "class TestConcurrencyPerformance:\n    \"\"\"Test concurrent operations\"\"\"\n    @pytest.mark.skipif(True, reason=\"SQLite doesn't support concurrent writes - skipped for local testing\")\n    def test_concurrent_session_creation(self, test_user):\n        \"\"\"Test creating multiple sessions concurrently\"\"\"\n        from django.db import transaction\n        import concurrent.futures\n        def create_session(index):\n            with transaction.atomic():\n                return AnalysisSession.objects.create(",
         "detail": "django_ganglioside.tests.performance.test_load",
         "documentation": {}
     },
@@ -3460,6 +4294,87 @@
         "description": "django_ganglioside.tests.performance.test_load",
         "peekOfCode": "class TestMemoryUsage:\n    \"\"\"Test memory-efficient operations\"\"\"\n    def test_iterator_for_large_queryset(self, test_user):\n        \"\"\"Test using iterator for large querysets\"\"\"\n        session = AnalysisSession.objects.create(\n            user=test_user,\n            name=\"Memory Test\",\n            data_type=\"porcine\",\n            status=\"completed\",\n            file_size=1024,",
         "detail": "django_ganglioside.tests.performance.test_load",
+        "documentation": {}
+    },
+    {
+        "label": "TestChemicalValidatorInit",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestChemicalValidatorInit:\n    \"\"\"Test ChemicalValidator initialization.\"\"\"\n    def test_default_initialization(self):\n        \"\"\"Test default parameter values.\"\"\"\n        validator = ChemicalValidator()\n        assert validator.OACETYL_RT_SHIFT_MIN == 0.3\n        assert validator.OACETYL_RT_SHIFT_MAX == 3.0\n    def test_category_sugar_map(self):\n        \"\"\"Test category to sugar mapping is defined.\"\"\"\n        validator = ChemicalValidator()",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestSugarRTValidation",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestSugarRTValidation:\n    \"\"\"Test sugar count vs RT relationship validation.\"\"\"\n    @pytest.fixture\n    def validator(self):\n        return ChemicalValidator()\n    @pytest.fixture\n    def valid_sugar_rt_data(self):\n        \"\"\"Data where more sugars = lower RT (correct).\"\"\"\n        return pd.DataFrame({\n            'Name': ['GM3(36:1;O2)', 'GD1(36:1;O2)', 'GT1(36:1;O2)'],",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestCategoryOrderingValidation",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestCategoryOrderingValidation:\n    \"\"\"Test cross-category RT ordering validation.\"\"\"\n    @pytest.fixture\n    def validator(self):\n        return ChemicalValidator()\n    @pytest.fixture\n    def valid_category_ordering_data(self):\n        \"\"\"Data with correct RT ordering: GP < GQ < GT < GD < GM.\"\"\"\n        return pd.DataFrame({\n            'Name': ['GM3(36:1;O2)', 'GD1(36:1;O2)', 'GT1(36:1;O2)',",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestCoefficientSignValidation",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestCoefficientSignValidation:\n    \"\"\"Test regression coefficient sign validation.\"\"\"\n    @pytest.fixture\n    def validator(self):\n        return ChemicalValidator()\n    def test_valid_coefficient_signs(self, validator):\n        \"\"\"Test that correct coefficient signs pass.\"\"\"\n        # Correct signs: a_component +, b_component -, Log P +\n        regression_result = {\n            'coefficients': {",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestOAcetylationMagnitudeValidation",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestOAcetylationMagnitudeValidation:\n    \"\"\"Test O-acetylation RT shift magnitude validation.\"\"\"\n    @pytest.fixture\n    def validator(self):\n        return ChemicalValidator()\n    def test_valid_magnitude(self, validator):\n        \"\"\"Test that RT shift within range passes.\"\"\"\n        pairs = [\n            {\n                'oacetyl_name': 'GM3+OAc(36:1;O2)',",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestValidationResult",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestValidationResult:\n    \"\"\"Test ValidationResult dataclass.\"\"\"\n    def test_to_dict(self):\n        \"\"\"Test conversion to dictionary.\"\"\"\n        warnings = [\n            ValidationWarning(\n                rule='test_rule',\n                severity='warning',\n                message='Test warning',\n                details={'key': 'value'}",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestValidationWarning",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestValidationWarning:\n    \"\"\"Test ValidationWarning dataclass.\"\"\"\n    def test_attributes(self):\n        \"\"\"Test ValidationWarning attributes.\"\"\"\n        warning = ValidationWarning(\n            rule='coefficient_sign',\n            severity='warning',\n            message='a_component coefficient is negative',\n            details={'coefficient': -0.5}\n        )",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "TestValidateAll",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "class TestValidateAll:\n    \"\"\"Test validate_all method.\"\"\"\n    @pytest.fixture\n    def validator(self):\n        return ChemicalValidator()\n    def test_validate_all_basic(self, validator):\n        \"\"\"Test running all validations.\"\"\"\n        df = pd.DataFrame({\n            'Name': ['GM1(36:1;O2)', 'GD1(36:1;O2)'],\n            'RT': [10.0, 9.0],",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
+        "documentation": {}
+    },
+    {
+        "label": "pytestmark",
+        "kind": 5,
+        "importPath": "django_ganglioside.tests.unit.test_chemical_validation",
+        "description": "django_ganglioside.tests.unit.test_chemical_validation",
+        "peekOfCode": "pytestmark = pytest.mark.django_db(transaction=True)\nclass TestChemicalValidatorInit:\n    \"\"\"Test ChemicalValidator initialization.\"\"\"\n    def test_default_initialization(self):\n        \"\"\"Test default parameter values.\"\"\"\n        validator = ChemicalValidator()\n        assert validator.OACETYL_RT_SHIFT_MIN == 0.3\n        assert validator.OACETYL_RT_SHIFT_MAX == 3.0\n    def test_category_sugar_map(self):\n        \"\"\"Test category to sugar mapping is defined.\"\"\"",
+        "detail": "django_ganglioside.tests.unit.test_chemical_validation",
         "documentation": {}
     },
     {
@@ -3514,6 +4429,33 @@
         "description": "django_ganglioside.tests.unit.test_models",
         "peekOfCode": "class TestModelRelationships:\n    \"\"\"Test relationships between models\"\"\"\n    def test_user_sessions_relationship(self, test_user):\n        \"\"\"Test user can have multiple sessions\"\"\"\n        session1 = AnalysisSession.objects.create(\n            user=test_user,\n            name=\"Session 1\",\n            data_type=\"porcine\",\n            status=\"completed\",\n            file_size=1024,",
         "detail": "django_ganglioside.tests.unit.test_models",
+        "documentation": {}
+    },
+    {
+        "label": "TestCSVInjectionProtection",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_security",
+        "description": "django_ganglioside.tests.unit.test_security",
+        "peekOfCode": "class TestCSVInjectionProtection:\n    \"\"\"Test CSV injection protection in processors\"\"\"\n    @pytest.fixture\n    def malicious_csv_data(self):\n        \"\"\"CSV data with potential formula injection patterns\"\"\"\n        return pd.DataFrame({\n            'Name': [\n                '=cmd|\\'calc\\'!A0',  # Excel command injection\n                '+SUM(A1:A10)',      # Plus prefix formula\n                '-1+1',              # Minus prefix formula",
+        "detail": "django_ganglioside.tests.unit.test_security",
+        "documentation": {}
+    },
+    {
+        "label": "TestCSVInjectionPatterns",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_security",
+        "description": "django_ganglioside.tests.unit.test_security",
+        "peekOfCode": "class TestCSVInjectionPatterns:\n    \"\"\"Test detection of various CSV injection attack patterns\"\"\"\n    @pytest.mark.parametrize(\"malicious_name,expected_sanitized\", [\n        (\"=HYPERLINK('http://evil.com')\", \"HYPERLINK('http://evil.com')\"),\n        (\"+cmd|'calc'!A0\", \"cmd|'calc'!A0\"),\n        (\"-1+1\", \"1+1\"),\n        (\"@SUM(A1:A10)\", \"SUM(A1:A10)\"),\n        (\"\\t=1+1\", \"1+1\"),\n        (\"\\r=test\", \"test\"),\n    ])",
+        "detail": "django_ganglioside.tests.unit.test_security",
+        "documentation": {}
+    },
+    {
+        "label": "TestFileUploadValidation",
+        "kind": 6,
+        "importPath": "django_ganglioside.tests.unit.test_security",
+        "description": "django_ganglioside.tests.unit.test_security",
+        "peekOfCode": "class TestFileUploadValidation:\n    \"\"\"Test file upload validation features\"\"\"\n    def _create_mock_file(self, content: bytes, filename: str = 'test.csv', size: int = None):\n        \"\"\"Create a mock file object for testing\"\"\"\n        file = MagicMock()\n        file.name = filename\n        file.size = size if size is not None else len(content)\n        # Create a BytesIO that supports seek and read\n        buffer = BytesIO(content)\n        file.read = buffer.read",
+        "detail": "django_ganglioside.tests.unit.test_security",
         "documentation": {}
     },
     {
@@ -3775,6 +4717,42 @@
         "description": "django_ganglioside.manage",
         "peekOfCode": "def main():\n    \"\"\"Run administrative tasks.\"\"\"\n    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.development')\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and \"\n            \"available on your PYTHONPATH environment variable? Did you \"\n            \"forget to activate a virtual environment?\"",
         "detail": "django_ganglioside.manage",
+        "documentation": {}
+    },
+    {
+        "label": "test_improvements",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_accuracy_improvements",
+        "description": "django_ganglioside.test_accuracy_improvements",
+        "peekOfCode": "def test_improvements():\n    \"\"\"Test the accuracy improvements with real data\"\"\"\n    print(\"=\" * 80)\n    print(\"ACCURACY IMPROVEMENTS TEST\")\n    print(\"=\" * 80)\n    print()\n    # Load test data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    df = pd.read_csv(data_path)\n    print(f\"📊 Dataset: testwork_user.csv\")",
+        "detail": "django_ganglioside.test_accuracy_improvements",
+        "documentation": {}
+    },
+    {
+        "label": "test_hybrid_multilevel",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_hybrid_multilevel",
+        "description": "django_ganglioside.test_hybrid_multilevel",
+        "peekOfCode": "def test_hybrid_multilevel():\n    \"\"\"Test hybrid multi-level regression strategy\"\"\"\n    print(\"=\" * 80)\n    print(\"HYBRID MULTI-LEVEL STRATEGY TEST\")\n    print(\"=\" * 80)\n    print()\n    # Load test data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)",
+        "detail": "django_ganglioside.test_hybrid_multilevel",
+        "documentation": {}
+    },
+    {
+        "label": "cross_validate_regression",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_improvements_standalone",
+        "description": "django_ganglioside.test_improvements_standalone",
+        "peekOfCode": "def cross_validate_regression(X, y):\n    \"\"\"\n    Leave-One-Out Cross-Validation for regression\n    Returns validation R² (realistic performance on held-out data)\n    \"\"\"\n    if len(X) < 3:\n        return None\n    loo = LeaveOneOut()\n    predictions = []\n    actuals = []",
+        "detail": "django_ganglioside.test_improvements_standalone",
+        "documentation": {}
+    },
+    {
+        "label": "test_with_real_data",
+        "kind": 2,
+        "importPath": "django_ganglioside.test_improvements_standalone",
+        "description": "django_ganglioside.test_improvements_standalone",
+        "peekOfCode": "def test_with_real_data():\n    \"\"\"Test cross-validation with real ganglioside data\"\"\"\n    print(\"=\" * 80)\n    print(\"ACCURACY IMPROVEMENTS DEMONSTRATION\")\n    print(\"=\" * 80)\n    print()\n    # Load test data\n    data_path = '/Users/seoljonghyeon/Documents/GitHub/Automated-LC-MS-MS-analaysis_ver2/Regression/data/samples/testwork_user.csv'\n    try:\n        df = pd.read_csv(data_path)",
+        "detail": "django_ganglioside.test_improvements_standalone",
         "documentation": {}
     },
     {

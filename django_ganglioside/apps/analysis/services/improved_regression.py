@@ -295,6 +295,10 @@ class ImprovedRegressionModel:
             equation_parts.append(f"{coef:.4f}*{feature}")
         equation = "RT = " + " + ".join(equation_parts)
 
+        # Validate coefficient signs based on chromatography principles
+        feature_coefficients = {f: float(c) for f, c in zip(selected_features, model.coef_)}
+        coefficient_warnings = self._validate_coefficient_signs(feature_coefficients)
+
         return {
             'success': True,
             'prefix_group': prefix_group,
@@ -306,12 +310,13 @@ class ImprovedRegressionModel:
             'equation': equation,
             'coefficients': {
                 'intercept': float(model.intercept_),
-                'features': {f: float(c) for f, c in zip(selected_features, model.coef_)}
+                'features': feature_coefficients
             },
             'predictions': predictions,
             'residuals': residuals,
             'standardized_residuals': standardized_residuals,
-            'residual_std': residual_std
+            'residual_std': residual_std,
+            'coefficient_warnings': coefficient_warnings
         }
 
     def validate_model(
@@ -355,3 +360,65 @@ class ImprovedRegressionModel:
             'n_test_samples': len(test_df),
             'overfit_indicator': model_result['metrics']['r2'] - test_r2
         }
+
+    def _validate_coefficient_signs(
+        self,
+        coefficients: Dict[str, float]
+    ) -> List[str]:
+        """
+        Validate coefficient signs against chromatography principles.
+
+        In reverse-phase chromatography:
+        - Higher hydrophobicity → Higher retention time (RT)
+
+        Expected coefficient signs:
+        - a_component (carbon count): POSITIVE (more carbons → higher hydrophobicity → higher RT)
+        - b_component (double bonds): NEGATIVE (more double bonds → lower hydrophobicity → lower RT)
+        - Log P: POSITIVE (higher partition coefficient → higher hydrophobicity → higher RT)
+        - sugar_count: NEGATIVE (more sugars → lower hydrophobicity → lower RT)
+
+        Args:
+            coefficients: Dictionary mapping feature names to coefficient values
+
+        Returns:
+            List of warning messages for coefficients with unexpected signs
+        """
+        warnings = []
+
+        # Expected signs based on chromatography principles
+        expected_signs = {
+            'a_component': 'positive',   # More carbons → higher RT
+            'b_component': 'negative',   # More double bonds → lower RT
+            'Log P': 'positive',         # Higher Log P → higher RT
+            'sugar_count': 'negative',   # More sugars → lower RT
+        }
+
+        for feature, coef in coefficients.items():
+            if feature in expected_signs:
+                expected = expected_signs[feature]
+
+                if expected == 'positive' and coef < 0:
+                    warning = (
+                        f"⚠️ {feature} coefficient is NEGATIVE ({coef:.4f}), "
+                        f"but chromatography principles expect POSITIVE "
+                        f"(more {feature} should increase RT)"
+                    )
+                    warnings.append(warning)
+                    logger.warning(warning)
+
+                elif expected == 'negative' and coef > 0:
+                    warning = (
+                        f"⚠️ {feature} coefficient is POSITIVE ({coef:.4f}), "
+                        f"but chromatography principles expect NEGATIVE "
+                        f"(more {feature} should decrease RT)"
+                    )
+                    warnings.append(warning)
+                    logger.warning(warning)
+
+        if warnings:
+            logger.warning(
+                f"Found {len(warnings)} coefficient sign violation(s). "
+                f"This may indicate data quality issues or non-standard chromatography behavior."
+            )
+
+        return warnings

@@ -170,7 +170,8 @@ class TestDatabaseIntegrity:
         session_id = session.id
         result_id = result.id
 
-        session.delete()
+        # Use hard_delete() since AnalysisSession uses SoftDeleteModel
+        session.hard_delete()
 
         assert not AnalysisSession.objects.filter(id=session_id).exists()
         assert not AnalysisResult.objects.filter(id=result_id).exists()
@@ -242,6 +243,7 @@ class TestAnalysisPerformance:
                 name=f"Compound {i}",
                 rt=float(i),
                 volume=1000.0,
+                log_p=float(i) / 10,  # Fixed: log_p is required
             )
 
         # Test query efficiency

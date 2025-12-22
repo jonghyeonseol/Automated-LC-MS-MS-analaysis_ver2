@@ -47,8 +47,20 @@ class AnalysisSessionViewSet(viewsets.ModelViewSet):
         return AnalysisSessionSerializer
 
     def get_queryset(self):
-        """Filter sessions by current user"""
-        return AnalysisSession.objects.filter(user=self.request.user)
+        """Filter sessions by current user and query parameters"""
+        queryset = AnalysisSession.objects.filter(user=self.request.user)
+
+        # Filter by status
+        status_filter = self.request.query_params.get('status', None)
+        if status_filter is not None:
+            queryset = queryset.filter(status=status_filter)
+
+        # Filter by data_type
+        data_type = self.request.query_params.get('data_type', None)
+        if data_type is not None:
+            queryset = queryset.filter(data_type=data_type)
+
+        return queryset
 
     @action(detail=True, methods=['post'])
     def analyze(self, request, pk=None):

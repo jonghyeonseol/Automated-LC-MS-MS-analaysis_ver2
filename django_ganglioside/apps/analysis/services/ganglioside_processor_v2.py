@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from .improved_regression import ImprovedRegressionModel
 from .ganglioside_categorizer import GangliosideCategorizer
+from .chemical_validation import ChemicalValidator
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -54,6 +55,7 @@ class GangliosideProcessorV2:
             min_samples=min_samples_for_regression,
             r2_threshold=r2_threshold
         )
+        self.chemical_validator = ChemicalValidator()
 
         logger.info(
             "Ganglioside Processor V2 initialized with settings: "
@@ -203,10 +205,17 @@ class GangliosideProcessorV2:
                 f"Filtered compounds: {len(rule5_results['filtered_compounds'])}"
             )
 
+            # Rule 6: Sugar-RT relationship validation (chemical principle)
+            rule6_results = self._apply_rule6_sugar_rt_validation(df_processed)
+
+            # Rule 7: Category ordering validation (chemical principle)
+            rule7_results = self._apply_rule7_category_ordering(df_processed)
+
             # Compile final results
             logger.info("Compiling final results...")
             final_results = self._compile_results(
-                df_processed, rule1_results, rule23_results, rule4_results, rule5_results
+                df_processed, rule1_results, rule23_results, rule4_results, rule5_results,
+                rule6_results, rule7_results
             )
 
             success_rate = final_results['statistics']['success_rate']
@@ -232,6 +241,14 @@ class GangliosideProcessorV2:
         Returns:
             Processed DataFrame with extracted features
         """
+        # CSV injection protection: Sanitize string columns
+        # Remove formula-like prefixes (=, +, -, @, \t, \r) from string cells
+        dangerous_prefixes = ('=', '+', '-', '@', '\t', '\r')
+        if 'Name' in df.columns:
+            df['Name'] = df['Name'].apply(
+                lambda x: str(x).lstrip(''.join(dangerous_prefixes)) if isinstance(x, str) else x
+            )
+
         # Extract prefix and suffix from Name column
         df["prefix"] = df["Name"].str.extract(r"^([^(]+)")[0]
         df["suffix"] = df["Name"].str.extract(r"\(([^)]+)\)")[0]
@@ -292,24 +309,25 @@ class GangliosideProcessorV2:
             if n_anchors < self.min_samples_for_regression:
                 # Insufficient samples for regression
                 if n_anchors > 0:
-                    # Mark anchors as valid (trusted)
-                    for _, row in anchor_compounds.iterrows():
-                        compound = row.to_dict()
+                    # Mark anchors as valid (trusted) - vectorized
+                    anchor_records = anchor_compounds.to_dict('records')
+                    for compound in anchor_records:
                         compound["predicted_rt"] = compound["RT"]
                         compound["residual"] = 0.0
                         compound["std_residual"] = 0.0
                         compound["regression_group"] = f"{prefix}_trusted"
-                        valid_compounds.append(compound)
+                    valid_compounds.extend(anchor_records)
 
-                # Mark non-anchors as uncertain
+                # Mark non-anchors as uncertain - vectorized
                 non_anchors = prefix_group[prefix_group["Anchor"] == False]
-                for _, row in non_anchors.iterrows():
-                    row_dict = row.to_dict()
-                    row_dict["outlier_reason"] = (
-                        f"Rule 1: Insufficient anchor compounds ({n_anchors} < "
-                        f"{self.min_samples_for_regression}) for regression"
-                    )
-                    outliers.append(row_dict)
+                outlier_reason = (
+                    f"Rule 1: Insufficient anchor compounds ({n_anchors} < "
+                    f"{self.min_samples_for_regression}) for regression"
+                )
+                non_anchor_records = non_anchors.to_dict('records')
+                for row_dict in non_anchor_records:
+                    row_dict["outlier_reason"] = outlier_reason
+                outliers.extend(non_anchor_records)
 
                 model_warnings.append(
                     f"{prefix}: Only {n_anchors} anchors, skipped regression"
@@ -340,25 +358,35 @@ class GangliosideProcessorV2:
                         f"{prefix}: {regression_result['metrics']['warning']}"
                     )
 
-                # Classify compounds based on residuals
+                # Classify compounds based on residuals - vectorized
                 predictions = regression_result['predictions']
                 std_residuals = regression_result['standardized_residuals']
+                residuals = regression_result['residuals']
 
-                for idx, (_, row) in enumerate(prefix_group.iterrows()):
-                    row_dict = row.to_dict()
-                    row_dict["predicted_rt"] = float(predictions[idx])
-                    row_dict["residual"] = float(regression_result['residuals'][idx])
-                    row_dict["std_residual"] = float(std_residuals[idx])
-                    row_dict["regression_group"] = prefix
+                # Add prediction columns to the group
+                prefix_group = prefix_group.copy()
+                prefix_group["predicted_rt"] = predictions
+                prefix_group["residual"] = residuals
+                prefix_group["std_residual"] = std_residuals
+                prefix_group["regression_group"] = prefix
 
-                    if abs(std_residuals[idx]) < self.outlier_threshold:
-                        valid_compounds.append(row_dict)
-                    else:
-                        row_dict["outlier_reason"] = (
-                            f"Rule 1: Standardized residual = {std_residuals[idx]:.3f} "
-                            f"exceeds threshold {self.outlier_threshold}"
-                        )
-                        outliers.append(row_dict)
+                # Separate valid and outlier compounds using boolean masking
+                is_valid = np.abs(std_residuals) < self.outlier_threshold
+                valid_df = prefix_group[is_valid]
+                outlier_df = prefix_group[~is_valid]
+
+                # Convert to records and extend lists
+                valid_compounds.extend(valid_df.to_dict('records'))
+
+                # Add outlier reasons
+                outlier_records = outlier_df.to_dict('records')
+                for idx, row_dict in enumerate(outlier_records):
+                    std_res = row_dict["std_residual"]
+                    row_dict["outlier_reason"] = (
+                        f"Rule 1: Standardized residual = {std_res:.3f} "
+                        f"exceeds threshold {self.outlier_threshold}"
+                    )
+                outliers.extend(outlier_records)
 
             else:
                 # Regression failed
@@ -373,11 +401,12 @@ class GangliosideProcessorV2:
                     f"{prefix}: Regression failed - {regression_result['reason']}"
                 )
 
-                # Mark all compounds as outliers
-                for _, row in prefix_group.iterrows():
-                    row_dict = row.to_dict()
-                    row_dict["outlier_reason"] = f"Rule 1: {regression_result['reason']}"
-                    outliers.append(row_dict)
+                # Mark all compounds as outliers - vectorized
+                outlier_reason = f"Rule 1: {regression_result['reason']}"
+                outlier_records = prefix_group.to_dict('records')
+                for row_dict in outlier_records:
+                    row_dict["outlier_reason"] = outlier_reason
+                outliers.extend(outlier_records)
 
         return {
             "regression_results": regression_results,
@@ -401,19 +430,12 @@ class GangliosideProcessorV2:
         Returns:
             Dictionary with sugar analysis results
         """
-        sugar_analysis = {}
-
-        for _, row in df.iterrows():
-            name = row["Name"]
+        # Vectorized sugar composition parsing
+        def process_row(row):
             prefix = row["base_prefix"]
-
-            # Parse prefix to extract sugar information
             sugar_info = self._parse_sugar_composition(prefix)
-
-            # Check for potential isomers
             can_have_isomers = self._check_isomer_possibility(prefix, sugar_info)
-
-            sugar_analysis[name] = {
+            return {
                 "prefix": prefix,
                 "sugar_count": sugar_info.get("total_sugars", 0),
                 "sialic_acid_count": sugar_info.get("sialic_acids", 0),
@@ -422,11 +444,19 @@ class GangliosideProcessorV2:
                 "data_type": data_type
             }
 
+        # Use apply with axis=1 for row-wise processing
+        sugar_results = df.apply(process_row, axis=1)
+        sugar_analysis = dict(zip(df["Name"], sugar_results))
+
         return {"sugar_analysis": sugar_analysis}
 
     def _apply_rule4_oacetylation(self, df: pd.DataFrame) -> Dict[str, Any]:
         """
         Rule 4: Validate O-acetylation effects on retention time.
+
+        O-acetylation increases hydrophobicity, so:
+        - RT(compound+OAc) > RT(compound_base) [primary validation]
+        - RT shift should be within expected range (magnitude validation)
 
         Args:
             df: Preprocessed DataFrame
@@ -436,52 +466,88 @@ class GangliosideProcessorV2:
         """
         valid_oacetyl = []
         invalid_oacetyl = []
+        oacetyl_pairs = []  # For magnitude validation
 
         # Find O-acetylated compounds
-        oacetyl_compounds = df[df["prefix"].str.contains(r"\+OAc", na=False)]
+        oacetyl_mask = df["prefix"].str.contains(r"\+OAc", na=False)
+        oacetyl_compounds = df[oacetyl_mask].copy()
 
-        for _, oac_row in oacetyl_compounds.iterrows():
-            # Find base compound (without OAc)
-            base_name = oac_row["prefix"].replace("+OAc", "")
-            base_suffix = oac_row["suffix"]
+        if oacetyl_compounds.empty:
+            return {
+                "valid_oacetyl": [],
+                "invalid_oacetyl": [],
+                "magnitude_validation": {"is_valid": True, "warnings": [], "statistics": {}}
+            }
 
-            # Find matching base compound
-            base_compound = df[
-                (df["prefix"] == base_name) &
-                (df["suffix"] == base_suffix)
-            ]
+        # Create base compound lookup key
+        oacetyl_compounds["base_prefix"] = oacetyl_compounds["prefix"].str.replace("+OAc", "", regex=False)
+        oacetyl_compounds["lookup_key"] = oacetyl_compounds["base_prefix"] + "_" + oacetyl_compounds["suffix"]
 
-            if not base_compound.empty:
-                base_rt = base_compound.iloc[0]["RT"]
-                oac_rt = oac_row["RT"]
+        # Create lookup for base compounds
+        base_df = df[~oacetyl_mask][["prefix", "suffix", "Name", "RT"]].copy()
+        base_df["lookup_key"] = base_df["prefix"] + "_" + base_df["suffix"]
+        base_df = base_df.rename(columns={"Name": "base_Name", "RT": "base_RT"})
 
-                # O-acetylation should increase retention time
-                if oac_rt > base_rt:
-                    valid_oacetyl.append({
-                        "compound": oac_row["Name"],
-                        "base_compound": base_compound.iloc[0]["Name"],
-                        "rt_increase": oac_rt - base_rt,
-                        "valid": True
-                    })
-                else:
-                    invalid_oacetyl.append({
-                        "compound": oac_row["Name"],
-                        "base_compound": base_compound.iloc[0]["Name"],
-                        "rt_difference": oac_rt - base_rt,
-                        "valid": False,
-                        "reason": "O-acetylation did not increase RT"
-                    })
-            else:
-                # No matching base compound found
-                invalid_oacetyl.append({
-                    "compound": oac_row["Name"],
-                    "valid": False,
-                    "reason": "No matching base compound found"
+        # Merge to find matching base compounds
+        merged = oacetyl_compounds.merge(
+            base_df[["lookup_key", "base_Name", "base_RT"]],
+            on="lookup_key",
+            how="left"
+        )
+
+        # Compounds with matching base
+        has_base = merged["base_Name"].notna()
+        with_base = merged[has_base]
+        without_base = merged[~has_base]
+
+        # Vectorized RT comparison
+        if not with_base.empty:
+            rt_increase = with_base["RT"] - with_base["base_RT"]
+            is_valid = rt_increase > 0
+
+            # Valid OAc compounds
+            valid_df = with_base[is_valid]
+            for _, row in zip(valid_df.index, valid_df.to_dict('records')):
+                valid_oacetyl.append({
+                    "compound": row["Name"],
+                    "base_compound": row["base_Name"],
+                    "rt_increase": row["RT"] - row["base_RT"],
+                    "valid": True
                 })
+                # Collect pair for magnitude validation
+                oacetyl_pairs.append({
+                    "oacetyl_name": row["Name"],
+                    "base_name": row["base_Name"],
+                    "oacetyl_rt": row["RT"],
+                    "base_rt": row["base_RT"]
+                })
+
+            # Invalid OAc compounds (RT didn't increase)
+            invalid_df = with_base[~is_valid]
+            for _, row in zip(invalid_df.index, invalid_df.to_dict('records')):
+                invalid_oacetyl.append({
+                    "compound": row["Name"],
+                    "base_compound": row["base_Name"],
+                    "rt_difference": row["RT"] - row["base_RT"],
+                    "valid": False,
+                    "reason": "O-acetylation did not increase RT"
+                })
+
+        # Compounds without matching base
+        for row in without_base.to_dict('records'):
+            invalid_oacetyl.append({
+                "compound": row["Name"],
+                "valid": False,
+                "reason": "No matching base compound found"
+            })
+
+        # Magnitude validation for valid OAc pairs
+        magnitude_result = self.chemical_validator.validate_oacetylation_magnitude(oacetyl_pairs)
 
         return {
             "valid_oacetyl": valid_oacetyl,
-            "invalid_oacetyl": invalid_oacetyl
+            "invalid_oacetyl": invalid_oacetyl,
+            "magnitude_validation": magnitude_result.to_dict()
         }
 
     def _apply_rule5_rt_filtering(self, df: pd.DataFrame) -> Dict[str, Any]:
@@ -498,37 +564,47 @@ class GangliosideProcessorV2:
         filtered_compounds = []
         consolidated_compounds = {}
 
+        # Pre-compute sugar counts for all compounds - vectorized
+        def get_sugar_count(base_prefix):
+            sugar_info = self._parse_sugar_composition(base_prefix)
+            return sugar_info.get("total_sugars", 0)
+
+        df = df.copy()
+        df["_sugar_count"] = df["base_prefix"].apply(get_sugar_count)
+
         # Group by suffix (lipid composition)
         for suffix in df["suffix"].unique():
             if pd.isna(suffix):
                 continue
 
             suffix_group = df[df["suffix"] == suffix].sort_values("RT")
+            if len(suffix_group) <= 1:
+                continue
 
-            # Check for compounds within RT tolerance
-            for i, row in suffix_group.iterrows():
-                rt = row["RT"]
-                name = row["Name"]
+            # Use vectorized RT difference calculation
+            rt_values = suffix_group["RT"].values
+            names = suffix_group["Name"].values
+            indices = suffix_group.index.values
 
-                # Find other compounds within RT tolerance
-                nearby_compounds = suffix_group[
-                    (abs(suffix_group["RT"] - rt) <= self.rt_tolerance) &
-                    (suffix_group.index != i)
-                ]
+            # Track which compounds have been processed as part of a group
+            processed_indices = set()
 
-                if not nearby_compounds.empty:
-                    # Potential fragmentation detected
-                    # Keep compound with highest sugar count (least fragmented)
-                    all_candidates = pd.concat([
-                        pd.DataFrame([row]),
-                        nearby_compounds
-                    ])
+            for idx, (i, rt, name) in enumerate(zip(indices, rt_values, names)):
+                if i in processed_indices:
+                    continue
 
-                    # Get sugar counts
-                    sugar_counts = []
-                    for _, cand in all_candidates.iterrows():
-                        sugar_info = self._parse_sugar_composition(cand["base_prefix"])
-                        sugar_counts.append(sugar_info.get("total_sugars", 0))
+                # Find nearby compounds using vectorized comparison
+                rt_diffs = np.abs(rt_values - rt)
+                nearby_mask = (rt_diffs <= self.rt_tolerance) & (indices != i)
+
+                if np.any(nearby_mask):
+                    # Get all candidates including current compound
+                    all_mask = nearby_mask.copy()
+                    all_mask[idx] = True
+                    all_candidates = suffix_group.iloc[all_mask]
+
+                    # Get sugar counts (pre-computed)
+                    sugar_counts = all_candidates["_sugar_count"].values
 
                     # Select compound with maximum sugar count
                     max_sugar_idx = np.argmax(sugar_counts)
@@ -540,26 +616,36 @@ class GangliosideProcessorV2:
                             "selected": selected["Name"],
                             "fragments": all_candidates["Name"].tolist(),
                             "rt_range": (
-                                all_candidates["RT"].min(),
-                                all_candidates["RT"].max()
+                                float(all_candidates["RT"].min()),
+                                float(all_candidates["RT"].max())
                             ),
-                            "consolidated_volume": all_candidates["Volume"].sum()
+                            "consolidated_volume": float(all_candidates["Volume"].sum())
                         })
 
                     # Add to filtered list (avoid duplicates)
                     if selected["Name"] not in consolidated_compounds:
+                        selected_dict = selected.to_dict()
+                        # Remove temporary column
+                        selected_dict.pop("_sugar_count", None)
                         consolidated_compounds[selected["Name"]] = {
-                            **selected.to_dict(),
+                            **selected_dict,
                             "consolidated": True,
                             "fragment_count": len(all_candidates)
                         }
 
-        # Add compounds that weren't involved in fragmentation
-        for _, row in df.iterrows():
-            if row["Name"] not in consolidated_compounds:
-                filtered_compounds.append(row.to_dict())
+                    # Mark all candidates as processed
+                    processed_indices.update(all_candidates.index.tolist())
+
+        # Add compounds that weren't involved in fragmentation - vectorized
+        all_records = df.to_dict('records')
+        for row_dict in all_records:
+            name = row_dict["Name"]
+            # Remove temporary column
+            row_dict.pop("_sugar_count", None)
+            if name not in consolidated_compounds:
+                filtered_compounds.append(row_dict)
             else:
-                filtered_compounds.append(consolidated_compounds[row["Name"]])
+                filtered_compounds.append(consolidated_compounds[name])
 
         return {
             "fragmentation_candidates": fragmentation_candidates,
@@ -623,13 +709,101 @@ class GangliosideProcessorV2:
 
         return prefix in isomer_prefixes and f_value == 1
 
+
+    def _apply_rule6_sugar_rt_validation(
+        self,
+        df: pd.DataFrame
+    ) -> Dict[str, Any]:
+        """
+        Rule 6: Validate sugar count inversely correlates with RT.
+
+        Chromatography principle:
+        - More sugars → more hydrophilic → lower RT
+
+        For compounds with the SAME lipid composition (suffix),
+        higher sugar count should correlate with lower RT.
+
+        Args:
+            df: DataFrame with compound data including 'sugar_count' column
+
+        Returns:
+            Dictionary with validation results and any warnings
+        """
+        logger.info("Rule 6: Validating sugar-RT relationship...")
+
+        # Ensure sugar_count column exists
+        if 'sugar_count' not in df.columns:
+            # Add sugar count from sugar analysis
+            df = df.copy()
+            df['sugar_count'] = df['base_prefix'].apply(
+                lambda x: self._parse_sugar_composition(x).get('total_sugars', 0)
+            )
+
+        # Also ensure category column exists
+        if 'category' not in df.columns:
+            df = df.copy()
+            df['category'] = df['base_prefix'].str[:2]
+
+        result = self.chemical_validator.validate_sugar_rt_relationship(
+            df,
+            sugar_count_column='sugar_count',
+            rt_column='RT',
+            suffix_column='suffix'
+        )
+
+        logger.info(
+            f"  - Valid groups: {result.statistics.get('valid_groups', 0)}, "
+            f"Violations: {result.statistics.get('violation_groups', 0)}"
+        )
+
+        return result.to_dict()
+
+    def _apply_rule7_category_ordering(
+        self,
+        df: pd.DataFrame
+    ) -> Dict[str, Any]:
+        """
+        Rule 7: Validate RT ordering across categories.
+
+        Chromatography principle:
+        - More sugars → more hydrophilic → lower RT
+
+        Expected average RT ordering (ascending):
+        GP (9 sugars) < GQ (8) < GT (7) < GD (6) < GM (5)
+
+        Args:
+            df: DataFrame with compound data
+
+        Returns:
+            Dictionary with validation results and any warnings
+        """
+        logger.info("Rule 7: Validating category RT ordering...")
+
+        # Ensure category column exists
+        if 'category' not in df.columns:
+            df = df.copy()
+            df['category'] = df['base_prefix'].str[:2]
+
+        result = self.chemical_validator.validate_category_ordering(
+            df,
+            category_column='category',
+            rt_column='RT'
+        )
+
+        n_violations = len(result.statistics.get('order_violations', []))
+        logger.info(f"  - Order violations: {n_violations}")
+
+        return result.to_dict()
+
     def _compile_results(
         self,
         df: pd.DataFrame,
         rule1_results: Dict[str, Any],
         rule23_results: Dict[str, Any],
         rule4_results: Dict[str, Any],
-        rule5_results: Dict[str, Any]
+        rule5_results: Dict[str, Any],
+        rule6_results: Optional[Dict[str, Any]] = None,
+        rule7_results: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """Compile all rule results into final output."""
         # Calculate statistics
@@ -639,8 +813,25 @@ class GangliosideProcessorV2:
         outlier_count = len(rule1_results["outliers"])
         success_rate = (valid_compounds / total_compounds * 100) if total_compounds > 0 else 0
 
-        # Categorize compounds
-        categorization = self.categorizer.categorize_compounds(df.to_dict('records'))
+        # Categorize compounds (ISSUE-002 fix: pass DataFrame, not list)
+        categorization = self.categorizer.categorize_compounds(df)
+
+        # Compile chemical validation results
+        chemical_validation = {}
+        if rule6_results:
+            chemical_validation['sugar_rt_validation'] = rule6_results
+        if rule7_results:
+            chemical_validation['category_ordering'] = rule7_results
+
+        # Collect all warnings from chemical validation
+        chemical_warnings = []
+        for validation_name, validation_result in chemical_validation.items():
+            if validation_result and 'warnings' in validation_result:
+                for warning in validation_result['warnings']:
+                    chemical_warnings.append({
+                        'validation': validation_name,
+                        **warning
+                    })
 
         return {
             "success": True,
@@ -664,5 +855,7 @@ class GangliosideProcessorV2:
                 "fragmentation_events": rule5_results["fragmentation_candidates"],
                 "filtered_compounds": rule5_results["filtered_compounds"]
             },
-            "categorization": categorization
+            "categorization": categorization,
+            "chemical_validation": chemical_validation,
+            "chemical_warnings": chemical_warnings
         }

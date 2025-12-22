@@ -8,17 +8,14 @@ import logging
 import pandas as pd
 import numpy as np
 from django.db import transaction
-from django.core.files.storage import default_storage
+from django.utils import timezone
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 from ..models import AnalysisSession, AnalysisResult, Compound, RegressionModel
 from .ganglioside_processor_v2 import GangliosideProcessorV2
-# Legacy import kept for backward compatibility
-# from .ganglioside_processor import GangliosideProcessor
 
 
 def convert_to_json_serializable(obj):
@@ -115,12 +112,12 @@ class AnalysisService:
                         'message': message,
                         'percentage': percentage,
                         'current_step': current_step,
-                        'timestamp': datetime.now().isoformat(),
+                        'timestamp': timezone.now().isoformat(),
                     }
                 )
             except Exception as e:
                 # Log error but don't fail analysis
-                print(f"WebSocket progress update failed: {e}")
+                logger.warning(f"WebSocket progress update failed: {e}")
 
     def _send_complete(self, session_id: int, message: str, success: bool = True, results_url: str = ''):
         """
@@ -142,11 +139,11 @@ class AnalysisService:
                         'message': message,
                         'success': success,
                         'results_url': results_url,
-                        'timestamp': datetime.now().isoformat(),
+                        'timestamp': timezone.now().isoformat(),
                     }
                 )
             except Exception as e:
-                print(f"WebSocket completion update failed: {e}")
+                logger.warning(f"WebSocket completion update failed: {e}")
 
     def _send_error(self, session_id: int, message: str, error: str = ''):
         """
@@ -166,11 +163,11 @@ class AnalysisService:
                         'type': 'analysis_error',
                         'message': message,
                         'error': error,
-                        'timestamp': datetime.now().isoformat(),
+                        'timestamp': timezone.now().isoformat(),
                     }
                 )
             except Exception as e:
-                print(f"WebSocket error update failed: {e}")
+                logger.warning(f"WebSocket error update failed: {e}")
 
     def run_analysis(self, session: AnalysisSession) -> AnalysisResult:
         """
@@ -188,6 +185,11 @@ class AnalysisService:
         session_id = session.id
 
         try:
+            # Update session status to processing
+            session.status = 'processing'
+            session.started_at = timezone.now()
+            session.save(update_fields=['status', 'started_at'])
+
             # Send initial progress
             self._send_progress(session_id, "Loading CSV file...", 5, "Loading")
 
@@ -217,6 +219,11 @@ class AnalysisService:
             with transaction.atomic():
                 analysis_result = self._save_results(session, results, df)
 
+                # Update session status to completed
+                session.status = 'completed'
+                session.completed_at = timezone.now()
+                session.save(update_fields=['status', 'completed_at'])
+
             self._send_progress(session_id, "Results saved successfully.", 95, "Complete")
 
             # Send completion notification
@@ -231,6 +238,12 @@ class AnalysisService:
             return analysis_result
 
         except Exception as e:
+            # Update session status to failed
+            session.status = 'failed'
+            session.error_message = str(e)
+            session.completed_at = timezone.now()
+            session.save(update_fields=['status', 'error_message', 'completed_at'])
+
             # Send error notification
             self._send_error(
                 session_id,

@@ -3,10 +3,13 @@ Ganglioside Categorization Module
 Provides prefix-based categorization for ganglioside data visualization
 """
 
+import logging
 import re
 import pandas as pd
 from typing import Dict, List, Any, Tuple
 from collections import defaultdict
+
+logger = logging.getLogger(__name__)
 
 
 class GangliosideCategorizer:
@@ -64,7 +67,7 @@ class GangliosideCategorizer:
             'NeuGc': 'N-glycolylneuraminic acid'
         }
 
-        print("📊 Ganglioside Categorizer 초기화 완료")
+        logger.info("Ganglioside Categorizer initialized")
 
     def extract_base_prefix(self, compound_name: str) -> Tuple[str, str, List[str]]:
         """
@@ -128,23 +131,35 @@ class GangliosideCategorizer:
         base_prefix_counts = defaultdict(int)
         modification_counts = defaultdict(int)
 
-        # Process each compound
-        for idx, row in df.iterrows():
+        # Process each compound - vectorized using apply
+        def process_compound(row):
             compound_name = row[name_column]
             base_prefix, category, modifications = self.extract_base_prefix(compound_name)
-
-            # Store mapping
-            categorization_results['compound_mapping'][compound_name] = {
+            return {
+                'compound_name': compound_name,
                 'base_prefix': base_prefix,
                 'category': category,
                 'modifications': modifications,
-                'index': idx
+                'index': row.name  # DataFrame index
+            }
+
+        # Apply to all rows at once
+        results = df.apply(process_compound, axis=1)
+
+        # Build compound mapping and counts from results
+        for result in results:
+            compound_name = result['compound_name']
+            categorization_results['compound_mapping'][compound_name] = {
+                'base_prefix': result['base_prefix'],
+                'category': result['category'],
+                'modifications': result['modifications'],
+                'index': result['index']
             }
 
             # Update counts
-            category_counts[category] += 1
-            base_prefix_counts[base_prefix] += 1
-            for mod in modifications:
+            category_counts[result['category']] += 1
+            base_prefix_counts[result['base_prefix']] += 1
+            for mod in result['modifications']:
                 modification_counts[mod] += 1
 
         # Organize by categories

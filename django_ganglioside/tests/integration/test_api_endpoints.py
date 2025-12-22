@@ -2,6 +2,7 @@
 Integration tests for API endpoints
 """
 import pytest
+from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from apps.analysis.models import AnalysisSession
@@ -13,7 +14,7 @@ class TestAnalysisAPIEndpoints:
 
     def test_create_analysis_session_unauthorized(self, api_client, sample_csv_file):
         """Test creating session without authentication fails"""
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         data = {
             'name': 'Test Analysis',
             'data_type': 'porcine',
@@ -27,7 +28,7 @@ class TestAnalysisAPIEndpoints:
 
     def test_create_analysis_session_authorized(self, authenticated_client, sample_csv_file):
         """Test creating session with authentication"""
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         data = {
             'name': 'Test Analysis',
             'data_type': 'porcine',
@@ -58,7 +59,7 @@ class TestAnalysisAPIEndpoints:
                 original_filename=f"test_{i}.csv",
             )
 
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         response = authenticated_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
@@ -75,7 +76,7 @@ class TestAnalysisAPIEndpoints:
             original_filename="test.csv",
         )
 
-        url = reverse('analysis:session-detail', kwargs={'pk': session.id})
+        url = reverse('analysis:api-session-detail', kwargs={'pk': session.id})
         response = authenticated_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
@@ -93,7 +94,7 @@ class TestAnalysisAPIEndpoints:
             original_filename="test.csv",
         )
 
-        url = reverse('analysis:session-detail', kwargs={'pk': session.id})
+        url = reverse('analysis:api-session-detail', kwargs={'pk': session.id})
         data = {'name': 'Updated Name'}
 
         response = authenticated_client.patch(url, data, format='json')
@@ -105,7 +106,7 @@ class TestAnalysisAPIEndpoints:
         assert session.name == 'Updated Name'
 
     def test_delete_session(self, authenticated_client, test_user):
-        """Test deleting session"""
+        """Test deleting session (soft delete)"""
         session = AnalysisSession.objects.create(
             user=test_user,
             name="Delete Test",
@@ -115,11 +116,14 @@ class TestAnalysisAPIEndpoints:
             original_filename="test.csv",
         )
 
-        url = reverse('analysis:session-detail', kwargs={'pk': session.id})
+        url = reverse('analysis:api-session-detail', kwargs={'pk': session.id})
         response = authenticated_client.delete(url)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert not AnalysisSession.objects.filter(id=session.id).exists()
+        # Note: AnalysisSession uses SoftDeleteModel, so it will be soft-deleted
+        # The default manager should filter out soft-deleted items
+        session.refresh_from_db()
+        assert session.is_deleted == True
 
     def test_filter_sessions_by_status(self, authenticated_client, test_user):
         """Test filtering sessions by status"""
@@ -141,7 +145,7 @@ class TestAnalysisAPIEndpoints:
             original_filename="test2.csv",
         )
 
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         response = authenticated_client.get(url, {'status': 'completed'})
 
         assert response.status_code == status.HTTP_200_OK
@@ -170,7 +174,7 @@ class TestAnalysisAPIEndpoints:
         api_client.force_authenticate(user=test_user)
 
         # Try to access other user's session
-        url = reverse('analysis:session-detail', kwargs={'pk': other_session.id})
+        url = reverse('analysis:api-session-detail', kwargs={'pk': other_session.id})
         response = api_client.get(url)
 
         # Should not be able to access
@@ -182,12 +186,16 @@ class TestHealthCheckEndpoint:
     """Test health check endpoint"""
 
     def test_health_check_endpoint(self, api_client):
-        """Test health check returns OK"""
-        url = reverse('health-check')
+        """Test health check returns healthy status"""
+        url = reverse('core:health-check')
         response = api_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.data == {'status': 'ok'}
+        # Health check returns JsonResponse, use .json() instead of .data
+        data = response.json()
+        assert data['status'] in ['healthy', 'degraded']  # Redis might be unavailable
+        assert 'checks' in data
+        assert data['checks']['database'] == 'ok'
 
 
 @pytest.mark.integration
@@ -196,7 +204,7 @@ class TestAPIValidation:
 
     def test_invalid_data_type(self, authenticated_client, sample_csv_file):
         """Test invalid data_type is rejected"""
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         data = {
             'name': 'Test',
             'data_type': 'invalid_type',  # Invalid
@@ -210,7 +218,7 @@ class TestAPIValidation:
 
     def test_missing_required_fields(self, authenticated_client):
         """Test missing required fields are rejected"""
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         data = {}  # Missing required fields
 
         response = authenticated_client.post(url, data, format='multipart')
@@ -219,7 +227,7 @@ class TestAPIValidation:
 
     def test_invalid_threshold_values(self, authenticated_client, sample_csv_file):
         """Test invalid threshold values are rejected"""
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         data = {
             'name': 'Test',
             'data_type': 'porcine',
@@ -250,7 +258,7 @@ class TestAPIPagination:
                 original_filename=f"test_{i}.csv",
             )
 
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         response = authenticated_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
@@ -273,7 +281,7 @@ class TestAPIPagination:
                 original_filename=f"test_{i}.csv",
             )
 
-        url = reverse('analysis:session-list')
+        url = reverse('analysis:api-session-list')
         response = authenticated_client.get(url, {'page_size': 5})
 
         assert response.status_code == status.HTTP_200_OK
