@@ -5,9 +5,9 @@ Addresses overfitting issues with proper feature selection and validation
 
 import numpy as np
 import pandas as pd
-from typing import Dict, Any, Tuple, Optional, List
-from sklearn.linear_model import Ridge, RidgeCV, LinearRegression
-from sklearn.model_selection import LeaveOneOut, KFold, cross_val_score
+from typing import Dict, Any, Tuple, List
+from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.model_selection import LeaveOneOut, KFold
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import StandardScaler
 import logging
