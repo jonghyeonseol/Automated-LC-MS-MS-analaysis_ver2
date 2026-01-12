@@ -5,7 +5,7 @@ OLS regression, residual analysis, Durbin-Watson test, Cook's Distance, etc.
 
 import logging
 import warnings
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import numpy as np
 from scipy import stats
