@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 from ..models import AnalysisSession, AnalysisResult, Compound, RegressionModel
 from .ganglioside_processor_v2 import GangliosideProcessorV2
+from .ganglioside_processor_v3 import GangliosideProcessorV3
 
 
 def convert_to_json_serializable(obj):
@@ -49,48 +50,65 @@ class AnalysisService:
     Service class for running ganglioside analysis and persisting results
     """
 
-    def __init__(self, use_v2: bool = True):
+    def __init__(self, version: str = "v3"):
         """
         Initialize Analysis Service
 
         Args:
-            use_v2: Use improved V2 processor (default: True, STRONGLY RECOMMENDED)
+            version: Processor version to use ("v1", "v2", or "v3")
+                     Default: "v3" (10-rule pipeline with confidence scoring)
 
         Processor Version Comparison:
         ============================
-        V2 (GangliosideProcessorV2) - RECOMMENDED:
+        V3 (GangliosideProcessorV3) - LATEST & RECOMMENDED:
+          ✅ All V2 features plus:
+          ✅ Rule 8: Modification Stack Validation
+          ✅ Rule 9: Cross-Prefix Consistency Validation
+          ✅ Rule 10: Confidence Scoring
+          ✅ Probabilistic compound identification
+          ✅ Enhanced chemical validation
+
+        V2 (GangliosideProcessorV2) - STABLE:
           ✅ BayesianRidge with adaptive regularization
-          ✅ R² = 0.994 (60.7% improvement)
+          ✅ R² = 0.994 (60.7% improvement over V1)
           ✅ 0% false positive rate
-          ✅ Better input validation
-          ✅ Comprehensive error handling
+          ✅ 7-rule pipeline (Rules 1-7)
 
         V1 (GangliosideProcessor) - DEPRECATED:
           ❌ Fixed Ridge α=1.0 (overfitting risk)
           ❌ R² = 0.386 (poor validation)
           ❌ 67% false positive rate
-          ❌ Limited validation
           ⚠️  Scheduled for removal: 2026-01-31
 
         Production Usage:
-        - Always use use_v2=True (default)
-        - Only set use_v2=False for legacy data comparison
+        - Use version="v3" for full 10-rule pipeline (default)
+        - Use version="v2" for stable 7-rule pipeline
+        - Only use version="v1" for legacy data comparison
         """
-        # Use improved V2 processor by default to prevent overfitting
-        if use_v2:
+        version = version.lower()
+
+        if version == "v3":
+            self.processor = GangliosideProcessorV3()
+            logger.info("Using GangliosideProcessorV3 (10-rule pipeline)")
+        elif version == "v2":
             self.processor = GangliosideProcessorV2()
-        else:
+            logger.info("Using GangliosideProcessorV2 (7-rule pipeline)")
+        elif version == "v1":
             # ⚠️ DEPRECATED: Legacy V1 processor
-            # Only used for backward compatibility testing
             from .ganglioside_processor import GangliosideProcessor
             self.processor = GangliosideProcessor()
             logger.warning(
                 "Using deprecated GangliosideProcessor V1. "
-                "Please migrate to V2 for better accuracy."
+                "Please migrate to V2/V3 for better accuracy."
+            )
+        else:
+            raise ValueError(
+                f"Unknown processor version: {version}. "
+                "Valid options: 'v1', 'v2', 'v3'"
             )
 
         self.channel_layer = get_channel_layer()
-        self.processor_version = "v2" if use_v2 else "v1"
+        self.processor_version = version
 
     def _send_progress(self, session_id: int, message: str, percentage: int, current_step: str = ''):
         """
