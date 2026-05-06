@@ -1,12 +1,15 @@
 """
 Improved Regression Model for Ganglioside Analysis
-Addresses overfitting issues with proper feature selection and validation
+Addresses overfitting issues with proper feature selection and validation.
+
+Uses BayesianRidge for automatic regularization: α and λ are learned from data
+via Bayesian inference, removing the need to grid-search Ridge alpha values.
 """
 
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, Tuple, List
-from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.linear_model import BayesianRidge
 from sklearn.model_selection import LeaveOneOut, KFold
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import StandardScaler
@@ -29,21 +32,21 @@ class ImprovedRegressionModel:
         min_samples: int = 3,
         max_features_ratio: float = 0.3,  # Max 30% features relative to samples
         r2_threshold: float = 0.70,  # Realistic threshold for LC-MS data
-        alpha_values: List[float] = None
     ):
         """
         Initialize improved regression model.
+
+        BayesianRidge learns α (noise precision) and λ (weight precision) from
+        the data, so no manual alpha grid is needed.
 
         Args:
             min_samples: Minimum samples required for regression
             max_features_ratio: Maximum ratio of features to samples
             r2_threshold: Minimum R² for valid regression (0.70-0.85 realistic)
-            alpha_values: Ridge regression alpha values for CV
         """
         self.min_samples = min_samples
         self.max_features_ratio = max_features_ratio
         self.r2_threshold = r2_threshold
-        self.alpha_values = alpha_values or [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
 
     def select_features(
         self,
@@ -131,7 +134,11 @@ class ImprovedRegressionModel:
         n_samples: int
     ) -> Tuple[Any, Dict[str, float]]:
         """
-        Fit regression model with appropriate validation strategy.
+        Fit BayesianRidge with cross-validated honest metrics.
+
+        BayesianRidge learns regularization automatically, so the CV split is used
+        only to compute out-of-fold predictions for r2/rmse — not to tune α.
+        Final returned model is fit on all data.
 
         Args:
             X: Feature matrix
@@ -141,74 +148,63 @@ class ImprovedRegressionModel:
         Returns:
             Tuple of (fitted_model, metrics)
         """
-        metrics = {}
+        metrics: Dict[str, Any] = {}
+        n_features = X.shape[1]
+
+        # Train final model on all data (used for prediction downstream)
+        model = BayesianRidge()
+        model.fit(X, y)
 
         if n_samples < 5:
-            # Too few samples for cross-validation - use Leave-One-Out
-            logger.warning(f"Only {n_samples} samples - using Leave-One-Out CV")
-
-            if n_samples == X.shape[1]:
-                # Exactly determined system - use strong regularization
-                model = Ridge(alpha=10.0)
-                model.fit(X, y)
-                y_pred = model.predict(X)
-                metrics['cv_method'] = 'none (exactly determined)'
-                metrics['warning'] = 'System is exactly determined - results unreliable'
-
-            else:
-                # Use LOO cross-validation
-                cv = LeaveOneOut()
-                model = RidgeCV(alphas=self.alpha_values, cv=cv)
-                model.fit(X, y)
-
-                # Calculate LOO predictions for metrics
-                y_pred = np.zeros(n_samples)
-                for i, (train_idx, test_idx) in enumerate(cv.split(X)):
-                    temp_model = Ridge(alpha=model.alpha_)
-                    temp_model.fit(X[train_idx], y[train_idx])
-                    y_pred[test_idx] = temp_model.predict(X[test_idx])
-
-                metrics['cv_method'] = 'leave-one-out'
-                metrics['selected_alpha'] = model.alpha_
-
+            cv = LeaveOneOut()
+            method_label = 'leave-one-out'
+            logger.info(f"{n_samples} samples - using LOO CV for honest metrics")
         elif n_samples < 10:
-            # Small sample - use 3-fold CV
-            logger.info(f"{n_samples} samples - using 3-fold CV")
             cv = KFold(n_splits=3, shuffle=True, random_state=42)
-            model = RidgeCV(alphas=self.alpha_values, cv=cv)
-            model.fit(X, y)
-            y_pred = model.predict(X)
-
-            metrics['cv_method'] = '3-fold'
-            metrics['selected_alpha'] = model.alpha_
-
+            method_label = '3-fold'
+            logger.info(f"{n_samples} samples - using 3-fold CV")
         else:
-            # Adequate samples - use 5-fold CV
-            logger.info(f"{n_samples} samples - using 5-fold CV")
             cv = KFold(n_splits=5, shuffle=True, random_state=42)
-            model = RidgeCV(alphas=self.alpha_values, cv=cv)
-            model.fit(X, y)
-            y_pred = model.predict(X)
+            method_label = '5-fold'
+            logger.info(f"{n_samples} samples - using 5-fold CV")
 
-            metrics['cv_method'] = '5-fold'
-            metrics['selected_alpha'] = model.alpha_
+        # Out-of-fold predictions for honest validation R²
+        y_pred = np.zeros(n_samples)
+        for train_idx, test_idx in cv.split(X):
+            fold_model = BayesianRidge()
+            fold_model.fit(X[train_idx], y[train_idx])
+            y_pred[test_idx] = fold_model.predict(X[test_idx])
 
-        # Calculate metrics
-        metrics['r2'] = r2_score(y, y_pred)
-        metrics['rmse'] = np.sqrt(mean_squared_error(y, y_pred))
+        metrics['cv_method'] = method_label
+        # BayesianRidge: alpha_ = noise precision, lambda_ = weight precision.
+        # Effective Ridge α equivalent ≈ lambda_ / alpha_.
+        metrics['selected_alpha'] = float(model.alpha_)
+        metrics['selected_lambda'] = float(model.lambda_)
+        metrics['effective_ridge_alpha'] = (
+            float(model.lambda_ / model.alpha_) if model.alpha_ > 0 else None
+        )
+
+        metrics['r2'] = float(r2_score(y, y_pred))
+        metrics['rmse'] = float(np.sqrt(mean_squared_error(y, y_pred)))
+        metrics['train_r2'] = float(r2_score(y, model.predict(X)))
         metrics['n_samples'] = n_samples
-        metrics['n_features'] = X.shape[1]
+        metrics['n_features'] = n_features
 
-        # Adjusted R² (penalizes for number of features)
-        if n_samples > X.shape[1] + 1:
-            metrics['adjusted_r2'] = 1 - (1 - metrics['r2']) * \
-                                     (n_samples - 1) / (n_samples - X.shape[1] - 1)
+        if n_samples > n_features + 1:
+            metrics['adjusted_r2'] = (
+                1 - (1 - metrics['r2']) * (n_samples - 1) / (n_samples - n_features - 1)
+            )
         else:
             metrics['adjusted_r2'] = None
 
-        # Warning if R² is suspiciously high
-        if metrics['r2'] > 0.98 and n_samples < 10:
-            metrics['warning'] = f"R²={metrics['r2']:.3f} with only {n_samples} samples suggests overfitting"
+        if n_samples == n_features:
+            metrics['warning'] = (
+                'System is exactly determined - relying on Bayesian regularization'
+            )
+        elif metrics['r2'] > 0.98 and n_samples < 10:
+            metrics['warning'] = (
+                f"R²={metrics['r2']:.3f} with only {n_samples} samples suggests overfitting"
+            )
             logger.warning(metrics['warning'])
 
         return model, metrics
@@ -230,9 +226,13 @@ class ImprovedRegressionModel:
         Returns:
             Dictionary with regression results and metrics
         """
-        # Filter to anchor compounds if specified
+        # Filter to anchor compounds if specified.
+        # V2/V3 normalize Anchor to bool in _preprocess_data; raw CSVs use 'T'/'F'.
         if anchor_only:
-            train_df = df[df['Anchor'] == 'T'].copy()
+            anchor_mask = df['Anchor'].map(
+                lambda v: v is True or (isinstance(v, str) and v.upper() == 'T')
+            )
+            train_df = df[anchor_mask].copy()
         else:
             train_df = df.copy()
 

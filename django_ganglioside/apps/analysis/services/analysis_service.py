@@ -55,7 +55,7 @@ class AnalysisService:
         Initialize Analysis Service
 
         Args:
-            version: Processor version to use ("v1", "v2", or "v3")
+            version: Processor version to use ("v2" or "v3")
                      Default: "v3" (10-rule pipeline with confidence scoring)
 
         Processor Version Comparison:
@@ -73,17 +73,6 @@ class AnalysisService:
           ✅ R² = 0.994 (60.7% improvement over V1)
           ✅ 0% false positive rate
           ✅ 7-rule pipeline (Rules 1-7)
-
-        V1 (GangliosideProcessor) - DEPRECATED:
-          ❌ Fixed Ridge α=1.0 (overfitting risk)
-          ❌ R² = 0.386 (poor validation)
-          ❌ 67% false positive rate
-          ⚠️  Scheduled for removal: 2026-01-31
-
-        Production Usage:
-        - Use version="v3" for full 10-rule pipeline (default)
-        - Use version="v2" for stable 7-rule pipeline
-        - Only use version="v1" for legacy data comparison
         """
         version = version.lower()
 
@@ -93,18 +82,9 @@ class AnalysisService:
         elif version == "v2":
             self.processor = GangliosideProcessorV2()
             logger.info("Using GangliosideProcessorV2 (7-rule pipeline)")
-        elif version == "v1":
-            # ⚠️ DEPRECATED: Legacy V1 processor
-            from .ganglioside_processor import GangliosideProcessor
-            self.processor = GangliosideProcessor()
-            logger.warning(
-                "Using deprecated GangliosideProcessor V1. "
-                "Please migrate to V2/V3 for better accuracy."
-            )
         else:
             raise ValueError(
-                f"Unknown processor version: {version}. "
-                "Valid options: 'v1', 'v2', 'v3'"
+                f"Unknown processor version: {version}. Valid options: 'v2', 'v3'"
             )
 
         self.channel_layer = get_channel_layer()
@@ -484,7 +464,10 @@ class AnalysisService:
             rt=data.get('RT', 0.0),
             volume=data.get('Volume', 0.0),
             log_p=data.get('Log P', 0.0),
-            is_anchor=data.get('Anchor', 'F') == 'T',
+            is_anchor=(
+                data.get('Anchor') is True
+                or (isinstance(data.get('Anchor'), str) and data.get('Anchor', '').upper() == 'T')
+            ),
             prefix=prefix,
             suffix=data.get('suffix', ''),
             a_component=data.get('a_component'),
@@ -538,49 +521,49 @@ class AnalysisService:
 
     def _save_regression_models(self, session: AnalysisSession, results: dict):
         """
-        Save regression model details to database
+        Save regression model details to database.
 
-        Args:
-            session: AnalysisSession instance
-            results: Analysis results dictionary
+        V2/V3 emit a nested schema per prefix:
+            {
+                'features': [...],
+                'coefficients': {'intercept': float, 'features': {name: coef}},
+                'equation': str,
+                'metrics': {'r2', 'rmse', 'selected_alpha', 'cv_method', ...},
+                'n_samples': int, 'n_anchors': int,
+                'coefficient_warnings': [...], 'anchor_logp_span': {...}
+            }
         """
         models_to_create = []
 
         regression_analysis = results.get('regression_analysis', {})
-        regression_quality = results.get('regression_quality', {})
 
         for prefix_group, model_data in regression_analysis.items():
-            quality_data = regression_quality.get(prefix_group, {})
+            coefficients_block = model_data.get('coefficients', {}) or {}
+            intercept = float(coefficients_block.get('intercept', 0.0))
+            feature_coefs = coefficients_block.get('features', {}) or {}
+            feature_names = model_data.get('features') or list(feature_coefs.keys())
 
-            # Extract coefficients and feature names
-            coefficients = model_data.get('coefficients', {})
-            feature_names = list(coefficients.keys())
-
-            # Build equation string
-            equation = self._build_equation_string(
-                model_data.get('intercept', 0.0),
-                coefficients
-            )
+            metrics = model_data.get('metrics', {}) or {}
+            equation = model_data.get('equation') or self._build_equation_string(intercept, feature_coefs)
 
             regression_model = RegressionModel(
                 session=session,
                 prefix_group=prefix_group,
-                model_type=model_data.get('model_type', 'Ridge'),
-                intercept=model_data.get('intercept', 0.0),
-                coefficients=coefficients,
+                model_type=model_data.get('model_type', 'BayesianRidge'),
+                intercept=intercept,
+                coefficients=feature_coefs,
                 feature_names=feature_names,
-                regularization_alpha=model_data.get('alpha', 1.0),
-                r2=quality_data.get('r2', 0.0),
-                adjusted_r2=quality_data.get('adjusted_r2'),
-                rmse=quality_data.get('rmse'),
-                durbin_watson=quality_data.get('durbin_watson'),
-                n_samples=model_data.get('n_samples', 0),
-                n_anchors=model_data.get('n_anchors', 0),
+                regularization_alpha=float(metrics.get('selected_alpha', 0.0) or 0.0),
+                r2=float(metrics.get('r2', 0.0) or 0.0),
+                adjusted_r2=metrics.get('adjusted_r2'),
+                rmse=metrics.get('rmse'),
+                durbin_watson=metrics.get('durbin_watson'),
+                n_samples=int(model_data.get('n_samples', 0) or 0),
+                n_anchors=int(model_data.get('n_anchors', 0) or 0),
                 equation=equation
             )
             models_to_create.append(regression_model)
 
-        # Bulk create
         RegressionModel.objects.bulk_create(models_to_create, batch_size=100)
 
     def _build_equation_string(self, intercept: float, coefficients: dict) -> str:
